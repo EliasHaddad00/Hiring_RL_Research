@@ -1,0 +1,7 @@
+  T prototype    choose automatic      diff  diff %   states   sec
+ 10    0.5838   0.58376   0.58367  0.000095  0.016%    86194   2.6
+ 12    0.6335   0.63348   0.63333  0.000149  0.024%   165558   5.3
+ 15    0.6947   0.69473   0.69453  0.000202  0.029%   357279  14.1
+
+Optimal policy (automatic drop) simulated in our environment, 40000 episodes: 0.6308 +- 0.0041; computed 0.63333; z = -0.63 (within 3 standard errors)
+Random policy on the same episodes: -0.0097 +- 0.0049

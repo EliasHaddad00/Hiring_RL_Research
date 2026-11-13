@@ -1,0 +1,42 @@
+{
+ "horizons": {
+  "10": {
+   "prototype": 0.5838,
+   "choose": 0.5837606831730264,
+   "automatic": 0.5836654791743274,
+   "difference": 9.520399869900054e-05,
+   "difference_pct": 0.016308737714489433,
+   "start_of_day_states": 86194,
+   "reproduces_prototype": true
+  },
+  "12": {
+   "prototype": 0.6335,
+   "choose": 0.6334766681681725,
+   "automatic": 0.6333277027645984,
+   "difference": 0.00014896540357411947,
+   "difference_pct": 0.023515531204153648,
+   "start_of_day_states": 165558,
+   "reproduces_prototype": true
+  },
+  "15": {
+   "prototype": 0.6947,
+   "choose": 0.6947321360664812,
+   "automatic": 0.6945297362088048,
+   "difference": 0.00020239985767644963,
+   "difference_pct": 0.02913351019321227,
+   "start_of_day_states": 357279,
+   "reproduces_prototype": true
+  }
+ },
+ "monte_carlo": {
+  "episodes": 40000,
+  "mean": 0.630766523056258,
+  "se": 0.004084107019273895,
+  "computed": 0.6333277027645984,
+  "z": -0.6271088627828617,
+  "within_3_se": true,
+  "random_policy_mean": -0.009744490166319763,
+  "random_policy_se": 0.004872875352870857
+ },
+ "stop": false
+}
