@@ -1,0 +1,19 @@
+{
+ "episodes": 2000,
+ "mean": -0.4825467591943542,
+ "se": 0.039675832462926906,
+ "interviews_per_episode": 6.917,
+ "hires_per_episode": 3.0,
+ "share_days_pool_over_slots": 0.058135784550878894,
+ "share_days_hidden_better": 0.005241090146750524,
+ "share_hires_at_interview_cap": 0.036166666666666666,
+ "scenario": "stress",
+ "h0": 0.05,
+ "accept_decay": 0.03,
+ "n_slots": 10,
+ "policy": "random",
+ "params": null,
+ "belief": "naive",
+ "pool": "dev",
+ "commit": "0b903ef"
+}
