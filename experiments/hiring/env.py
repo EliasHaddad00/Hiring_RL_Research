@@ -69,6 +69,7 @@ class HiringEnv(gym.Env):
                  episode_seeds: Optional[Sequence[int]] = None):
         self.sc = sc = scenario
         self.strict = strict
+        self.build_obs = True
         self.N = sc.n_slots
         self.binned = sc.signals == "binned"
         self.belief = BinnedBelief(sc) if self.binned else GaussianBelief(sc)
@@ -239,6 +240,8 @@ class HiringEnv(gym.Env):
     def _obs(self) -> np.ndarray:
         sc, N, F = self.sc, self.N, self.n_slot_features
         obs = np.zeros(N * F + N_GLOBAL, np.float32)
+        if not self.build_obs:      # rule evaluation reads view() and does not need the vector
+            return obs
         v = self.order[:N]
         k = len(v)
         if k:
