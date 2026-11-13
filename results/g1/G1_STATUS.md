@@ -5,7 +5,7 @@ Every number below was produced by this repository's code. "Prototype" and "publ
 | G1 condition | Result | Evidence |
 | --- | --- | --- |
 | Environment tests pass | Yes | `pytest experiments/tests`: both environment checkers, masked random rollouts, determinism, arrival / acceptance / departure rates, and every convention test |
-| Earlier rule scores reproduce within 0.05 | Yes, all ten gate rows; largest gap 0.004 | `rule_reproduction.txt` |
+| Earlier rule scores reproduce within 0.05 | Yes, all ten gate rows; largest gap 0.006 | `rule_reproduction.txt` |
 | Exact instance reproduces 0.6335 | Yes: 0.63348 (prototype convention) | `exact_small.txt` |
 | Throughput measured | Yes | `throughput.txt` |
 | Pre-registration drafted | Yes, untagged | `PREREGISTRATION.md` |
