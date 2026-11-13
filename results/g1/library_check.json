@@ -1,0 +1,20 @@
+{
+ "task": "CartPole-v1",
+ "steps": 151552,
+ "seed": 0,
+ "eval_mean": 500.0,
+ "eval_std": 0.0,
+ "eval_episodes": 50,
+ "solved_threshold": 475.0,
+ "passed": true,
+ "logged_columns_missing": [],
+ "seconds": 28.58697819709778,
+ "final_row": {
+  "rollout/ep_rew_mean": "499.58",
+  "train/policy_gradient_loss": "-0.0004389428926515393",
+  "train/value_loss": "0.0004124040400711237",
+  "train/entropy_loss": "-0.5016871105879546",
+  "train/approx_kl": "0.0013300723",
+  "train/clip_fraction": "0.00830078125"
+ }
+}
