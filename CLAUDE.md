@@ -32,9 +32,11 @@ Research questions: RQ1 how close simple rules get to the optimum; RQ2 whether P
 ```
 context/       the five reference files above; treat as read-only unless asked
 experiments/   all code and configs
-  hiring/      env.py, belief.py, rules.py, exact_dp.py, bounds.py, policies.py, seeding.py
+  hiring/      env.py, belief.py, rules.py, exact_dp.py, bounds.py, policies.py, seeding.py,
+               config.py, pool.py, evaluation.py
   configs/     one file per experiment: hyperparameters, scenario, seed lists
-  scripts/     tune_rules.py, tune_ppo.py, train.py, evaluate.py, ablations.py, diagnose.py
+  scripts/     tune_rules.py, tune_ppo.py, train.py, evaluate.py, ablations.py, diagnose.py,
+               G1 checks, and reference/ (untouched-logic copy of the earlier simulator)
   analysis/    one script per figure or table, reading only saved results
   tests/       simulator statistics, determinism, belief, exact values, bound checks, policy tests
 notes/         research papers and reading notes
@@ -48,10 +50,17 @@ Create subfolders as needed. Keep `PREREGISTRATION.md`, the lockfile and the `Ma
 
 Python 3.11 or later. Gymnasium 1.4.0, Stable-Baselines3 2.9.2, SB3-Contrib 2.9.2, PyTorch, NumPy. Pin versions in a lockfile. CPU only.
 
+Use the project environment: `.venv\Scripts\python.exe` (install with `pip install -r requirements.lock --extra-index-url https://download.pytorch.org/whl/cpu`).
+
 Commands (fill in as they come to exist, and keep this list current):
 
-- Tests: `pytest experiments/tests`
-- Regenerate all figures and tables: `make figures`
+- Fast tests (about 2 minutes): `python -m pytest experiments/tests`
+- Slow tests (v3 replay, 40,000-episode Monte Carlo; about 3 minutes): `python -m pytest experiments/tests -m slow`
+- G1 checks, each writing to `results/g1/`: `python experiments/scripts/reproduce_rules.py`, `solve_small.py`, `measure_throughput.py`, `check_library.py`
+- Run one policy on a fixed episode pool: `python experiments/scripts/evaluate.py --help`
+- Regenerate all figures and tables: `make figures` (stub until week 2)
+
+Known environment problem: Python 3.12.0's `zipfile` breaks loading of saved SB3 models (`test_setup.py` fails). Use a later Python patch release before any run that must reload a model.
 
 ## Rules for working in this project
 
@@ -84,6 +93,26 @@ Commands (fill in as they come to exist, and keep this list current):
 - Start with `gamma = 0.999`. At 0.99 over 200 steps only 13% of a terminal reward survives.
 - Use `DummyVecEnv` and parallelise across runs, one process per core.
 - Fix these three conventions once and keep the simulator, the exact solver and the bound consistent with them: at most one interview per candidate per day; offers resolved one at a time; a candidate interviewed today can be offered tomorrow at the earliest.
+
+### Simulator conventions (decided Nov 12; the full text is the `env.py` docstring)
+
+Change none of these without updating the environment, the exact solver, the bound and the tests together.
+
+- **Day order.** Yesterday's interview results applied, arrivals, offers, interviews, poaching.
+- **Strict phases.** After the first interview of a day, all offers are masked until the next day.
+- **Interview results are visible next morning.** A result is held as pending and applied at the start of the next day, before offers; it is lost if the candidate is poached that night.
+- **Interview limits.** One per candidate per day, 3 per day, 3 per candidate in total (2 on the small instance), none on the last day (masked). If more than 5% of hired candidates reach the per-candidate cap in any scenario, tell the user and rerun that scenario with a cap of 6 (seeding already draws 6 interview noises per candidate).
+- **Slots.** 10 candidates shown, sorted by naive estimate (highest first, ties by arrival), for every policy and belief variant. Rules act through the same view as PPO.
+- **Small-instance overflow.** Pool cap 2. On overflow the candidate with the lowest naive estimate is dropped automatically (newcomer included; ties: longest wait leaves). One function, `hiring/pool.py`, used by both `env.py` and `exact_dp.py`. PPO and rules are scored only against the automatic-drop optimum.
+- **Rule defaults.** A rule re-checks its offer bar after every offer and has no offer cap. The earlier simulator's start-of-day eligibility and 12-offers-per-day cap exist only as `v3_compat=True`, for reproduction.
+- **Actions.** `Discrete(2N+1)`: 0..N-1 interview slot i, N..2N-1 offer slot i, 2N end day.
+
+### Numbers reproduced in our simulator (Nov 12)
+
+- **Belief.** A naive estimate of 1.0 (resume only) after 7 days is really 0.88, 0.72, 0.48 at h0 = 0.02, 0.05, 0.10 (quadrature 0.883, 0.721, 0.482). The 0.87 / 0.71 / 0.47 in `context/` came from a wide-band Monte Carlo and is superseded.
+- **Exact small instance (T = 12).** Prototype convention ("choose" whom to drop): 0.63348, matching the prototype's 0.6335. Our convention (automatic drop): **0.63333**. Use 0.63333 as the optimum.
+- **Earlier rule scores.** All reproduce within 0.05 from `notes/hiring_sim_v3.py`'s tuned parameters; see `results/g1/rule_reproduction.txt`.
+- **Throughput.** MaskablePPO about 4,800 steps/s (unrestricted) and 3,700 (index actor) with 8 environments on one thread; `SubprocVecEnv` gives no gain.
 
 ### Scope
 

@@ -1,0 +1,6 @@
+Raw environment, random policy, stress:     22407 steps/s (16 steps per episode)
+Raw environment, random policy, small:      18869 steps/s (5 steps per episode)
+MaskablePPO MlpPolicy, DummyVecEnv x8, stress    time/fps =   4764  (102400 steps in 22s; 3M steps = 0.17 hours)
+MaskablePPO MlpPolicy, SubprocVecEnv x8, stress  time/fps =   4851  (102400 steps in 21s; 3M steps = 0.17 hours)
+MaskablePPO IndexPolicy, DummyVecEnv x8, stress  time/fps =   3717  (102400 steps in 28s; 3M steps = 0.22 hours)
+MaskablePPO MlpPolicy, DummyVecEnv x8, small     time/fps =   4989  (102400 steps in 21s; 3M steps = 0.17 hours)

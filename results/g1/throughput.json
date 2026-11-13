@@ -1,0 +1,43 @@
+{
+ "torch_threads": 1,
+ "n_envs": 8,
+ "target_steps": 100000,
+ "raw_env_stress": {
+  "steps_per_second": 22406.768390681653,
+  "steps_per_episode": 15.55,
+  "episodes_per_second": 1440.9497357351545
+ },
+ "raw_env_small": {
+  "steps_per_second": 18868.94336021067,
+  "steps_per_episode": 4.8432,
+  "episodes_per_second": 3895.9661711700264
+ },
+ "ppo_mlp_dummy_stress": {
+  "time_fps": 4764.0,
+  "total_timesteps": 102400,
+  "wall_seconds": 21.864481200000228,
+  "ep_len_mean": 11.91,
+  "hours_per_3M_steps": 0.17492303386509936
+ },
+ "ppo_mlp_subproc_stress": {
+  "time_fps": 4851.0,
+  "total_timesteps": 102400,
+  "wall_seconds": 21.45249270000022,
+  "ep_len_mean": 11.91,
+  "hours_per_3M_steps": 0.17178588607160034
+ },
+ "ppo_index_dummy_stress": {
+  "time_fps": 3717.0,
+  "total_timesteps": 102400,
+  "wall_seconds": 28.12734939999973,
+  "ep_len_mean": 15.97,
+  "hours_per_3M_steps": 0.22419513944937675
+ },
+ "ppo_mlp_dummy_small": {
+  "time_fps": 4989.0,
+  "total_timesteps": 102400,
+  "wall_seconds": 20.829171899999892,
+  "ep_len_mean": 5.69,
+  "hours_per_3M_steps": 0.16703414177857953
+ }
+}
