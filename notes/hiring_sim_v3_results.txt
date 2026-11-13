@@ -1,0 +1,50 @@
+
+== h0=0.0 b=0.0  (207s)
+  static_threshold                       3.10 ±0.02  interviews/ep=  0.0 cap_bind=0.000 par=[0.8]
+  patient_no_interview                   3.56 ±0.02  interviews/ep=  0.0 cap_bind=0.000 par=[-0.5]
+  patient_interview                      3.87 ±0.02  interviews/ep= 15.9 cap_bind=0.000 par=[1, 0.5, 0.5]
+  patient_interview_everyone(v2 style)   2.31 ±0.02  interviews/ep= 17.2 cap_bind=0.016 par=[10, 0.5]
+  resume_falling_bar                     3.42 ±0.02  interviews/ep=  0.0 cap_bind=0.000 par=[1.68, 1.54, 0.3]
+  one_interview                          3.86 ±0.02  interviews/ep= 12.2 cap_bind=0.000 par=[2.27, 1.72, 0.29, 1.1, 0.8, 0.42, 0.14]
+  up_to_two_interviews                   3.93 ±0.02  interviews/ep=  9.9 cap_bind=0.000 par=[2.26, 1.83, -17.75, 0.08, 1.26, 1.01, 55.64, 0.55, 0.15]
+  oracle_threshold                       6.07 ±0.01  interviews/ep=  0.0 cap_bind=0.000 par=[2.52, 1.48, 0.16]
+
+== h0=0.0 b=0.03  (211s)
+  static_threshold                       3.10 ±0.02  interviews/ep=  0.0 cap_bind=0.000 par=[0.8]
+  patient_no_interview                   2.94 ±0.03  interviews/ep=  0.0 cap_bind=0.000 par=[-0.5]
+  patient_interview                      2.80 ±0.02  interviews/ep= 16.0 cap_bind=0.000 par=[1, 0.5, 0.5]
+  patient_interview_everyone(v2 style)   2.17 ±0.02  interviews/ep= 18.2 cap_bind=0.017 par=[10, 0.5]
+  resume_falling_bar                     3.31 ±0.03  interviews/ep=  0.0 cap_bind=0.000 par=[1.7, 1.65, 0.35]
+  one_interview                          3.71 ±0.02  interviews/ep= 11.3 cap_bind=0.000 par=[1.93, 1.39, 0.77, 0.9, 0.48, -0.04, 0.19]
+  up_to_two_interviews                   3.71 ±0.02  interviews/ep= 11.3 cap_bind=0.000 par=[1.93, 1.39, 99.0, 0.77, 0.9, 0.48, 99.0, -0.04, 0.19]
+  oracle_threshold                       5.94 ±0.01  interviews/ep=  0.0 cap_bind=0.000 par=[2.2, 1.63, 0.38]
+
+== h0=0.02 b=0.03  (211s)
+  static_threshold                       3.10 ±0.02  interviews/ep=  0.0 cap_bind=0.000 par=[0.8]
+  patient_no_interview                   1.90 ±0.02  interviews/ep=  0.0 cap_bind=0.000 par=[0.25]
+  patient_interview                      1.23 ±0.02  interviews/ep= 16.2 cap_bind=0.000 par=[1, 0.5, 0.5]
+  patient_interview_everyone(v2 style)   1.88 ±0.02  interviews/ep= 19.7 cap_bind=0.018 par=[10, 0.5]
+  resume_falling_bar                     3.17 ±0.02  interviews/ep=  0.0 cap_bind=0.000 par=[1.17, 0.89, 0.22]
+  one_interview                          3.54 ±0.02  interviews/ep=  9.8 cap_bind=0.000 par=[1.65, 1.31, 0.99, 0.44, 0.47, -0.06, 0.02]
+  up_to_two_interviews                   3.54 ±0.02  interviews/ep=  9.8 cap_bind=0.000 par=[1.65, 1.31, 99.0, 0.99, 0.44, 0.47, 99.0, -0.06, 0.02]
+  oracle_threshold                       5.87 ±0.02  interviews/ep=  0.0 cap_bind=0.000 par=[2.12, 1.57, 0.36]
+
+== h0=0.05 b=0.03  (211s)
+  static_threshold                       3.10 ±0.02  interviews/ep=  0.0 cap_bind=0.000 par=[0.8]
+  patient_no_interview                   1.18 ±0.02  interviews/ep=  0.0 cap_bind=0.000 par=[0.25]
+  patient_interview                      0.34 ±0.02  interviews/ep= 16.4 cap_bind=0.000 par=[1, 0.5, 0.5]
+  patient_interview_everyone(v2 style)   1.56 ±0.02  interviews/ep= 21.9 cap_bind=0.020 par=[10, 0.5]
+  resume_falling_bar                     3.15 ±0.03  interviews/ep=  0.0 cap_bind=0.000 par=[1.02, 0.62, 0.14]
+  one_interview                          3.34 ±0.02  interviews/ep=  7.7 cap_bind=0.000 par=[1.48, 0.91, -0.06, 0.24, 0.6, 0.11, 0.03]
+  up_to_two_interviews                   3.42 ±0.02  interviews/ep= 10.0 cap_bind=0.000 par=[1.42, 1.3, 7.12, 0.79, 0.71, 0.69, 29.31, 0.39, 0.09]
+  oracle_threshold                       5.84 ±0.02  interviews/ep=  0.0 cap_bind=0.000 par=[2.04, 1.31, 0.24]
+
+== h0=0.1 b=0.03  (350s)
+  static_threshold                       3.10 ±0.02  interviews/ep=  0.0 cap_bind=0.000 par=[0.8]
+  patient_no_interview                   0.66 ±0.02  interviews/ep=  0.0 cap_bind=0.000 par=[0.25]
+  patient_interview                      0.01 ±0.01  interviews/ep=  3.2 cap_bind=0.000 par=[1, 1.0, 0.5]
+  patient_interview_everyone(v2 style)   1.20 ±0.02  interviews/ep= 25.5 cap_bind=0.023 par=[10, 0.5]
+  resume_falling_bar                     3.17 ±0.03  interviews/ep=  0.0 cap_bind=0.000 par=[1.01, 0.48, 0.11]
+  one_interview                          3.14 ±0.03  interviews/ep=  0.0 cap_bind=0.000 par=[1.1, 31.88, 0.65, 1.23, 40.3, 0.52, 0.1]
+  up_to_two_interviews                   3.14 ±0.03  interviews/ep=  0.0 cap_bind=0.000 par=[1.1, 31.88, 99.0, 0.65, 1.23, 40.3, 99.0, 0.52, 0.1]
+  oracle_threshold                       5.83 ±0.02  interviews/ep=  0.0 cap_bind=0.000 par=[1.95, 1.28, 0.29]

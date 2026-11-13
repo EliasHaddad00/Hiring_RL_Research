@@ -1,0 +1,20 @@
+Question: "Good evening!
+I had a quick question regarding the final project grading criteria, particularly the contribution and novelty components.
+
+If we propose an RL-based approach to an existing problem, conduct experiments, and ultimately find that our approach does not outperform existing methods, would that negatively impact our grade? Or would a well-supported negative result, with meaningful analysis explaining why the approach did not outperform the baselines, still be considered a valid research contribution?
+
+I just wanted to clarify how much emphasis is placed on achieving improved performance versus the quality of the research, experimentation, and findings."
+
+Answer: "A negative result will not hurt your grade—provided it is backed by thorough experimentation and rigorous analysis. In research, demonstrating why an approach struggles can be just as valuable as beating a baseline.
+
+However, to ensure your report is academically sound, you must prove that the performance gap is due to inherent task characteristics rather than execution flaws. Your report should clearly address the following:
+
+Convergence & Stability: Provide complete learning curves (reward, loss, policy entropy) to prove the model actually converged and wasn't limited by undertraining or instability.
+
+Implementation & Hyperparameters: Include hyperparameter tuning and ablation results to demonstrate that the issue isn't caused by sub-optimal setups or engineering bugs.
+
+Problem & Data Constraints: Analyze if the task itself presents fundamental hurdles for RL (e.g., sparse rewards, sample inefficiency, non-Markovian states, or data limitations).
+
+Failure Mode Analysis: Examine specific test cases where RL underperformed relative to the baseline and explain the structural reasons behind the failure.
+
+If your report rigorously rules out implementation bias and explains the underlying mechanics of why RL is unsuited for this problem, it will be evaluated as a high-quality, valid research contribution."

@@ -1,0 +1,17 @@
+# Seed pools. Fixed before any run; pools are disjoint. Never tune on `final` or `evaluation`.
+# Never drop a seed. Counts marked "planning default" can change until the Dec 2 freeze.
+
+# An episode seed fixes arrivals, qualities, signal noise and the departure and acceptance draws
+# for that episode (hiring/seeding.py), so every policy faces the same world.
+episode_seeds:
+  dev:        {start: 1000000, count: 100000}   # unit tests, G1 checks, throughput; never reported as a result
+  tuning:     {start: 2000000, count: 4000}     # rule fitting and PPO configuration scoring
+  evaluation: {start: 3000000, count: 10000}    # final paired evaluation of every policy
+
+# Training seeds (PPO initialisation and rollout sampling).
+training_seeds:
+  tuning: [101, 102, 103]                       # 3 per configuration (planning default)
+  final:  [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010, 1011, 1012, 1013, 1014, 1015]
+
+# During training, episodes are drawn from this range, disjoint from all pools above.
+training_episode_seed_start: 10000000

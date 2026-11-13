@@ -1,0 +1,23 @@
+# Stress scenario (the decided parameter set). Primary setting: h0 = 0.05 (planning default).
+# Other pressure levels override h0 and accept_decay:
+#   none            h0 = 0,    accept_decay = 0
+#   decay only      h0 = 0,    accept_decay = 0.03
+#   poaching        h0 = 0.02 / 0.05 / 0.10, accept_decay = 0.03
+name: stress
+horizon: 60
+roles: 3
+arrival: poisson
+arrival_rate: 1.5
+max_candidates: 135
+resume_sd: 1.5
+interview_sd: 1.0
+interview_cost: 0.05
+interviews_per_day: 3
+max_interviews: 3
+h0: 0.05
+quality_slope: 0.6
+accept_base: 0.9
+accept_decay: 0.03
+n_slots: 10
+signals: gaussian
+obs_belief: survival

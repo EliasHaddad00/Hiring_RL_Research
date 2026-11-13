@@ -1,0 +1,23 @@
+# Exact small instance: one role, 12 days, one interview slot, pool cap 2, binned signals.
+# Solved by hiring/exact_dp.py. Overflow at arrival is an automatic drop (hiring/pool.py).
+name: small_exact
+horizon: 12
+roles: 1
+arrival: bernoulli
+arrival_rate: 0.6
+max_candidates: 12
+resume_sd: 1.5
+interview_sd: 1.0
+interview_cost: 0.05
+interviews_per_day: 1
+max_interviews: 2
+h0: 0.05
+quality_slope: 0.6
+accept_base: 0.9
+accept_decay: 0.03
+n_slots: 2
+pool_cap: 2
+signals: binned
+resume_cuts: [-0.8, 0.8]
+interview_cuts: [0.0, 1.0]
+obs_belief: survival
