@@ -12,6 +12,8 @@ Every number below was produced by this repository's code. "Prototype" and "publ
 
 Open problem, not a G1 condition: saved SB3 models cannot be loaded under Python 3.12.0 (standard-library `zipfile` bug). Two tests fail for this reason: `test_setup.py::test_zipfile_streams_seek_correctly` and `test_policies.py::test_save_and_load_round_trip`. Needs a later Python patch release before week 2.
 
+**Resolved Nov 14.** The environment was rebuilt on Python 3.13.17 from the same lockfile. All 97 fast tests and all 17 slow tests pass, including the two above.
+
 ## Rule reproduction
 
 Method: a copy of `notes/hiring_sim_v3.py` was rerun with fixed seeds and reproduced every score and every rounded parameter in the original results file. Its 4,000 evaluation episodes were then replayed draw for draw through our environment with its full-precision parameters.

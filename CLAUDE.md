@@ -60,7 +60,7 @@ Commands (fill in as they come to exist, and keep this list current):
 - Run one policy on a fixed episode pool: `python experiments/scripts/evaluate.py --help`
 - Regenerate all figures and tables: `make figures` (stub until week 2)
 
-Known environment problem: Python 3.12.0's `zipfile` breaks loading of saved SB3 models (`test_setup.py` fails). Use a later Python patch release before any run that must reload a model.
+The environment runs Python 3.13.17 (since Nov 14; create it with `py -3.13 -m venv .venv`). Do not use Python 3.12.0: its `zipfile` breaks loading of saved SB3 models, and `test_setup.py` fails there.
 
 ## Rules for working in this project
 
