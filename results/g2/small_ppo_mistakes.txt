@@ -1,0 +1,28 @@
+Exact optimum 0.63333. Loss per episode by mistake type, priced by the exact solver (40,000 development episodes, greedy actions).
+
+run                      offer too early      offer too late     wrong candidate  unneeded interview    missed interview    total  % of optimum lost  optimum - simulated
+index_s101                        0.0037              0.0000              0.0001              0.0002              0.0004   0.0044              0.70%               0.0095
+index_s102                        0.0030              0.0008              0.0001              0.0004              0.0002   0.0045              0.71%               0.0100
+index_s103                        0.0037              0.0003              0.0001              0.0010              0.0002   0.0053              0.84%               0.0103
+unrestricted_s101                 0.0066              0.0003              0.0019              0.0047              0.0008   0.0144              2.28%               0.0199
+unrestricted_s102                 0.0074              0.0002              0.0022              0.0013              0.0009   0.0121              1.91%               0.0168
+unrestricted_s103                 0.0042              0.0014              0.0019              0.0035              0.0016   0.0125              1.98%               0.0186
+
+Mistakes per 100 episodes:
+index_s101                           9.8                 0.2                 1.0                11.7                10.3
+index_s102                           8.7                 4.3                 0.3                17.8                 7.4
+index_s103                           9.8                 3.1                 0.4                26.7                 2.8
+unrestricted_s101                   26.6                 1.1                15.0                32.0                19.4
+unrestricted_s102                   26.4                 1.0                15.5                19.5                14.2
+unrestricted_s103                   14.0                 7.0                14.4                34.5                13.9
+
+Share of the loss by day of the 12-day window (days 1-4 / 5-8 / 9-12):
+index_s101           0% / 49% / 51%
+index_s102           0% / 27% / 73%
+index_s103           0% / 35% / 65%
+unrestricted_s101    2% / 59% / 38%
+unrestricted_s102    11% / 40% / 49%
+unrestricted_s103    2% / 42% / 56%
+
+total = exact expected shortfall of the agent (no episode luck). 'optimum - simulated' is the same
+quantity estimated from realised payoffs; it differs from total only by sampling error (about 0.004).

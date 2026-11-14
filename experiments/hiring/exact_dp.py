@@ -175,3 +175,174 @@ class ExactPolicy:
             return N + order[j]
         j = self.solver.interview_choice(t, pool)
         return order[j] if j is not None else 2 * N
+
+
+# ---- exact policy evaluation ------------------------------------------------------------------------
+#
+# The same backward pass as the solver, with a policy's action in place of the maximum. A policy
+# is a function of the solver state: `choose(t, pool)` returns [(probability, kind, j), ...] with
+# kind in {"offer", "interview", "end"} and j an index into `pool`. It is asked only in the offer
+# phase. After an interview the environment allows nothing but "end day" (one slot per day), and
+# "interview" below already includes that forced step.
+
+class PolicyEvaluator:
+    def __init__(self, solver: ExactSolver, choose):
+        assert solver.overflow == "automatic", "policies play the environment, which drops automatically"
+        self.s, self.choose = solver, choose
+        self.memo = {"W": {}, "U": {}, "Pc": {}}
+
+    def W(self, t, pool):
+        s = self.s
+        if t > s.T:
+            return 0.0
+        key = (t, pool)
+        v = self.memo["W"].get(key)
+        if v is None:
+            v = (1 - s.pa) * self.U(t, pool)
+            for r, pr in enumerate(s.prior_r):
+                v += s.pa * pr * self.U(t, s.after_arrival(t, pool, r))
+            self.memo["W"][key] = v
+        return v
+
+    def U(self, t, pool):
+        s = self.s
+        key = (t, pool)
+        v = self.memo["U"].get(key)
+        if v is None:
+            v, total = 0.0, 0.0
+            for prob, kind, j in self.choose(t, pool):
+                total += prob
+                if prob == 0.0:
+                    continue
+                if kind == "end":
+                    q = self.Pc(t, pool)
+                elif kind == "offer":
+                    ty, d = pool[j]
+                    p = s.p_accept(d)
+                    q = p * s.M[ty][d] + (1 - p) * self.U(t, pool[:j] + pool[j + 1:])
+                else:
+                    ty, d = pool[j]
+                    assert t < s.T and s.nx[ty][0] >= 0, "the policy chose an interview that is not allowed"
+                    q = -s.c
+                    for b_, nt in enumerate(s.nx[ty]):
+                        q += s.PB[ty][b_][d] * self.Pc(t, tuple(sorted(pool[:j] + ((nt, d),) + pool[j + 1:])))
+                v += prob * q
+            assert abs(total - 1.0) < 1e-9, "action probabilities must sum to 1"
+            self.memo["U"][key] = v
+        return v
+
+    def Pc(self, t, pool):
+        s = self.s
+        key = (t, pool)
+        v = self.memo["Pc"].get(key)
+        if v is None:
+            v = 0.0
+            if t < s.T:
+                for stay in itertools.product((0, 1), repeat=len(pool)):
+                    pr, new = 1.0, []
+                    for keep, (ty, d) in zip(stay, pool):
+                        sv = s.S[ty][d]
+                        if keep:
+                            pr *= sv
+                            new.append((ty, d + 1))
+                        else:
+                            pr *= 1 - sv
+                    if pr > 0:
+                        v += pr * self.W(t + 1, tuple(new))
+            self.memo["Pc"][key] = v
+        return v
+
+    def value(self) -> float:
+        """Expected payoff of the policy from an empty pool on day 1."""
+        return self.W(1, ())
+
+
+def valid_actions(solver: ExactSolver, t, pool):
+    """[(kind, j), ...] allowed in the offer phase of state (t, pool); "end" is always allowed."""
+    acts = [("offer", j) for j in range(len(pool))]
+    if t < solver.T:
+        acts += [("interview", j) for j, (ty, _) in enumerate(pool) if solver.nx[ty][0] >= 0]
+    return acts + [("end", None)]
+
+
+def optimal_choice(solver: ExactSolver):
+    def choose(t, pool):
+        j = solver.offer_choice(t, pool)
+        if j is not None:
+            return [(1.0, "offer", j)]
+        j = solver.interview_choice(t, pool)
+        return [(1.0, "interview", j)] if j is not None else [(1.0, "end", None)]
+    return choose
+
+
+def uniform_choice(solver: ExactSolver):
+    """The random policy: uniform over the valid actions."""
+    def choose(t, pool):
+        acts = valid_actions(solver, t, pool)
+        return [(1.0 / len(acts), kind, j) for kind, j in acts]
+    return choose
+
+
+# ---- the environment's view of a solver state ------------------------------------------------------
+
+def slot_order(solver: ExactSolver, pool):
+    """Pool indices in the environment's slot order: highest naive estimate first, ties by arrival
+    (the candidate who has waited longer arrived earlier)."""
+    return sorted(range(len(pool)), key=lambda i: (-solver.naive[pool[i][0]], -pool[i][1]))
+
+
+def state_observation(solver: ExactSolver, t, pool):
+    """Observation and action mask the environment shows in the offer phase of (t, pool).
+
+    Used to evaluate a learned agent exactly. tests/test_exact_dp.py checks it against env.py.
+    """
+    import numpy as np
+    from .env import MEAN_SCALE, N_GLOBAL
+
+    sc, b = solver.sc, solver.b
+    N, F = sc.n_slots, 5 + 1 + b.B
+    obs = np.zeros(N * F + N_GLOBAL, np.float32)
+    mask = np.zeros(2 * N + 1, bool)
+    mask[2 * N] = True
+    order = slot_order(solver, pool)
+    assert len(order) <= N
+    for slot, i in enumerate(order):
+        ty, d = pool[i]
+        r, counts = b.types[ty]
+        est = b.M[ty, d] if sc.obs_belief == "survival" else b.M[ty, 0]
+        row = [1.0, est / MEAN_SCALE, sum(counts) / sc.max_interviews, d / sc.horizon, 0.0, r / (b.R - 1)]
+        obs[slot * F:(slot + 1) * F] = row + [c / sc.max_interviews for c in counts]
+        mask[N + slot] = True
+        mask[slot] = t < solver.T and solver.nx[ty][0] >= 0
+    g = N * F
+    obs[g:] = [(sc.horizon - (t - 1)) / sc.horizon, 1.0, 1.0, min(len(pool), 2 * N) / (2 * N), 1.0]
+    return obs, mask, order
+
+
+def greedy_choice(solver: ExactSolver, model):
+    """The greedy (most probable valid action) policy of a MaskablePPO model, as a function of the state."""
+    import numpy as np
+
+    solver.value()                                   # fills the memo with every reachable offer-phase state
+    known = set(solver.memo["U"])
+    N = solver.sc.n_slots
+    table = {}
+
+    def fill(keys):
+        for i in range(0, len(keys), 8192):
+            chunk = keys[i:i + 8192]
+            views = [state_observation(solver, t, pool) for t, pool in chunk]
+            actions, _ = model.predict(np.stack([v[0] for v in views]), action_masks=np.stack([v[1] for v in views]),
+                                       deterministic=True)
+            for key, (_, _, order), a in zip(chunk, views, actions):
+                a = int(a)
+                table[key] = ("end", None) if a == 2 * N else (("offer", order[a - N]) if a >= N else ("interview", order[a]))
+
+    fill(list(known))
+
+    def choose(t, pool):
+        if (t, pool) not in table:                   # a state the solver never visited (should not happen)
+            fill([(t, pool)])
+        kind, j = table[(t, pool)]
+        return [(1.0, kind, j)]
+    return choose

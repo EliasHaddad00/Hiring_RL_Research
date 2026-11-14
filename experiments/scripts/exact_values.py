@@ -1,0 +1,69 @@
+"""Exact expected payoff of each trained agent on the small instance, beside two estimates of it.
+
+  exact      backward pass over every state with the agent's greedy action in place of the maximum
+             (hiring/exact_dp.py, PolicyEvaluator). No sampling at all.
+  priced     sum of solver-priced mistakes along simulated episodes (price_mistakes.py)
+  realised   paired difference of realised payoffs to the exact policy on 40,000 development
+             episodes (check_small_ppo.py)
+
+Writes results/g2/exact_values.{txt,json}.
+"""
+import json
+import sys
+from pathlib import Path
+
+import numpy as np
+import torch as th
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from hiring.config import load_scenario  # noqa: E402
+from hiring.exact_dp import ExactSolver, PolicyEvaluator, greedy_choice, optimal_choice, uniform_choice  # noqa: E402
+
+OUT = Path(__file__).resolve().parents[2] / "results" / "g2"
+SOURCES = [("ppo_small", "small_ppo"), ("copy_test", "copy_test")]
+
+
+def main():
+    from sb3_contrib import MaskablePPO
+    th.set_num_threads(1)
+    sc = load_scenario("small_exact")
+    solver = ExactSolver(sc, "automatic")
+    optimum = solver.value()
+    limit = -0.02 * optimum
+    check = PolicyEvaluator(solver, optimal_choice(solver)).value()
+    random_value = PolicyEvaluator(solver, uniform_choice(solver)).value()
+    lines = [f"Exact optimum {optimum:.5f}; the optimal policy evaluated by the same pass {check:.5f}; random policy {random_value:.5f}.",
+             f"Offer-phase states evaluated per agent: {len(solver.memo['U']):,}.", "",
+             f"{'agent':28s} {'exact value':>12s} {'exact shortfall':>16s} {'% of optimum':>13s} {'within 2%':>10s} "
+             f"{'priced shortfall':>17s} {'realised shortfall':>19s} {'95% interval':>18s}"]
+    rows = []
+    for folder, tag in SOURCES:
+        priced = {r["run"]: r["total_loss"] for r in json.loads((OUT / f"{tag}_mistakes.json").read_text())["rows"]}
+        realised = {r["run"]: r["greedy"] for r in json.loads((OUT / f"{tag}.json").read_text())["rows"]}
+        for path in sorted((OUT / folder).glob("*/model.zip")):
+            name = path.parent.name
+            model = MaskablePPO.load(path, device="cpu")
+            value = PolicyEvaluator(solver, greedy_choice(solver, model)).value()
+            g = realised[name]
+            rows.append(dict(agent=f"{folder}/{name}", exact_value=value, exact_shortfall=optimum - value,
+                             percent_of_optimum=100 * value / optimum, within_2_percent=bool(value - optimum > limit),
+                             priced_shortfall=priced[name], realised_shortfall=-g["diff"],
+                             realised_interval=[-g["hi"], -g["lo"]]))
+            r = rows[-1]
+            lines.append(f"{r['agent']:28s} {value:12.5f} {r['exact_shortfall']:16.5f} {r['percent_of_optimum']:12.2f}% "
+                         f"{'yes' if r['within_2_percent'] else 'no':>10s} {r['priced_shortfall']:17.5f} "
+                         f"{r['realised_shortfall']:19.5f} {'[%.4f, %.4f]' % tuple(r['realised_interval']):>18s}")
+            print(lines[-1], flush=True)
+    d_priced = np.array([r["exact_shortfall"] - r["priced_shortfall"] for r in rows])
+    d_real = np.array([r["exact_shortfall"] - r["realised_shortfall"] for r in rows])
+    lines += ["", f"exact minus priced shortfall:   largest |difference| {np.abs(d_priced).max():.5f}, mean {d_priced.mean():+.5f}",
+              f"exact minus realised shortfall: largest |difference| {np.abs(d_real).max():.5f}, mean {d_real.mean():+.5f}",
+              "", "Agents use training seeds 101 to 103 or supervised imitation (copy_test); a gate check, not a reported result."]
+    text = "\n".join(lines)
+    print("\n" + text)
+    (OUT / "exact_values.txt").write_text(text + "\n")
+    (OUT / "exact_values.json").write_text(json.dumps(dict(optimum=optimum, random=random_value, rows=rows), indent=1))
+
+
+if __name__ == "__main__":
+    main()

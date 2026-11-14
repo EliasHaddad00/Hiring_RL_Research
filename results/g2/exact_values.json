@@ -1,0 +1,123 @@
+{
+ "optimum": 0.6333277027645984,
+ "random": -0.014052269116008265,
+ "rows": [
+  {
+   "agent": "ppo_small/index_s101",
+   "exact_value": 0.6288317872765681,
+   "exact_shortfall": 0.0044959154880303,
+   "percent_of_optimum": 99.29011229598756,
+   "within_2_percent": true,
+   "priced_shortfall": 0.004426669963029165,
+   "realised_shortfall": 0.0069360188807516465,
+   "realised_interval": [
+    0.0040194064499174285,
+    0.009852631311585865
+   ]
+  },
+  {
+   "agent": "ppo_small/index_s102",
+   "exact_value": 0.6287785612029447,
+   "exact_shortfall": 0.004549141561653647,
+   "percent_of_optimum": 99.28170810438328,
+   "within_2_percent": true,
+   "priced_shortfall": 0.004480614087544469,
+   "realised_shortfall": 0.007419760063841253,
+   "realised_interval": [
+    0.00474278181431529,
+    0.010096738313367215
+   ]
+  },
+  {
+   "agent": "ppo_small/index_s103",
+   "exact_value": 0.6279637873519127,
+   "exact_shortfall": 0.00536391541268566,
+   "percent_of_optimum": 99.15305845784557,
+   "within_2_percent": true,
+   "priced_shortfall": 0.005304585913240107,
+   "realised_shortfall": 0.007705855345866372,
+   "realised_interval": [
+    0.004428206522192846,
+    0.010983504169539898
+   ]
+  },
+  {
+   "agent": "ppo_small/unrestricted_s101",
+   "exact_value": 0.6189823091651285,
+   "exact_shortfall": 0.014345393599469847,
+   "percent_of_optimum": 97.73491771529187,
+   "within_2_percent": false,
+   "priced_shortfall": 0.01441002367884297,
+   "realised_shortfall": 0.017377581623187435,
+   "realised_interval": [
+    0.012844006172165308,
+    0.021911157074209563
+   ]
+  },
+  {
+   "agent": "ppo_small/unrestricted_s102",
+   "exact_value": 0.6213174224117082,
+   "exact_shortfall": 0.012010280352890201,
+   "percent_of_optimum": 98.10362308478486,
+   "within_2_percent": true,
+   "priced_shortfall": 0.012065334391740741,
+   "realised_shortfall": 0.01420448185277439,
+   "realised_interval": [
+    0.00978618358839687,
+    0.01862278011715191
+   ]
+  },
+  {
+   "agent": "ppo_small/unrestricted_s103",
+   "exact_value": 0.6208181684687766,
+   "exact_shortfall": 0.0125095342958218,
+   "percent_of_optimum": 98.02479281401789,
+   "within_2_percent": true,
+   "priced_shortfall": 0.012529736236500097,
+   "realised_shortfall": 0.0159933357371503,
+   "realised_interval": [
+    0.011921282757137705,
+    0.020065388717162895
+   ]
+  },
+  {
+   "agent": "copy_test/index_s0",
+   "exact_value": 0.6308797760906659,
+   "exact_shortfall": 0.0024479266739324546,
+   "percent_of_optimum": 99.61348182572043,
+   "within_2_percent": true,
+   "priced_shortfall": 0.002456461368823569,
+   "realised_shortfall": 0.0026798884930327657,
+   "realised_interval": [
+    0.0007061693434005211,
+    0.00465360764266501
+   ]
+  },
+  {
+   "agent": "copy_test/pooled_s0",
+   "exact_value": 0.6332761737902821,
+   "exact_shortfall": 5.152897431626169e-05,
+   "percent_of_optimum": 99.99186377382651,
+   "within_2_percent": true,
+   "priced_shortfall": 4.770229528904033e-05,
+   "realised_shortfall": 0.0002318186086929848,
+   "realised_interval": [
+    -0.00024401909715753326,
+    0.0007076563145435029
+   ]
+  },
+  {
+   "agent": "copy_test/unrestricted_s0",
+   "exact_value": 0.6332892565681563,
+   "exact_shortfall": 3.8446196442110114e-05,
+   "percent_of_optimum": 99.99392949396113,
+   "within_2_percent": true,
+   "priced_shortfall": 3.741783101350627e-05,
+   "realised_shortfall": 0.0002942981740667062,
+   "realised_interval": [
+    -0.00018336409128051254,
+    0.000771960439413925
+   ]
+  }
+ ]
+}

@@ -1,6 +1,6 @@
 PY ?= .venv/Scripts/python.exe
 
-.PHONY: test test-slow g1 figures
+.PHONY: test test-slow g1 figures paper-setup
 
 test:
 	$(PY) -m pytest experiments/tests
@@ -15,6 +15,10 @@ g1:
 	$(PY) experiments/scripts/measure_throughput.py
 	$(PY) experiments/scripts/check_library.py
 	$(PY) experiments/scripts/check_slot_view.py
+
+# Download the official ICML 2026 style files into paper/ (they are not kept in the repository).
+paper-setup:
+	$(PY) experiments/scripts/paper_setup.py
 
 # Stub: analysis scripts arrive in weeks 2 to 4.
 figures:

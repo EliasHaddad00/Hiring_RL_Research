@@ -120,3 +120,49 @@ def test_no_policy_beats_the_optimum_in_simulation(auto12):
     n = 4000
     rand = evaluate(SMALL, RandomPolicy(), seeds=episode_seeds("dev", n))["ret"]
     assert rand.mean() + 3 * rand.std(ddof=1) / np.sqrt(n) < auto12.value()
+
+
+# ---- exact policy evaluation ------------------------------------------------------------------------
+
+def test_exact_evaluation_of_the_optimal_policy_gives_the_optimum(auto12):
+    from hiring.exact_dp import PolicyEvaluator, optimal_choice
+    assert PolicyEvaluator(auto12, optimal_choice(auto12)).value() == pytest.approx(auto12.value(), abs=1e-12)
+    assert auto12.value() == pytest.approx(0.63333, abs=1e-5)
+
+
+def test_exact_evaluation_of_the_random_policy_matches_simulation(auto12):
+    from hiring.exact_dp import PolicyEvaluator, uniform_choice
+    exact = PolicyEvaluator(auto12, uniform_choice(auto12)).value()
+    sim = evaluate(SMALL, RandomPolicy(), seeds=episode_seeds("dev", 20000))["ret"]
+    se = sim.std(ddof=1) / np.sqrt(len(sim))
+    assert abs(sim.mean() - exact) < 3 * se, (sim.mean(), exact, se)
+    assert exact < 0.1 < auto12.value()
+
+
+def test_exact_evaluation_never_exceeds_the_optimum(auto12):
+    from hiring.exact_dp import PolicyEvaluator, valid_actions
+    for pick in (0, -1):                              # always the first valid action; always "end day"
+        ev = PolicyEvaluator(auto12, lambda t, pool: [(1.0, *valid_actions(auto12, t, pool)[pick])])
+        assert ev.value() <= auto12.value() + 1e-12
+    assert PolicyEvaluator(auto12, lambda t, pool: [(1.0, "end", None)]).value() == 0.0
+
+
+def test_observation_is_a_function_of_the_solver_state(auto12):
+    """In every offer-phase state of real episodes, the environment's observation and mask equal
+    the ones rebuilt from the solver state alone. So a learned agent can be evaluated exactly."""
+    from hiring.env import HiringEnv
+    from hiring.exact_dp import state_observation
+    env, rng, checked = HiringEnv(SMALL), np.random.default_rng(0), 0
+    for seed in episode_seeds("dev", 1500):
+        obs, _ = env.reset(seed=seed)
+        done = False
+        while not done:
+            v = env.view()
+            if v.offers_open:
+                pool = tuple(sorted((int(ty), int(d)) for ty, d in zip(v.types, v.days)))
+                o, m, order = state_observation(auto12, v.t + 1, pool)
+                assert np.allclose(o, obs, atol=1e-6) and np.array_equal(m, env.action_masks())
+                assert [pool[i] for i in order] == [(int(ty), int(d)) for ty, d in zip(v.types, v.days)]
+                checked += 1
+            obs, _, done, _, _ = env.step(int(rng.choice(np.flatnonzero(env.action_masks()))))
+    assert checked > 5000

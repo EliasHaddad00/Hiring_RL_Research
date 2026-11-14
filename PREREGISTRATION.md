@@ -103,6 +103,16 @@ interview noise, no pressure, very high hazard); imitation of the exact optimal 
 architecture; a standard reference task (CartPole); simulator statistics (arrival, acceptance,
 departure rates); upper bound at least as large as every evaluated policy at every setting.
 
+## Checks triggered before the tag
+
+- **Interview cap (Nov 14).** The rule "if more than 5% of hired candidates reach the cap of 3
+  interviews, rerun with a cap of 6" fired for the untuned price-directed rule: 18.8%, 12.8% and
+  5.7% of hires at h0 = 0, 0.02 and 0.05. Rerun with a cap of 6 on the same 4,000 development
+  episodes: payoff changes by at most 0.008 (the 2% margin is about 0.07) and the upper bound by
+  at most 0.001 (`results/g2/price_rule.txt`, `results/g2/bounds.txt`). Decision: the cap stays
+  at 3. The check is repeated once on a trained full-problem PPO agent, which may use interviews
+  differently from the rule.
+
 ## Deviations
 
 *(empty)*

@@ -72,13 +72,31 @@ def _normalized_entropy_callback():
     return NormalizedEntropy()
 
 
+def _timed_eval_class():
+    from sb3_contrib.common.maskable.callbacks import MaskableEvalCallback
+
+    class TimedEval(MaskableEvalCallback):
+        """MaskableEvalCallback that also records how long the evaluations take."""
+        seconds = 0.0
+
+        def _on_step(self) -> bool:
+            due = self.eval_freq > 0 and self.n_calls % self.eval_freq == 0
+            t0 = time.perf_counter()
+            out = super()._on_step()
+            if due:
+                self.seconds += time.perf_counter() - t0
+            return out
+
+    return TimedEval
+
+
 def train(cfg: dict, actor: str, seed: int, out_dir, total_timesteps: int | None = None,
           allow_final_seed: bool = False) -> dict:
     """Train one agent; write progress.csv, evaluations.npz, model.zip and run.json to out_dir."""
     import torch as th
     from sb3_contrib import MaskablePPO
-    from sb3_contrib.common.maskable.callbacks import MaskableEvalCallback
     from stable_baselines3.common.callbacks import CallbackList
+    _TimedEval = _timed_eval_class()
     from stable_baselines3.common.env_util import make_vec_env
     from stable_baselines3.common.logger import configure
     from stable_baselines3.common.monitor import Monitor
@@ -112,23 +130,30 @@ def train(cfg: dict, actor: str, seed: int, out_dir, total_timesteps: int | None
 
     # Fixed development episodes for the curve. One environment, so episodes are played in order;
     # the pool is cycled, so every evaluation uses the same set of episodes.
-    eval_seeds = list(episode_seeds("dev", int(ev["episodes"]), offset=EVAL_POOL_OFFSET))
-    eval_env = DummyVecEnv([lambda: Monitor(HiringEnv(sc, episode_seeds=eval_seeds))])
-    eval_cb = MaskableEvalCallback(eval_env, n_eval_episodes=len(eval_seeds),
-                                   eval_freq=max(1, int(ev["freq_steps"]) // n_envs),
-                                   deterministic=True, log_path=str(out_dir), best_model_save_path=None,
-                                   verbose=0, warn=False)
+    # eval.episodes = 0 switches the curve off (throughput measurements only).
+    callbacks, eval_seeds, eval_cb = [_normalized_entropy_callback()], [], None
+    if int(ev["episodes"]) > 0:
+        eval_seeds = list(episode_seeds("dev", int(ev["episodes"]), offset=EVAL_POOL_OFFSET))
+        eval_env = DummyVecEnv([lambda: Monitor(HiringEnv(sc, episode_seeds=eval_seeds))])
+        eval_cb = _TimedEval(eval_env, n_eval_episodes=len(eval_seeds),
+                             eval_freq=max(1, int(ev["freq_steps"]) // n_envs),
+                             deterministic=True, log_path=str(out_dir), best_model_save_path=None,
+                             verbose=0, warn=False)
+        callbacks.append(eval_cb)
     t0 = time.perf_counter()
-    model.learn(total_timesteps=steps, callback=CallbackList([_normalized_entropy_callback(), eval_cb]))
+    model.learn(total_timesteps=steps, callback=CallbackList(callbacks))
     wall = time.perf_counter() - t0
     model.logger.close()
     model.save(out_dir / "model")
     venv.close()
-    eval_env.close()
+    if eval_cb is not None:
+        eval_env.close()
     meta = dict(actor=actor, seed=int(seed), scenario=sc.name, h0=sc.h0, accept_decay=sc.accept_decay,
                 obs_belief=sc.obs_belief, total_timesteps=int(model.num_timesteps), wall_seconds=wall,
                 steps_per_second=model.num_timesteps / wall, config=cfg, commit=commit_hash(),
-                eval_episode_seeds=[eval_seeds[0], eval_seeds[-1]], eval_deterministic=True,
-                last_eval_mean=float(eval_cb.last_mean_reward))
+                eval_episode_seeds=[eval_seeds[0], eval_seeds[-1]] if eval_seeds else None,
+                eval_deterministic=True, torch_threads=th.get_num_threads(),
+                eval_seconds=float(eval_cb.seconds) if eval_cb is not None else 0.0,
+                last_eval_mean=float(eval_cb.last_mean_reward) if eval_cb is not None else None)
     (out_dir / "run.json").write_text(json.dumps(meta, indent=1))
     return meta

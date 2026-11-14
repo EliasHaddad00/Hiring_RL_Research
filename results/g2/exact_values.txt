@@ -1,0 +1,18 @@
+Exact optimum 0.63333; the optimal policy evaluated by the same pass 0.63333; random policy -0.01405.
+Offer-phase states evaluated per agent: 170,940.
+
+agent                         exact value  exact shortfall  % of optimum  within 2%  priced shortfall  realised shortfall       95% interval
+ppo_small/index_s101              0.62883          0.00450        99.29%        yes           0.00443             0.00694   [0.0040, 0.0099]
+ppo_small/index_s102              0.62878          0.00455        99.28%        yes           0.00448             0.00742   [0.0047, 0.0101]
+ppo_small/index_s103              0.62796          0.00536        99.15%        yes           0.00530             0.00771   [0.0044, 0.0110]
+ppo_small/unrestricted_s101       0.61898          0.01435        97.73%         no           0.01441             0.01738   [0.0128, 0.0219]
+ppo_small/unrestricted_s102       0.62132          0.01201        98.10%        yes           0.01207             0.01420   [0.0098, 0.0186]
+ppo_small/unrestricted_s103       0.62082          0.01251        98.02%        yes           0.01253             0.01599   [0.0119, 0.0201]
+copy_test/index_s0                0.63088          0.00245        99.61%        yes           0.00246             0.00268   [0.0007, 0.0047]
+copy_test/pooled_s0               0.63328          0.00005        99.99%        yes           0.00005             0.00023  [-0.0002, 0.0007]
+copy_test/unrestricted_s0         0.63329          0.00004        99.99%        yes           0.00004             0.00029  [-0.0002, 0.0008]
+
+exact minus priced shortfall:   largest |difference| 0.00007, mean +0.00001
+exact minus realised shortfall: largest |difference| 0.00348, mean -0.00189
+
+Agents use training seeds 101 to 103 or supervised imitation (copy_test); a gate check, not a reported result.

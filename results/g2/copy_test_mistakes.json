@@ -1,0 +1,113 @@
+{
+ "optimum": 0.6333277027645984,
+ "rows": [
+  {
+   "run": "index_s0",
+   "episodes": 40000,
+   "steps": 413570,
+   "mean_return": 0.6280866345632252,
+   "loss_per_episode": {
+    "offer too early": 0.0020639633837616768,
+    "offer too late": 3.184341671303776e-05,
+    "wrong candidate": 0.00010804165841687208,
+    "unneeded interview": 0.00013921484565617318,
+    "missed interview": 0.00011339806427580937
+   },
+   "mistakes_per_100_episodes": {
+    "offer too early": 4.315,
+    "offer too late": 0.6325,
+    "wrong candidate": 0.9025,
+    "unneeded interview": 2.25,
+    "missed interview": 9.23
+   },
+   "loss_by_day": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.7441086595724482e-05,
+    0.0001632213314371026,
+    0.001165108330691588,
+    0.0005185393377674464,
+    0.0005189196541293834,
+    7.323162820232027e-05
+   ],
+   "total_loss": 0.002456461368823569,
+   "percent_lost": 0.387865769664052
+  },
+  {
+   "run": "pooled_s0",
+   "episodes": 40000,
+   "steps": 417809,
+   "mean_return": 0.630534704447565,
+   "loss_per_episode": {
+    "offer too early": 7.341659255293621e-06,
+    "offer too late": 1.996991813257915e-05,
+    "wrong candidate": 5.870859774262248e-06,
+    "unneeded interview": 8.93568668658625e-06,
+    "missed interview": 5.584171440319057e-06
+   },
+   "mistakes_per_100_episodes": {
+    "offer too early": 0.38,
+    "offer too late": 0.2525,
+    "wrong candidate": 0.115,
+    "unneeded interview": 0.4775,
+    "missed interview": 0.74
+   },
+   "loss_by_day": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.7925535270642e-07,
+    1.970941085041568e-06,
+    8.09337691046245e-06,
+    1.475431311795396e-05,
+    2.270440882287595e-05
+   ],
+   "total_loss": 4.770229528904033e-05,
+   "percent_lost": 0.007532008323780966
+  },
+  {
+   "run": "unrestricted_s0",
+   "episodes": 40000,
+   "steps": 417745,
+   "mean_return": 0.6304722248821912,
+   "loss_per_episode": {
+    "offer too early": 4.8218895573076505e-06,
+    "offer too late": 1.175554174735384e-05,
+    "wrong candidate": 9.686231421594615e-06,
+    "unneeded interview": 2.732153957753814e-06,
+    "missed interview": 8.422014329496352e-06
+   },
+   "mistakes_per_100_episodes": {
+    "offer too early": 0.2575,
+    "offer too late": 0.235,
+    "wrong candidate": 0.185,
+    "unneeded interview": 0.265,
+    "missed interview": 0.6425
+   },
+   "loss_by_day": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    1.684250327359263e-07,
+    1.412887249656139e-06,
+    8.440074671280439e-07,
+    5.8504281571744866e-06,
+    1.1020487463025543e-05,
+    1.8121595643786134e-05
+   ],
+   "total_loss": 3.741783101350627e-05,
+   "percent_lost": 0.0059081311065614485
+  }
+ ]
+}

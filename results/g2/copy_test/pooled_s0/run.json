@@ -1,0 +1,35 @@
+{
+ "actor": "pooled",
+ "seed": 0,
+ "total_timesteps": 0,
+ "method": "supervised imitation of the exact policy",
+ "training_states": 172202,
+ "epochs": 40,
+ "agreement_on_training_states": 0.9986178874969482,
+ "final_loss": 0.00524681294336915,
+ "config": {
+  "scenario": "small_exact",
+  "scenario_overrides": {},
+  "total_timesteps": 3000000,
+  "n_envs": 8,
+  "hidden": 64,
+  "ppo": {
+   "n_steps": 512,
+   "batch_size": 256,
+   "n_epochs": 10,
+   "learning_rate": 0.0003,
+   "lr_schedule": "linear",
+   "gamma": 0.999,
+   "gae_lambda": 0.95,
+   "ent_coef": 0.01,
+   "clip_range": 0.2,
+   "vf_coef": 0.5,
+   "max_grad_norm": 0.5
+  },
+  "eval": {
+   "episodes": 2000,
+   "freq_steps": 100000
+  }
+ },
+ "commit": "5fa45ea"
+}
