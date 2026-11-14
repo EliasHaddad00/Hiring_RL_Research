@@ -1,0 +1,18 @@
+setting                          bound    fine  change   cap 6      z    lam  relaxed: computed  simulated     se  prototype
+stress, no pressure             4.3412  4.3379 +0.0033  4.3424  1.184  0.000             4.3412     4.3350 0.0220       none
+stress, h0 = 0 (decay only)     4.2898  4.2868 +0.0030  4.2903  1.168  0.000             4.2898     4.2750 0.0220       4.31
+stress, h0 = 0.02               4.1580  4.1541 +0.0039  4.1580  1.128  0.000             4.1580     4.1411 0.0226       4.17
+stress, h0 = 0.05 (primary)     3.9848  3.9828 +0.0020  3.9848  1.108  0.000             3.9848     3.9755 0.0217       4.00
+stress, h0 = 0.10               3.7684  3.7661 +0.0023  3.7684  1.044  0.000             3.7684     3.7603 0.0224       none
+
+bound = default grid (181 points, 80 quality nodes, 15 noise nodes); fine = 361 / 160 / 30.
+change = bound minus fine; the coarser grid errs upward, which is the safe side for an upper bound.
+relaxed: the priced problem without the role and slot limits, at the best z; simulated on 4000 development episodes.
+prototype = notes/prototypes/lag.py as reported in context/ (a target, not a result). Rerun here, the prototype
+gives 4.172 at h0 = 0.02; our code gives the same 4.17237 when set to its grid (91 points on [-3, 4], 15 / 9
+nodes) and its arrival integration (41 Gauss-Hermite nodes), so there the added wait action changes nothing.
+one-candidate table: 1,260,484 states per price; build 0.34 s, bound search 17.5 s.
+
+small instance (T = 12): bound 0.86236 (z = 0.536, lam = 0.0), exact optimum 0.63348 (choose) / 0.63333 (automatic drop); 2,340 states.
+
+Problems: none

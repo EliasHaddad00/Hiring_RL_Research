@@ -1,0 +1,198 @@
+{
+ "settings": [
+  {
+   "setting": "stress, no pressure",
+   "scenario": "stress",
+   "h0": 0.0,
+   "accept_decay": 0.0,
+   "bound": 4.341230354533534,
+   "z": 1.1840000000000002,
+   "lam": 0.0,
+   "per_lam": [
+    {
+     "lam": 0.0,
+     "bound": 4.341230354533534,
+     "z": 1.1840000000000002
+    },
+    {
+     "lam": 0.005,
+     "bound": 5.1646815868950675,
+     "z": 1.1800000000000002
+    },
+    {
+     "lam": 0.02,
+     "bound": 7.661304465640682,
+     "z": 1.1280000000000001
+    }
+   ],
+   "bound_fine_grid": 4.337882867826286,
+   "grid_change": 0.0033474867072476044,
+   "bound_interview_cap_6": 4.342399089519633,
+   "state_count": 1260484,
+   "build_seconds": 0.3430316000012681,
+   "solve_seconds": 17.521095299976878,
+   "relaxed_computed": 4.3412303545335345,
+   "relaxed_simulated": 4.335039284677982,
+   "relaxed_se": 0.021994454152686315,
+   "prototype": null,
+   "seconds": 58.675039699999616
+  },
+  {
+   "setting": "stress, h0 = 0 (decay only)",
+   "scenario": "stress",
+   "h0": 0.0,
+   "accept_decay": 0.03,
+   "bound": 4.289816961781029,
+   "z": 1.1680000000000001,
+   "lam": 0.0,
+   "per_lam": [
+    {
+     "lam": 0.0,
+     "bound": 4.289816961781029,
+     "z": 1.1680000000000001
+    },
+    {
+     "lam": 0.005,
+     "bound": 5.115960023416098,
+     "z": 1.1600000000000001
+    },
+    {
+     "lam": 0.02,
+     "bound": 7.619681953525908,
+     "z": 1.112
+    }
+   ],
+   "bound_fine_grid": 4.286784978936197,
+   "grid_change": 0.003031982844832193,
+   "bound_interview_cap_6": 4.290290732378808,
+   "state_count": 1260484,
+   "build_seconds": 0.35430219999398105,
+   "solve_seconds": 16.842975999985356,
+   "relaxed_computed": 4.289816961781028,
+   "relaxed_simulated": 4.275043521829313,
+   "relaxed_se": 0.02195670170694628,
+   "prototype": 4.31,
+   "seconds": 56.39145860000281
+  },
+  {
+   "setting": "stress, h0 = 0.02",
+   "scenario": "stress",
+   "h0": 0.02,
+   "accept_decay": 0.03,
+   "bound": 4.157972392643773,
+   "z": 1.1280000000000001,
+   "lam": 0.0,
+   "per_lam": [
+    {
+     "lam": 0.0,
+     "bound": 4.157972392643773,
+     "z": 1.1280000000000001
+    },
+    {
+     "lam": 0.005,
+     "bound": 4.989173668853793,
+     "z": 1.1400000000000001
+    },
+    {
+     "lam": 0.02,
+     "bound": 7.511289121761878,
+     "z": 1.096
+    }
+   ],
+   "bound_fine_grid": 4.154110658299745,
+   "grid_change": 0.003861734344027923,
+   "bound_interview_cap_6": 4.157980670661475,
+   "state_count": 1260484,
+   "build_seconds": 0.38479999999981374,
+   "solve_seconds": 16.73657199999434,
+   "relaxed_computed": 4.157972392643772,
+   "relaxed_simulated": 4.14112566597849,
+   "relaxed_se": 0.02259099898142201,
+   "prototype": 4.17,
+   "seconds": 56.906172899995
+  },
+  {
+   "setting": "stress, h0 = 0.05 (primary)",
+   "scenario": "stress",
+   "h0": 0.05,
+   "accept_decay": 0.03,
+   "bound": 3.9847880582215915,
+   "z": 1.108,
+   "lam": 0.0,
+   "per_lam": [
+    {
+     "lam": 0.0,
+     "bound": 3.9847880582215915,
+     "z": 1.108
+    },
+    {
+     "lam": 0.005,
+     "bound": 4.826965102926799,
+     "z": 1.08
+    },
+    {
+     "lam": 0.02,
+     "bound": 7.375551330406333,
+     "z": 1.052
+    }
+   ],
+   "bound_fine_grid": 3.9828192043404727,
+   "grid_change": 0.0019688538811188927,
+   "bound_interview_cap_6": 3.9847880582215915,
+   "state_count": 1260484,
+   "build_seconds": 0.35916769999312237,
+   "solve_seconds": 16.786014499986777,
+   "relaxed_computed": 3.984788058221592,
+   "relaxed_simulated": 3.975472392847788,
+   "relaxed_se": 0.021734306875237242,
+   "prototype": 4.0,
+   "seconds": 56.42845900001703
+  },
+  {
+   "setting": "stress, h0 = 0.10",
+   "scenario": "stress",
+   "h0": 0.1,
+   "accept_decay": 0.03,
+   "bound": 3.768400356994485,
+   "z": 1.044,
+   "lam": 0.0,
+   "per_lam": [
+    {
+     "lam": 0.0,
+     "bound": 3.768400356994485,
+     "z": 1.044
+    },
+    {
+     "lam": 0.005,
+     "bound": 4.627007281097407,
+     "z": 1.036
+    },
+    {
+     "lam": 0.02,
+     "bound": 7.224691329307107,
+     "z": 1.004
+    }
+   ],
+   "bound_fine_grid": 3.7660893862622533,
+   "grid_change": 0.002310970732231521,
+   "bound_interview_cap_6": 3.768400356994485,
+   "state_count": 1260484,
+   "build_seconds": 0.3494057000207249,
+   "solve_seconds": 17.122395699989283,
+   "relaxed_computed": 3.7684003569944844,
+   "relaxed_simulated": 3.7603462207316616,
+   "relaxed_se": 0.022443677332015723,
+   "prototype": null,
+   "seconds": 56.21661169998697
+  }
+ ],
+ "small_instance": {
+  "bound": 0.8623577838208812,
+  "z": 0.536,
+  "lam": 0.0,
+  "state_count": 2340,
+  "exact_choose": 0.6334766681681725,
+  "exact_automatic": 0.6333277027645984
+ },
+ "problems": []
+}

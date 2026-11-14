@@ -62,6 +62,17 @@ class GaussianBelief:
         w = self._w * keep ** d[..., None]
         return q, w, keep
 
+    def nodes(self, mu, n, d, tilt: bool = True):
+        """Quadrature form of the belief about q, for the bound and the price-directed rule.
+
+        Returns (q, weights, keep) with a trailing axis of quadrature nodes: the nodes, their
+        weights (summing to 1) and 1 - hazard at each node. tilt=True is the survival-aware
+        belief; tilt=False is the naive belief, which ignores the d rounds already survived.
+        """
+        q, w, keep = self._tilt(mu, n, d if tilt else np.zeros_like(np.asarray(d, float)))
+        q, w, keep = np.broadcast_arrays(q, w, keep)
+        return q, w / w.sum(-1, keepdims=True), keep
+
     def survival_moments(self, mu, n, d):
         """Mean and variance of q given the signals and survival of d poaching rounds."""
         q, w, _ = self._tilt(mu, n, d)
