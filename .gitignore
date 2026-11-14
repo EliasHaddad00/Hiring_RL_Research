@@ -8,3 +8,13 @@ results/**/models/
 # Papers without a licence that allows redistribution; kept locally only (see notes/articles/README.md)
 notes/articles/Dynamic-Selection-Problems.pdf
 notes/articles/The 37 Implementation Details*.pdf
+# ICML style files: fetched locally, not redistributed (see paper/README.md)
+paper/*.sty
+paper/*.bst
+# LaTeX build output
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.bbl
+paper/*.blg
+paper/main.pdf

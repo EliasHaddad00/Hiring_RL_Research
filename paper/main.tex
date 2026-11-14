@@ -1,0 +1,220 @@
+% ELEN E6885 final project. ICML 2026 format, at most 5 pages.
+% Skeleton written Nov 14, 2026. Only Section 3 (problem and simulator) is drafted.
+% Every "TODO" marks text that waits for results; no number below is a result unless it says so.
+% Style files (icml2026.sty, icml2026.bst, fancyhdr.sty, algorithm.sty, algorithmic.sty): see README.md.
+\documentclass{article}
+
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+% Course report, not a blind submission: the [accepted] option shows the author block.
+\usepackage[accepted]{icml2026}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage[capitalize,noabbrev]{cleveref}
+
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\usepackage{xcolor}
+
+\icmltitlerunning{Hiring as a Race Against Poaching}
+
+\begin{document}
+
+\twocolumn[
+  \icmltitle{Hiring as a Race Against Poaching:\\
+    Do Simple Rules Leave Anything for Reinforcement Learning?}
+
+  \begin{icmlauthorlist}
+    \icmlauthor{Author name}{cu}
+  \end{icmlauthorlist}
+  \icmlaffiliation{cu}{ELEN E6885 Reinforcement Learning, Columbia University, New York, USA}
+  \icmlcorrespondingauthor{Author name}{author@columbia.edu}
+  \icmlkeywords{reinforcement learning, sequential hiring, costly inspection, index policies, upper bounds}
+  \vskip 0.3in
+]
+
+\printAffiliationsAndNotice{}
+
+% ---------------------------------------------------------------------------------------------
+\begin{abstract}
+  \todo{One paragraph, 4 to 6 sentences: the race (interviews inform, competitors poach); the
+  simulator; the three yardsticks (tuned rules, exact optimum on a small instance, Lagrangian upper
+  bound); the two ideas tested (index-structured actor, survival-aware belief); one verdict per
+  research question, each from the decision rule fixed in the pre-registration.}
+\end{abstract}
+
+% ---------------------------------------------------------------------------------------------
+\section{Introduction}
+\label{sec:intro}
+% 0.6 page with the abstract.
+\todo{The race: every interview tells the employer more about a candidate and gives competitors
+another day to hire them. Four questions: RQ1 how close simple rules get to the optimum; RQ2
+whether PPO reaches the optimum where it is computable and beats the best rule on the full
+problem; RQ3 whether an index-structured policy is enough once candidates leave; RQ4 whether
+correcting the quality estimate for survival changes decisions. Three contributions. Headline
+verdicts.}
+
+\todo{Novelty wording, hedged: ``To our knowledge, and within the search described in
+\cref{sec:related}, no published work gives a learned policy for this combined setting.'' Do not
+claim to be first to learn index policies, first to show index policies fail, or first to notice
+that candidates who remain available are a weaker group.}
+
+% ---------------------------------------------------------------------------------------------
+\section{Related Work}
+\label{sec:related}
+% 0.3 page. Cite only papers that have been opened; mark anything read only as an abstract.
+\todo{Four short groups: analytic hiring models (ordering offers under deadlines, hiring
+pipelines, secretaries with departures); learning in costly inspection (Pandora's box with
+deadlines); learned index policies; selection by departure in labour economics. State the search
+scope and date next to the novelty sentence.}
+
+% ---------------------------------------------------------------------------------------------
+\section{Problem and Simulator}
+\label{sec:problem}
+% 0.6 page. Drafted Nov 14 from experiments/hiring/env.py and experiments/configs/.
+
+\textbf{The task.} A firm must fill $m$ roles within $T$ days. Each day a Poisson number of
+candidates arrives, with mean $\lambda$. Candidate $i$ has a hidden quality
+$q_i \sim \mathcal{N}(0,1)$ that is never observed. On arrival the firm sees a noisy resume
+score $q_i + \sigma_R \varepsilon$. An interview costs $c$ and returns another noisy score
+$q_i + \sigma_I \varepsilon'$. The firm may make an offer to any candidate in its pool. An offer
+made after the candidate has waited $d$ days is accepted with probability
+$a_0 e^{-\beta d}$; a candidate who declines leaves. Each night every waiting candidate is hired
+elsewhere (``poached'') with probability
+\begin{equation}
+  h(q_i) = \min\bigl(1,\; h_0 e^{\kappa q_i}\bigr), \qquad \kappa > 0,
+  \label{eq:hazard}
+\end{equation}
+so stronger candidates leave sooner. The payoff of an episode is the total quality of the
+accepted hires minus the interview costs, and the firm maximises its expectation. The episode ends
+when all roles are filled or after day $T$.
+
+\textbf{Why it is a race.} Waiting has two prices. An interview improves the estimate of $q_i$,
+but its result arrives the next morning, after one more night of poaching and with a lower
+acceptance probability. And by \cref{eq:hazard} the candidates who are still available are, on
+average, weaker than their scores suggest: the usual Gaussian estimate ignores that survival is
+itself evidence. \Cref{sec:methods} gives the corrected estimate.
+
+\textbf{Order of a day.} The model is a partially observable Markov decision process, and its
+results depend on the timing rules, so we fix them: (1) yesterday's interview results are
+revealed; (2) new candidates arrive; (3) the firm makes offers, one at a time, each resolved
+before the next; (4) the firm chooses interviews; (5) poaching happens overnight. A candidate can
+be interviewed at most once per day and at most three times in total, at most $K$ interviews
+take place per day, and none on the last day, when a result could no longer be used. A candidate
+interviewed today can therefore receive an offer tomorrow at the earliest, and an interview
+result is lost if the candidate is poached that night.
+
+\textbf{Decision interface.} The policy acts one step at a time: it picks one of the $N = 10$
+shown candidates and either interviews or makes an offer, or it ends the day. That is a single
+choice among $2N + 1$ actions, with invalid choices masked. The shown candidates are the $N$ with
+the highest resume-and-interview estimate, in that order, for every policy we compare; rules and
+learned agents act through this same view. The observation holds, for each shown candidate, the
+quality estimate, the number of interview results seen, the days waited and whether the candidate
+was interviewed today, and, for the firm, the days left, the roles left, the interview slots left
+today and the pool size.
+
+\textbf{Two parameter sets.} \Cref{tab:scenarios} lists them. The \emph{stress} scenario is our
+main test bed; its acceptance decay and its upper poaching levels are harsher than hiring
+benchmarks support, and we label it as such. The \emph{calibrated} scenario moves four values
+toward published recruiting statistics. \todo{One sentence per calibrated value with its source,
+once each source has been opened; state that the quality slope $\kappa$, the exponential form and
+the interview cost have no empirical basis.}
+
+\begin{table}[t]
+  \caption{The two parameter sets. Stress is run at five pressure levels: no pressure
+    ($h_0 = 0$, $\beta = 0$) and $h_0 \in \{0, 0.02, 0.05, 0.10\}$ with $\beta = 0.03$.}
+  \label{tab:scenarios}
+  \centering
+  \begin{small}
+    \begin{tabular}{lcc}
+      \toprule
+      Parameter & Stress & Calibrated \\
+      \midrule
+      Horizon $T$, roles $m$ & 60, 3 & 60, 3 \\
+      Arrivals per day $\lambda$ & 1.5 & 1.5 \\
+      Interviews per day $K$ & 3 & 3 \\
+      Resume noise $\sigma_R$ & 1.5 & 2.4 \\
+      Interview noise $\sigma_I$ & 1.0 & 2.2 \\
+      Interview cost $c$ & 0.05 & 0.05 \\
+      Base acceptance $a_0$ & 0.90 & 0.85 \\
+      Acceptance decay $\beta$ & 0.03 & 0.003 \\
+      Poaching level $h_0$ & 0 to 0.10 & 0.02 \\
+      Quality slope $\kappa$ & 0.6 & 0.6 \\
+      \bottomrule
+    \end{tabular}
+  \end{small}
+\end{table}
+
+\textbf{A small instance that can be solved exactly.} With one role, twelve days, one interview
+per day, at most two candidates in the pool and scores reported in three bins, the belief state
+is finite and the optimal policy follows from dynamic programming. The same simulator class runs
+this instance, so it serves as a known-answer test for every learned agent before the full
+problem. \todo{State the optimum and how overflow of the two-candidate pool is resolved.}
+
+% ---------------------------------------------------------------------------------------------
+\section{Methods}
+\label{sec:methods}
+% 0.9 page.
+\subsection{Survival-aware belief}
+\todo{Posterior proportional to the Gaussian posterior times $(1 - h(q))^d$; sufficient statistic
+(naive mean, interviews seen, days waited); one-dimensional quadrature.}
+
+\subsection{Rules}
+\todo{Fixed threshold, falling bar, one-interview and two-interview rules; the price-directed
+rule from the relaxation; the random policy. Tuning budget per rule.}
+
+\subsection{Exact optimum and upper bound}
+\todo{Dynamic program on the small instance. Lagrangian bound: a price on each hire and on each
+interview slot, one-candidate dynamic programs, minimum over prices; what is relaxed; numerical
+accuracy.}
+
+\subsection{Agents}
+\todo{MaskablePPO. Unrestricted actor; index-structured actor (one shared network scores each
+candidate from its own features and the global features); pooled variant; identical critic. State
+that the index actor sees the clock and roles left, and that its end-day score uses global
+features only.}
+
+% ---------------------------------------------------------------------------------------------
+\section{Experimental Protocol}
+\label{sec:protocol}
+% 0.4 page.
+\todo{Seed pools (tuning, final training, tuning and evaluation episodes); paired evaluation on
+10{,}000 episodes; the training seed as the unit of analysis; equal tuning budgets; the decision
+rule with the 2\% equivalence margin; the pre-registration and its commit hash.}
+
+% ---------------------------------------------------------------------------------------------
+\section{Results}
+\label{sec:results}
+% 1.4 pages: learning curves, main table, gap figure, belief result; one verdict per question.
+\todo{Figure 1 (full width): return with reference lines for random, best rule and bound; policy
+and value loss; entropy. Table 2: methods by settings with intervals, percent of bound, percent of
+exact optimum. Figure 2: unrestricted minus index against $h_0$. Figure 3: belief effect.}
+
+% ---------------------------------------------------------------------------------------------
+\section{Hurdles and Failure Modes}
+\label{sec:hurdles}
+% 0.5 page. Keep tested mechanisms apart from conjecture.
+\todo{Headroom, payoff variance, credit-assignment length, time pressure, slot scarcity; mistakes
+counted by type and priced exactly on the small instance.}
+
+% ---------------------------------------------------------------------------------------------
+\section{Limitations and Conclusion}
+\label{sec:conclusion}
+% 0.3 page.
+\todo{Uncalibrated values; small-instance scope; the bound is loose; results are for one
+simulator.}
+
+% ---------------------------------------------------------------------------------------------
+\section*{Reproducibility}
+\todo{Repository URL, tagged release, the one command that regenerates every figure and table.}
+
+\bibliography{references}
+\bibliographystyle{icml2026}
+
+\end{document}
