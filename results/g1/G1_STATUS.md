@@ -34,6 +34,8 @@ Method: a copy of `notes/hiring_sim_v3.py` was rerun with fixed seeds and reprod
 
 **The 10-slot view hides candidates often.** The pool exceeds 10 on 53 to 87% of days, because a passed-over candidate is never removed. With poaching on, a hidden candidate has a higher survival-aware estimate than a shown one on 34 to 51% of days. It cost these naive-estimate rules nothing measurable, but it is untested for policies that use the survival-aware estimate.
 
+**Follow-up, Nov 14 (`slot_view.txt`).** The same rules with the survival-aware estimate, on 2,000 development episodes at h0 = 0.02, 0.05, 0.10: the 10-slot view, a 20-slot view and the full pool give identical payoff in every episode, for both estimates and all four rule families. A hidden candidate outranks a shown one on 33 to 55% of days, but these rules never act that far down the list (a separate 500-episode check: payoffs start to differ only at 6 slots or fewer). The parameters were tuned for the naive estimate, so this says nothing yet about survival-aware rules tuned in week 2, or about PPO.
+
 ## Exact small instance
 
 | T | Prototype | Choose whom to drop | Automatic drop | Difference |

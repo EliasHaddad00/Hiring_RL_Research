@@ -56,7 +56,7 @@ Commands (fill in as they come to exist, and keep this list current):
 
 - Fast tests (about 2 minutes): `python -m pytest experiments/tests`
 - Slow tests (v3 replay, 40,000-episode Monte Carlo; about 3 minutes): `python -m pytest experiments/tests -m slow`
-- G1 checks, each writing to `results/g1/`: `python experiments/scripts/reproduce_rules.py`, `solve_small.py`, `measure_throughput.py`, `check_library.py`
+- G1 checks, each writing to `results/g1/`: `python experiments/scripts/reproduce_rules.py`, `solve_small.py`, `measure_throughput.py`, `check_library.py`, `check_slot_view.py` (all five: `make g1`)
 - Run one policy on a fixed episode pool: `python experiments/scripts/evaluate.py --help`
 - Regenerate all figures and tables: `make figures` (stub until week 2)
 

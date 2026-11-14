@@ -13,6 +13,8 @@ g1:
 	$(PY) experiments/scripts/reproduce_rules.py
 	$(PY) experiments/scripts/solve_small.py
 	$(PY) experiments/scripts/measure_throughput.py
+	$(PY) experiments/scripts/check_library.py
+	$(PY) experiments/scripts/check_slot_view.py
 
 # Stub: analysis scripts arrive in weeks 2 to 4.
 figures:
