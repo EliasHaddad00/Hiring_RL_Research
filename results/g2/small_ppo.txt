@@ -1,0 +1,14 @@
+Exact optimum (computed, automatic drop): 0.63333. Pass limit on the paired difference: -0.0127.
+Exact optimal policy on these 40000 development episodes: 0.6308 +- 0.0041; random policy: -0.0097.
+
+run                      steps  greedy mean  minus exact         95% interval  % of optimum  verdict  sampled mean  sampled minus exact
+index_s101             3002368       0.6238      -0.0069   [-0.0099, -0.0040]         98.9%     PASS        0.6239              -0.0069
+index_s102             3002368       0.6233      -0.0074   [-0.0101, -0.0047]         98.8%     PASS        0.6222              -0.0086
+index_s103             3002368       0.6231      -0.0077   [-0.0110, -0.0044]         98.8%     PASS        0.6200              -0.0107
+unrestricted_s101      3002368       0.6134      -0.0174   [-0.0219, -0.0128]         97.3%     fail        0.6116              -0.0191
+unrestricted_s102      3002368       0.6166      -0.0142   [-0.0186, -0.0098]         97.8%     fail        0.6131              -0.0177
+unrestricted_s103      3002368       0.6148      -0.0160   [-0.0201, -0.0119]         97.5%     fail        0.6129              -0.0179
+
+Agents passing: 3 of 6 (index_s101, index_s102, index_s103).
+% of optimum = 1 + (paired difference / computed optimum). Training seeds 101 to 103 (tuning seeds);
+scores are on development episodes and are a gate check, not a reported result.
