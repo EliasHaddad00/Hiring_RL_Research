@@ -33,7 +33,7 @@ Research questions: RQ1 how close simple rules get to the optimum; RQ2 whether P
 context/       the five reference files above; treat as read-only unless asked
 experiments/   all code and configs
   hiring/      env.py, belief.py, rules.py, exact_dp.py, bounds.py, policies.py, seeding.py,
-               config.py, pool.py, evaluation.py
+               config.py, pool.py, evaluation.py, training.py, tuning.py
   configs/     one file per experiment: hyperparameters, scenario, seed lists
   scripts/     tune_rules.py, tune_ppo.py, train.py, evaluate.py, ablations.py, diagnose.py,
                G1 checks, and reference/ (untouched-logic copy of the earlier simulator)
@@ -57,7 +57,10 @@ Commands (fill in as they come to exist, and keep this list current):
 - Fast tests (about 2 minutes): `python -m pytest experiments/tests`
 - Slow tests (v3 replay, 40,000-episode Monte Carlo; about 3 minutes): `python -m pytest experiments/tests -m slow`
 - G1 checks, each writing to `results/g1/`: `python experiments/scripts/reproduce_rules.py`, `solve_small.py`, `measure_throughput.py`, `check_library.py`, `check_slot_view.py` (all five: `make g1`)
-- Run one policy on a fixed episode pool: `python experiments/scripts/evaluate.py --help`
+- Run one policy on a fixed episode pool: `python experiments/scripts/evaluate.py --help` (rules, `--policy ppo --model ...`, `--policy exact`, `--paired-with`)
+- Train PPO, one run or several in parallel: `python experiments/scripts/train.py --config ppo_small --actor index unrestricted pooled --seed 101 102 103 --out results/g2/ppo_small`
+- G2 checks, each writing to `results/g2/`: `compute_bounds.py` (upper bound, every setting), `check_price_rule.py`, `tune_rules.py` (40 configurations; `--robustness` for 360 at the primary setting), `check_small_ppo.py` (PPO against the exact policy), `check_g2.py` (bound above every rule and PPO run, slot view, interview cap, calibrated check)
+- Paper: `paper/main.tex`; style files are fetched locally (`paper/README.md`). No LaTeX on this machine.
 - Regenerate all figures and tables: `make figures` (stub until week 2)
 
 The environment runs Python 3.13.17 (since Nov 14; create it with `py -3.13 -m venv .venv`). Do not use Python 3.12.0: its `zipfile` breaks loading of saved SB3 models, and `test_setup.py` fails there.
@@ -104,6 +107,7 @@ Change none of these without updating the environment, the exact solver, the bou
 - **Interview limits.** One per candidate per day, 3 per day, 3 per candidate in total (2 on the small instance), none on the last day (masked). If more than 5% of hired candidates reach the per-candidate cap in any scenario, tell the user and rerun that scenario with a cap of 6 (seeding already draws 6 interview noises per candidate).
 - **Slots.** 10 candidates shown, sorted by naive estimate (highest first, ties by arrival), for every policy and belief variant. Rules act through the same view as PPO.
 - **Small-instance overflow.** Pool cap 2. On overflow the candidate with the lowest naive estimate is dropped automatically (newcomer included; ties: longest wait leaves). One function, `hiring/pool.py`, used by both `env.py` and `exact_dp.py`. PPO and rules are scored only against the automatic-drop optimum.
+- **Last-day bar (decided Nov 14).** A threshold rule using the survival-aware estimate offers to anyone with a positive estimate on the last day. A rule using the naive estimate keeps its tuned linear bar. `last_day_zero=False` replays the earlier rule form (G1 scripts).
 - **Rule defaults.** A rule re-checks its offer bar after every offer and has no offer cap. The earlier simulator's start-of-day eligibility and 12-offers-per-day cap exist only as `v3_compat=True`, for reproduction.
 - **Actions.** `Discrete(2N+1)`: 0..N-1 interview slot i, N..2N-1 offer slot i, 2N end day.
 
@@ -113,6 +117,19 @@ Change none of these without updating the environment, the exact solver, the bou
 - **Exact small instance (T = 12).** Prototype convention ("choose" whom to drop): 0.63348, matching the prototype's 0.6335. Our convention (automatic drop): **0.63333**. Use 0.63333 as the optimum.
 - **Earlier rule scores.** All reproduce within 0.05 from `notes/hiring_sim_v3.py`'s tuned parameters; see `results/g1/rule_reproduction.txt`.
 - **Throughput.** MaskablePPO about 4,800 steps/s (unrestricted) and 3,700 (index actor) with 8 environments on one thread; `SubprocVecEnv` gives no gain.
+
+### Decisions and numbers from week 2 (Nov 14; details in `PREREGISTRATION.md` and `results/g2/`)
+
+- **Pool locks live in `hiring/config.py`.** `episode_seeds("evaluation")` and final training seeds raise unless explicitly unlocked. PPO curves use development episodes 1,090,000 onward.
+- **PPO is scored greedy** (most probable valid action, masks on), in the evaluation callback and in final scoring. Sampled-action scores are reported beside it only.
+- **One rule configuration** = one parameter vector scored on all 4,000 tuning episodes; 40 per family, estimate and setting; plus a 360-evaluation robustness search at the primary setting (if the best rule gains more than 2%, the stronger rule is the comparator).
+- **Calibrated scenario**: resume noise 2.4, base acceptance 0.85, decay 0.003, h0 0.02, interview noise 2.2 (`configs/README.md`). Not frozen until realised acceptance is checked against 76 to 84%.
+- **Upper bound (ours).** 4.341 / 4.290 / 4.158 / 3.985 / 3.768 at no pressure / h0 = 0 / 0.02 / 0.05 / 0.10. A finer grid lowers each by under 0.004. The prototype's 4.172 at h0 = 0.02 is reproduced exactly with its grid and arrival integration; the 4.31 / 4.17 / 4.00 targets are superseded by our numbers. Small instance: 0.862 against the exact 0.63348.
+- **Price-directed rule, untuned (ours, 4,000 development episodes).** 3.872 / 3.722 / 3.544 at h0 = 0 / 0.02 / 0.05 (prototype targets 3.91 / 3.72 / 3.52). It beats the earlier one-interview rule by about 0.2, so it is the rule PPO must match.
+- **Interview cap.** 6 to 19% of the price-directed rule's hires reach the cap of 3. With a cap of 6 on the same episodes the payoff changes by at most 0.008 and the bound by at most 0.001. The cap stays at 3 unless the user says otherwise.
+- **PPO on the small instance, starting hyperparameters, seeds 101 to 103.** Index actor 98.8 to 98.9% of the optimum (passes the paired 2% rule); unrestricted actor 97.3 to 97.8% (just outside). Development episodes; a gate check, not a result.
+- **Throughput in real training** is about 1,600 steps/s per run with six runs in parallel and the evaluation callback on (3 million steps take about 32 minutes), well below the 4,800 measured without evaluation.
+- **Several multi-threaded NumPy workers at once are very slow.** Scripts that use a process pool set `OMP_NUM_THREADS=1` before importing NumPy.
 
 ### Scope
 
