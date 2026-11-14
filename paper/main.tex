@@ -174,6 +174,13 @@ rule from the relaxation; the random policy. Tuning budget per rule.}
 interview slot, one-candidate dynamic programs, minimum over prices; what is relaxed; numerical
 accuracy.}
 
+The bound may be far from tight. On the small instance, where the optimum is known exactly, the
+bound is 0.862 against an optimum of 0.633, that is 36\% above it. The distance between the best
+policy and the bound on the full problem may therefore be mostly slack in the bound rather than
+payoff left unearned, and we do not read that distance as a shortfall of any policy.
+% Source: results/g2/bounds.txt (small-instance line). Whether the slack is as large on the full
+% problem is not known; the sentence says "may" for that reason.
+
 \subsection{Agents}
 \todo{MaskablePPO. Unrestricted actor; index-structured actor (one shared network scores each
 candidate from its own features and the global features); pooled variant; identical critic. State
