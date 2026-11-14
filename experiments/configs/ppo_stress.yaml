@@ -18,5 +18,6 @@ ppo:
   vf_coef: 0.5
   max_grad_norm: 0.5
 eval:
-  episodes: 1000                # fixed development episodes, greedy actions, masks on
-  freq_steps: 100000
+  episodes: 300                 # fixed development episodes, greedy actions, masks on (full-problem episodes are long:
+                                # 300 every 150,000 steps keeps evaluation near a fifth of the run time)
+  freq_steps: 150000

@@ -1,0 +1,7 @@
+Unrestricted actor, small instance, 200,000 steps per run, 8 environments. Evaluation when on: 2000 episodes every 100,000 steps.
+
+set-up               runs  steps/s mean     min     max  time in evaluation  steps/s without evaluation time  torch threads
+A_alone_no_eval         1          5078    5078    5078                0.0%                             5078              1
+B_alone_eval            1          4192    4192    4192               16.5%                             5019              1
+C_six_no_eval           6          4059    4019    4086                0.0%                             4059              1
+D_six_eval              6          3113    3101    3134               16.2%                             3714              1
