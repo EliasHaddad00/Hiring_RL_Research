@@ -86,7 +86,12 @@ calibrated: bound 2.7059
 
 2. PPO runs at h0 = 0.05 against the bound (greedy actions, masks on, 4,000 development episodes)
 
-  no PPO runs under results/g2/ppo_stress yet
+  index_s101               3002368 steps  3.560 +- 0.022   bound - PPO +0.425   interviews per episode 8.4, hires 2.91, hires at the interview cap 0.2%
+  index_s102               3002368 steps  3.561 +- 0.022   bound - PPO +0.424   interviews per episode 8.7, hires 2.93, hires at the interview cap 0.2%
+  index_s103               3002368 steps  3.555 +- 0.022   bound - PPO +0.430   interviews per episode 8.0, hires 2.94, hires at the interview cap 0.0%
+  unrestricted_s101        3002368 steps  3.476 +- 0.022   bound - PPO +0.509   interviews per episode 6.8, hires 2.96, hires at the interview cap 1.6%
+  unrestricted_s102        3002368 steps  3.477 +- 0.023   bound - PPO +0.508   interviews per episode 5.6, hires 2.90, hires at the interview cap 2.2%
+  unrestricted_s103        3002368 steps  3.487 +- 0.023   bound - PPO +0.498   interviews per episode 5.4, hires 2.92, hires at the interview cap 0.0%
 
 3. Shape facts for the tuned threshold rules
 

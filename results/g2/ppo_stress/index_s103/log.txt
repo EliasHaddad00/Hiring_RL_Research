@@ -1,0 +1,1 @@
+index seed 103: 3002368 steps in 3486 s, last evaluation 3.5132

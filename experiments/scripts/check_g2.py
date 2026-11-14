@@ -111,7 +111,11 @@ def main():
     b05 = bounds.get(BOUND_LABEL["h0_0.05"])
     for name, meta, sm in ppo:
         ppo_rows.append(dict(run=name, actor=meta["actor"], seed=meta["seed"], steps=meta["total_timesteps"], dev=sm))
-        lines.append(f"  {name:22s} {meta['total_timesteps']:9d} steps  {sm['mean']:.3f} +- {sm['se']:.3f}   bound - PPO {b05 - sm['mean']:+.3f}")
+        lines.append(f"  {name:22s} {meta['total_timesteps']:9d} steps  {sm['mean']:.3f} +- {sm['se']:.3f}   bound - PPO {b05 - sm['mean']:+.3f}"
+                     f"   interviews per episode {sm['interviews_per_episode']:.1f}, hires {sm['hires_per_episode']:.2f}, "
+                     f"hires at the interview cap {100 * sm['share_hires_at_interview_cap']:.1f}%")
+        if sm["share_hires_at_interview_cap"] > CAP_LIMIT:
+            flags.append(f"interview cap: PPO run {name}: {100 * sm['share_hires_at_interview_cap']:.1f}% of hires at the cap of 3")
         if b05 - sm["mean"] <= 0:
             problems.append(f"bound below PPO run {name}")
     if not ppo:

@@ -1,0 +1,1 @@
+unrestricted seed 102: 3002368 steps in 3142 s, last evaluation 3.4779
