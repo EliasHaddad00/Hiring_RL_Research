@@ -25,7 +25,7 @@ from .env import HiringEnv
 
 REQUIRED_COLUMNS = ("rollout/ep_rew_mean", "train/policy_gradient_loss", "train/value_loss",
                     "train/entropy_loss", "train/approx_kl", "train/clip_fraction")
-ACTORS = ("unrestricted", "index")
+ACTORS = ("unrestricted", "index", "pooled")
 EVAL_POOL_OFFSET = 90_000       # curve episodes: dev seeds 1,090,000 onward, apart from scoring episodes
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -84,7 +84,7 @@ def train(cfg: dict, actor: str, seed: int, out_dir, total_timesteps: int | None
     from stable_baselines3.common.monitor import Monitor
     from stable_baselines3.common.vec_env import DummyVecEnv
 
-    from .policies import IndexPolicy, index_policy_kwargs
+    from .policies import IndexPolicy, PooledIndexPolicy, index_policy_kwargs
 
     assert actor in ACTORS, f"actor must be one of {ACTORS}"
     check_training_seed(seed, allow_final=allow_final_seed)
@@ -101,8 +101,9 @@ def train(cfg: dict, actor: str, seed: int, out_dir, total_timesteps: int | None
     schedule = p.pop("lr_schedule", "linear")
     assert schedule in ("linear", "constant")
     lr = (lambda progress: lr0 * progress) if schedule == "linear" else lr0
-    if actor == "index":
-        policy, policy_kwargs = IndexPolicy, dict(index_policy_kwargs(HiringEnv(sc)), hidden=hidden)
+    if actor in ("index", "pooled"):
+        policy = IndexPolicy if actor == "index" else PooledIndexPolicy
+        policy_kwargs = dict(index_policy_kwargs(HiringEnv(sc)), hidden=hidden)
     else:
         policy, policy_kwargs = "MlpPolicy", dict(net_arch=dict(pi=[hidden, hidden], vf=[hidden, hidden]))
     model = MaskablePPO(policy, venv, learning_rate=lr, policy_kwargs=policy_kwargs, seed=int(seed),

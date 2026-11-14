@@ -9,6 +9,12 @@ only (a stated restriction). The actor therefore cannot let one candidate's scor
 another candidate. The critic is the same unrestricted 64 x 64 network as in the other agent,
 so the two agents differ only in the actor.
 
+Pooled agent (PooledIndexPolicy): the same shared per-candidate network, but every candidate's
+input also carries a summary of the whole pool: the mean of a learned embedding over the present
+candidates, plus the number present. The "end day" logit reads the same summary. Weights are
+still shared across candidates, so this agent differs from the index agent only in pool
+awareness, and from the unrestricted agent only in symmetry. That separates the two.
+
 The extractor emits the 2N + 1 logits directly, in the environment's action order
 (interview slots, offer slots, end day), and SB3's final `action_net` is replaced by
 nn.Identity(). Leaving SB3's default dense output layer in place would mix candidates and
@@ -58,15 +64,45 @@ class IndexExtractor(nn.Module):
         return self.forward_actor(x), self.forward_critic(x)
 
 
+class PooledExtractor(IndexExtractor):
+    """Index extractor plus a pool summary (Deep Sets style).
+
+    summary = mean over PRESENT candidates of embed(candidate features, globals); an empty pool
+    gives zeros. The count of present candidates is passed separately, because a mean hides it.
+    Slot feature 0 is the presence flag (env.py).
+    """
+
+    def __init__(self, n_slots, n_slot_features, n_global, hidden=64, activation=nn.Tanh):
+        super().__init__(n_slots, n_slot_features, n_global, hidden, activation)
+        self.embed = mlp([self.F + self.G, hidden], activation)
+        extra = hidden + 1                                   # summary and count
+        self.candidate_body = mlp([self.F + self.G + extra, hidden, hidden], activation)
+        self.end_body = mlp([self.G + extra, hidden], activation)
+
+    def forward_actor(self, x: th.Tensor) -> th.Tensor:
+        b = x.shape[0]
+        slots = x[:, :self.N * self.F].reshape(b, self.N, self.F)
+        g = x[:, self.N * self.F:]
+        own = th.cat([slots, g[:, None, :].expand(b, self.N, self.G)], dim=-1)
+        present = slots[:, :, :1]                            # (b, N, 1), 1 for a real candidate
+        count = present.sum(1)                               # (b, 1)
+        summary = (self.embed(own) * present).sum(1) / count.clamp(min=1.0)
+        pool = th.cat([summary, count / self.N], dim=-1)     # (b, hidden + 1)
+        per = self.candidate_head(self.candidate_body(th.cat([own, pool[:, None, :].expand(b, self.N, -1)], dim=-1)))
+        end = self.end_head(self.end_body(th.cat([g, pool], dim=-1)))
+        return th.cat([per[:, :, 0], per[:, :, 1], end], dim=1)
+
+
 class IndexPolicy(MaskableActorCriticPolicy):
     """policy_kwargs must give n_slots, n_slot_features and n_global (from the environment)."""
+    extractor_class = IndexExtractor
 
     def __init__(self, *args, n_slots: int, n_slot_features: int, n_global: int, hidden: int = 64, **kwargs):
         self._index_spec = dict(n_slots=n_slots, n_slot_features=n_slot_features, n_global=n_global, hidden=hidden)
         super().__init__(*args, **kwargs)
 
     def _build_mlp_extractor(self) -> None:
-        self.mlp_extractor = IndexExtractor(activation=self.activation_fn, **self._index_spec)
+        self.mlp_extractor = self.extractor_class(activation=self.activation_fn, **self._index_spec)
 
     def _build(self, lr_schedule) -> None:
         self._build_mlp_extractor()
@@ -85,6 +121,11 @@ class IndexPolicy(MaskableActorCriticPolicy):
         data = super()._get_constructor_parameters()
         data.update(self._index_spec)
         return data
+
+
+class PooledIndexPolicy(IndexPolicy):
+    """Index-structured actor with a pool summary. Same critic and same policy_kwargs as IndexPolicy."""
+    extractor_class = PooledExtractor
 
 
 def index_policy_kwargs(env) -> dict:
