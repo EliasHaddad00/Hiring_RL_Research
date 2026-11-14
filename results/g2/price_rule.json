@@ -1,0 +1,403 @@
+{
+ "timing": {
+  "table_build_seconds": 1.0374319000111427,
+  "table_megabytes": 146.1438,
+  "seconds_per_episode": 0.007089292000164278,
+  "projected_tuning_hours": 0.3266066655629806,
+  "limit_hours": 2.0
+ },
+ "rows": [
+  {
+   "h0": 0.0,
+   "price_survival": {
+    "episodes": 4000,
+    "mean": 3.872407908024792,
+    "se": 0.021657343633770174,
+    "interviews_per_episode": 14.3205,
+    "hires_per_episode": 2.99525,
+    "share_days_pool_over_slots": 0.8524687187383791,
+    "share_days_hidden_better": 0.0,
+    "share_hires_at_interview_cap": 0.1882146732326183
+   },
+   "price_naive": {
+    "episodes": 4000,
+    "mean": 3.872407908024792,
+    "se": 0.021657343633770174,
+    "interviews_per_episode": 14.3205,
+    "hires_per_episode": 2.99525,
+    "share_days_pool_over_slots": 0.8524687187383791,
+    "share_days_hidden_better": 0.0,
+    "share_hires_at_interview_cap": 0.1882146732326183
+   },
+   "one_interview": {
+    "episodes": 4000,
+    "mean": 3.695162306878199,
+    "se": 0.022141021491513143,
+    "interviews_per_episode": 11.35875,
+    "hires_per_episode": 2.9105,
+    "share_days_pool_over_slots": 0.8313835669665541,
+    "share_days_hidden_better": 0.0,
+    "share_hires_at_interview_cap": 0.0
+   },
+   "price_minus_one_interview": {
+    "n": 4000,
+    "mean_a": 3.872407908024792,
+    "mean_b": 3.695162306878199,
+    "diff": 0.17724560114659266,
+    "se": 0.01605641176255326,
+    "lo": 0.14576608461438237,
+    "hi": 0.20872511767880295,
+    "margin": 0.07390324613756398,
+    "verdict": "better",
+    "correlation": 0.7314223407143233
+   },
+   "full_pool_minus_10_slots": {
+    "n": 4000,
+    "mean_a": 3.874734828806537,
+    "mean_b": 3.872407908024792,
+    "diff": 0.002326920781744843,
+    "se": 0.004090323615615139,
+    "lo": -0.00569239335792764,
+    "hi": 0.010346234921417327,
+    "margin": 0.07744815816049584,
+    "verdict": "equivalent",
+    "correlation": 0.9820978744685285
+   },
+   "prototype": 3.91
+  },
+  {
+   "h0": 0.02,
+   "price_survival": {
+    "episodes": 4000,
+    "mean": 3.7217843912975264,
+    "se": 0.022510211504495677,
+    "interviews_per_episode": 13.09825,
+    "hires_per_episode": 2.9925,
+    "share_days_pool_over_slots": 0.8410874653856157,
+    "share_days_hidden_better": 0.516734747997083,
+    "share_hires_at_interview_cap": 0.12848788638262323
+   },
+   "price_naive": {
+    "episodes": 4000,
+    "mean": 3.6692622560759074,
+    "se": 0.022668390971882335,
+    "interviews_per_episode": 14.40075,
+    "hires_per_episode": 2.99375,
+    "share_days_pool_over_slots": 0.8398339864844016,
+    "share_days_hidden_better": 0.5141070344884335,
+    "share_hires_at_interview_cap": 0.1448016701461378
+   },
+   "one_interview": {
+    "episodes": 4000,
+    "mean": 3.52605499850566,
+    "se": 0.02328699089642246,
+    "interviews_per_episode": 9.7915,
+    "hires_per_episode": 2.88875,
+    "share_days_pool_over_slots": 0.7999038245760267,
+    "share_days_hidden_better": 0.4437918763825217,
+    "share_hires_at_interview_cap": 0.0
+   },
+   "price_minus_one_interview": {
+    "n": 4000,
+    "mean_a": 3.7217843912975264,
+    "mean_b": 3.52605499850566,
+    "diff": 0.19572939279186613,
+    "se": 0.018520812372754845,
+    "lo": 0.15941827746298337,
+    "hi": 0.2320405081207489,
+    "margin": 0.0705210999701132,
+    "verdict": "better",
+    "correlation": 0.6733877224282011
+   },
+   "full_pool_minus_10_slots": {
+    "n": 4000,
+    "mean_a": 3.7206275568585925,
+    "mean_b": 3.7217843912975264,
+    "diff": -0.0011568344389335512,
+    "se": 0.002925837736967593,
+    "lo": -0.006893107198594636,
+    "hi": 0.004579438320727535,
+    "margin": 0.07443568782595053,
+    "verdict": "equivalent",
+    "correlation": 0.9915442185768187
+   },
+   "prototype": 3.72
+  },
+  {
+   "h0": 0.05,
+   "price_survival": {
+    "episodes": 4000,
+    "mean": 3.5435027631838967,
+    "se": 0.022989585786271676,
+    "interviews_per_episode": 11.45475,
+    "hires_per_episode": 2.98375,
+    "share_days_pool_over_slots": 0.8141872401376649,
+    "share_days_hidden_better": 0.5967284699703583,
+    "share_hires_at_interview_cap": 0.057226644323418514
+   },
+   "price_naive": {
+    "episodes": 4000,
+    "mean": 3.472603587405751,
+    "se": 0.02285176341512095,
+    "interviews_per_episode": 13.59125,
+    "hires_per_episode": 2.99125,
+    "share_days_pool_over_slots": 0.8099645249494303,
+    "share_days_hidden_better": 0.5896532796633428,
+    "share_hires_at_interview_cap": 0.09260342666109486
+   },
+   "one_interview": {
+    "episodes": 4000,
+    "mean": 3.3187083186895587,
+    "se": 0.02141766038811275,
+    "interviews_per_episode": 7.66725,
+    "hires_per_episode": 2.915,
+    "share_days_pool_over_slots": 0.7176008834765998,
+    "share_days_hidden_better": 0.4616836795606495,
+    "share_hires_at_interview_cap": 0.0
+   },
+   "price_minus_one_interview": {
+    "n": 4000,
+    "mean_a": 3.5435027631838967,
+    "mean_b": 3.3187083186895587,
+    "diff": 0.224794444494338,
+    "se": 0.019827451203855682,
+    "lo": 0.18592158876582277,
+    "hi": 0.26366730022285323,
+    "margin": 0.06637416637379118,
+    "verdict": "better",
+    "correlation": 0.6032999107946679
+   },
+   "full_pool_minus_10_slots": {
+    "n": 4000,
+    "mean_a": 3.5437628442301894,
+    "mean_b": 3.5435027631838967,
+    "diff": 0.00026008104629265206,
+    "se": 0.001647017352355956,
+    "lo": -0.002968990974222216,
+    "hi": 0.00348915306680752,
+    "margin": 0.07087005526367794,
+    "verdict": "equivalent",
+    "correlation": 0.9974395571668562
+   },
+   "prototype": 3.52
+  }
+ ],
+ "interview_cap": [
+  {
+   "h0": 0.0,
+   "belief": "survival",
+   "cap3": {
+    "episodes": 4000,
+    "mean": 3.872407908024792,
+    "se": 0.021657343633770174,
+    "interviews_per_episode": 14.3205,
+    "hires_per_episode": 2.99525,
+    "share_days_pool_over_slots": 0.8524687187383791,
+    "share_days_hidden_better": 0.0,
+    "share_hires_at_interview_cap": 0.1882146732326183
+   },
+   "cap6": {
+    "episodes": 4000,
+    "mean": 3.8686760514003136,
+    "se": 0.02171417643371773,
+    "interviews_per_episode": 14.892,
+    "hires_per_episode": 2.99625,
+    "share_days_pool_over_slots": 0.8531381364153168,
+    "share_days_hidden_better": 0.0,
+    "share_hires_at_interview_cap": 0.0
+   },
+   "cap6_minus_cap3": {
+    "n": 4000,
+    "mean_a": 3.8686760514003136,
+    "mean_b": 3.872407908024792,
+    "diff": -0.0037318566244786133,
+    "se": 0.004196046643239677,
+    "lo": -0.011958446825898828,
+    "hi": 0.004494733576941601,
+    "margin": 0.07744815816049584,
+    "verdict": "equivalent",
+    "correlation": 0.9812835968913916
+   }
+  },
+  {
+   "h0": 0.0,
+   "belief": "naive",
+   "cap3": {
+    "episodes": 4000,
+    "mean": 3.872407908024792,
+    "se": 0.021657343633770174,
+    "interviews_per_episode": 14.3205,
+    "hires_per_episode": 2.99525,
+    "share_days_pool_over_slots": 0.8524687187383791,
+    "share_days_hidden_better": 0.0,
+    "share_hires_at_interview_cap": 0.1882146732326183
+   },
+   "cap6": {
+    "episodes": 4000,
+    "mean": 3.8686760514003136,
+    "se": 0.02171417643371773,
+    "interviews_per_episode": 14.892,
+    "hires_per_episode": 2.99625,
+    "share_days_pool_over_slots": 0.8531381364153168,
+    "share_days_hidden_better": 0.0,
+    "share_hires_at_interview_cap": 0.0
+   },
+   "cap6_minus_cap3": {
+    "n": 4000,
+    "mean_a": 3.8686760514003136,
+    "mean_b": 3.872407908024792,
+    "diff": -0.0037318566244786133,
+    "se": 0.004196046643239677,
+    "lo": -0.011958446825898828,
+    "hi": 0.004494733576941601,
+    "margin": 0.07744815816049584,
+    "verdict": "equivalent",
+    "correlation": 0.9812835968913916
+   }
+  },
+  {
+   "h0": 0.02,
+   "belief": "survival",
+   "cap3": {
+    "episodes": 4000,
+    "mean": 3.7217843912975264,
+    "se": 0.022510211504495677,
+    "interviews_per_episode": 13.09825,
+    "hires_per_episode": 2.9925,
+    "share_days_pool_over_slots": 0.8410874653856157,
+    "share_days_hidden_better": 0.516734747997083,
+    "share_hires_at_interview_cap": 0.12848788638262323
+   },
+   "cap6": {
+    "episodes": 4000,
+    "mean": 3.716862546171525,
+    "se": 0.022544786553272345,
+    "interviews_per_episode": 13.313,
+    "hires_per_episode": 2.9925,
+    "share_days_pool_over_slots": 0.8416057503634644,
+    "share_days_hidden_better": 0.5179241350562734,
+    "share_hires_at_interview_cap": 0.0
+   },
+   "cap6_minus_cap3": {
+    "n": 4000,
+    "mean_a": 3.716862546171525,
+    "mean_b": 3.7217843912975264,
+    "diff": -0.004921845126001557,
+    "se": 0.0028936387408013448,
+    "lo": -0.01059498990619092,
+    "hi": 0.0007512996541878059,
+    "margin": 0.07443568782595053,
+    "verdict": "equivalent",
+    "correlation": 0.9917515772264849
+   }
+  },
+  {
+   "h0": 0.02,
+   "belief": "naive",
+   "cap3": {
+    "episodes": 4000,
+    "mean": 3.6692622560759074,
+    "se": 0.022668390971882335,
+    "interviews_per_episode": 14.40075,
+    "hires_per_episode": 2.99375,
+    "share_days_pool_over_slots": 0.8398339864844016,
+    "share_days_hidden_better": 0.5141070344884335,
+    "share_hires_at_interview_cap": 0.1448016701461378
+   },
+   "cap6": {
+    "episodes": 4000,
+    "mean": 3.6616147203274485,
+    "se": 0.022801368979126886,
+    "interviews_per_episode": 14.688,
+    "hires_per_episode": 2.99425,
+    "share_days_pool_over_slots": 0.8400864702771259,
+    "share_days_hidden_better": 0.5149756866530765,
+    "share_hires_at_interview_cap": 0.0
+   },
+   "cap6_minus_cap3": {
+    "n": 4000,
+    "mean_a": 3.6616147203274485,
+    "mean_b": 3.6692622560759074,
+    "diff": -0.0076475357484585265,
+    "se": 0.0034632263269471046,
+    "lo": -0.014437389672619542,
+    "hi": -0.0008576818242975121,
+    "margin": 0.07338524512151814,
+    "verdict": "equivalent",
+    "correlation": 0.9884146444873352
+   }
+  },
+  {
+   "h0": 0.05,
+   "belief": "survival",
+   "cap3": {
+    "episodes": 4000,
+    "mean": 3.5435027631838967,
+    "se": 0.022989585786271676,
+    "interviews_per_episode": 11.45475,
+    "hires_per_episode": 2.98375,
+    "share_days_pool_over_slots": 0.8141872401376649,
+    "share_days_hidden_better": 0.5967284699703583,
+    "share_hires_at_interview_cap": 0.057226644323418514
+   },
+   "cap6": {
+    "episodes": 4000,
+    "mean": 3.5436636288800076,
+    "se": 0.022984892958446912,
+    "interviews_per_episode": 11.458,
+    "hires_per_episode": 2.98375,
+    "share_days_pool_over_slots": 0.8141955569259537,
+    "share_days_hidden_better": 0.5967415467706401,
+    "share_hires_at_interview_cap": 0.0
+   },
+   "cap6_minus_cap3": {
+    "n": 4000,
+    "mean_a": 3.5436636288800076,
+    "mean_b": 3.5435027631838967,
+    "diff": 0.00016086569611115206,
+    "se": 0.00023998679014930807,
+    "lo": -0.0003096421757432689,
+    "hi": 0.000631373567965573,
+    "margin": 0.07087005526367794,
+    "verdict": "equivalent",
+    "correlation": 0.9999455240328498
+   }
+  },
+  {
+   "h0": 0.05,
+   "belief": "naive",
+   "cap3": {
+    "episodes": 4000,
+    "mean": 3.472603587405751,
+    "se": 0.02285176341512095,
+    "interviews_per_episode": 13.59125,
+    "hires_per_episode": 2.99125,
+    "share_days_pool_over_slots": 0.8099645249494303,
+    "share_days_hidden_better": 0.5896532796633428,
+    "share_hires_at_interview_cap": 0.09260342666109486
+   },
+   "cap6": {
+    "episodes": 4000,
+    "mean": 3.4699741077616877,
+    "se": 0.022887678567146984,
+    "interviews_per_episode": 13.699,
+    "hires_per_episode": 2.99075,
+    "share_days_pool_over_slots": 0.8100791336942941,
+    "share_days_hidden_better": 0.5899320405115754,
+    "share_hires_at_interview_cap": 0.0
+   },
+   "cap6_minus_cap3": {
+    "n": 4000,
+    "mean_a": 3.4699741077616877,
+    "mean_b": 3.472603587405751,
+    "diff": -0.0026294796440634173,
+    "se": 0.002480762163928669,
+    "lo": -0.007493156205597741,
+    "hi": 0.002234196917470907,
+    "margin": 0.06945207174811502,
+    "verdict": "equivalent",
+    "correlation": 0.994117962862594
+   }
+  }
+ ]
+}

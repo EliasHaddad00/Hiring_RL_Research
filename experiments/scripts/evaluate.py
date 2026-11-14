@@ -27,7 +27,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from hiring.config import episode_seeds, load_scenario  # noqa: E402
 from hiring.evaluation import STAT_KEYS, PPOPolicy, evaluate, paired_compare, summarize  # noqa: E402
-from hiring.rules import FAMILIES, RandomPolicy  # noqa: E402
+from hiring.rules import RULE_FAMILIES as FAMILIES, RandomPolicy  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 

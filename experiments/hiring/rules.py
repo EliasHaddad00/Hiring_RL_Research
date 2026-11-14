@@ -107,3 +107,68 @@ FAMILIES = {
     "one_interview": one_interview,
     "up_to_two_interviews": up_to_two_interviews,
 }
+
+
+# ---- price-directed rule (from the Lagrangian relaxation, hiring/bounds.py) ---------------------------
+
+class PriceDirectedRule:
+    """Follow each candidate's one-candidate policy at the current price of a hire.
+
+    At every decision the rule picks the price z that minimises
+        open roles * z + value of future arrivals at z + sum of the shown candidates' values at z,
+    multiplies it by `price_scale`, and then takes each candidate's own best action at that price:
+    offers first (highest one-candidate value first), then interviews (highest value first), up to
+    the daily limit. The price is recomputed after every offer. This is the index-style rule the
+    relaxation prescribes; `price_scale` and `interview_price` are its two tuned parameters
+    (1 and 0 are the untuned, theory values).
+
+    It sees only the N shown candidates, like every other policy. belief="naive" uses tables
+    solved under the naive belief (bounds.py); the table state is the naive mean in both versions.
+    """
+
+    def __init__(self, price_scale: float = 1.0, interview_price: float = 0.0, belief: str = "survival",
+                 name: str = "price_directed"):
+        assert belief in ("naive", "survival") and price_scale > 0 and interview_price >= 0
+        self.price_scale, self.interview_price = float(price_scale), float(interview_price)
+        self.belief, self.name = belief, name
+
+    def reset(self, env):
+        from .bounds import price_tables
+        assert not env.binned, "the price-directed rule is built for Gaussian signals"
+        self.tb = price_tables(env.sc, self.belief, self.interview_price)
+
+    def price_index(self, v, values) -> int:
+        """Index of the price in force. `values` is (shown candidates, prices)."""
+        tb = self.tb
+        r = v.horizon - 1 - v.t
+        objective = v.roles_left * tb.z + tb.Fcum[r] + values.sum(0)
+        z = self.price_scale * tb.z[int(np.argmin(objective))]
+        return int(np.argmin(np.abs(tb.z - z)))
+
+    def act(self, env) -> int:
+        from .bounds import INTERVIEW, OFFER
+        v, N, tb = env.view(), env.N, self.tb
+        k = len(v.ids)
+        if k == 0:
+            return 2 * N
+        r = v.horizon - 1 - v.t
+        i, f = tb.locate(v.naive)
+        V = tb.V[r][v.days, v.n_obs]                                   # (k, prices, grid)
+        rows = np.arange(k)
+        values = V[rows, :, i] * (1 - f)[:, None] + V[rows, :, i + 1] * f[:, None]
+        iz = self.price_index(v, values)
+        action = tb.A[r][v.days, v.n_obs, iz, np.rint(i + f).astype(int)]
+        value = values[:, iz]
+        if v.offers_open:
+            want = action == OFFER
+            if want.any():
+                return N + int(np.argmax(np.where(want, value, -np.inf)))
+        want = (action == INTERVIEW) & env.action_masks()[:k]
+        if want.any():
+            return int(np.argmax(np.where(want, value, -np.inf)))
+        return 2 * N
+
+
+# FAMILIES stays the four threshold families of the earlier simulator (the G1 scripts loop over it).
+# RULE_FAMILIES is every tuned rule: parameter vector for price_directed = (price_scale, interview_price).
+RULE_FAMILIES = dict(FAMILIES, price_directed=lambda v, **kw: PriceDirectedRule(v[0], v[1], **kw))

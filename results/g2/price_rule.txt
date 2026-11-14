@@ -1,0 +1,21 @@
+Timing: tables 1.0 s and 146 MB per setting; 7.1 ms per episode; projected tuning 0.33 h on 12 processes (limit 2 h): within the limit.
+
+   h0  price, survival     se  price, naive  earlier one-interview  price minus earlier       95% interval  full pool minus 10 slots  prototype
+ 0.00            3.872  0.022         3.872                  3.695               +0.177   [+0.146, +0.209]                   +0.0023       3.91
+ 0.02            3.722  0.023         3.669                  3.526               +0.196   [+0.159, +0.232]                   -0.0012       3.72
+ 0.05            3.544  0.023         3.473                  3.319               +0.225   [+0.186, +0.264]                   +0.0003       3.52
+
+4000 development episodes, paired, decay 0.03. Rule untuned: price_scale 1, interview_price 0.
+prototype = notes/prototypes/sim.py (3,000 episodes, +-0.03): a target, not a result.
+earlier one-interview = parameters tuned in the earlier simulator, naive estimate (results/g1/v3_fullprec.json).
+Survival-aware rule: interviews per episode 14.3, 13.1, 11.5; hires per episode 3.00, 2.99, 2.98; share of hires at the 3-interview cap 18.8%, 12.8%, 5.7%.
+
+Interview cap of 6 instead of 3, same episodes (cap 6 minus cap 3, paired):
+   h0  estimate   cap 3  at cap   cap 6  at cap  difference       95% interval  interviews 3 / 6
+ 0.00  survival   3.872   18.8%   3.869    0.0%     -0.0037 [-0.0120, +0.0045]     14.3 / 14.9
+ 0.00     naive   3.872   18.8%   3.869    0.0%     -0.0037 [-0.0120, +0.0045]     14.3 / 14.9
+ 0.02  survival   3.722   12.8%   3.717    0.0%     -0.0049 [-0.0106, +0.0008]     13.1 / 13.3
+ 0.02     naive   3.669   14.5%   3.662    0.0%     -0.0076 [-0.0144, -0.0009]     14.4 / 14.7
+ 0.05  survival   3.544    5.7%   3.544    0.0%     +0.0002 [-0.0003, +0.0006]     11.5 / 11.5
+ 0.05     naive   3.473    9.3%   3.470    0.0%     -0.0026 [-0.0075, +0.0022]     13.6 / 13.7
+at cap = share of hired candidates who had reached the per-candidate interview cap.
