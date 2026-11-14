@@ -11,6 +11,12 @@ interview results seen, estimate e, f = day / horizon and `hired` roles already 
 Offers go to the highest estimate first; interviews too. The estimate is the naive or the
 survival-aware mean (`belief`). The rule families below restrict this rule.
 
+Last day. A rule that uses the survival-aware estimate offers to anyone with a positive
+estimate on the last day (the bar is zero): an open role is worth nothing after the deadline, so
+this is the best last-day action and it is not a tuned parameter. A rule that uses the naive
+estimate keeps its tuned linear bar on the last day, and that bar is reported (decided Nov 14).
+`last_day_zero` overrides this default; the earlier parameters are replayed with it off.
+
 v3_compat reproduces two details of the earlier simulator and is used only for the G1
 reproduction: the offer bar uses `hired` as it stood at the start of the day, and at most 12
 offers are made per day. By default the bar is re-checked after every offer and there is no cap.
@@ -38,8 +44,11 @@ class RandomPolicy:
 
 
 class ThresholdRule:
-    def __init__(self, kmax, o, so, i, si, r=0.0, start_day=0, belief="naive", v3_compat=False, name="rule"):
+    def __init__(self, kmax, o, so, i, si, r=0.0, start_day=0, belief="naive", v3_compat=False, name="rule",
+                 last_day_zero=None):
         assert belief in ("naive", "survival")
+        self.last_day_zero = (belief == "survival" and not v3_compat) if last_day_zero is None else bool(last_day_zero)
+        assert not (self.last_day_zero and v3_compat), "the earlier simulator has no last-day rule"
         self.kmax, self.si, self.r, self.start_day = int(kmax), float(si), float(r), int(start_day)
         self.o, self.so, self.i = np.asarray(o, float), np.asarray(so, float), np.asarray(i, float)
         assert len(self.o) == len(self.so) >= self.kmax + 1
@@ -67,7 +76,10 @@ class ThresholdRule:
             hired = self._hired_at_start if self.v3_compat else v.hired
             if not (self.v3_compat and self._offers_today >= V3_OFFERS_PER_DAY):
                 n = np.minimum(v.n_obs, len(self.o) - 1)
-                eligible = est >= self.offer_bar(n, f, hired)
+                if self.last_day_zero and v.t == v.horizon - 1:
+                    eligible = est > 0.0
+                else:
+                    eligible = est >= self.offer_bar(n, f, hired)
                 if eligible.any():
                     self._offers_today += 1
                     return N + int(np.argmax(np.where(eligible, est, -np.inf)))

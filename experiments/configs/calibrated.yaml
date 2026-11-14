@@ -1,0 +1,22 @@
+# Calibrated scenario: the stress scenario with four values moved toward published hiring
+# benchmarks. Values decided Nov 14; sources and their strength are in configs/README.md.
+# NOT FROZEN until realised acceptance under the best tuned rule has been checked against the
+# 76 to 84% benchmark (results/g2/calibrated_check.txt).
+name: calibrated
+horizon: 60               # supported: time to fill 60 to 61 days at large employers (SHRM 2025)
+roles: 3
+arrival: poisson
+arrival_rate: 1.5         # an arrival is a candidate who passed resume screening
+max_candidates: 135
+resume_sd: 2.4            # biodata validity r = .38 gives sd 2.43, since r = 1 / sqrt(1 + sd^2) (Sackett et al., secondary source)
+interview_sd: 2.2         # structured-interview validity r = .42 gives sd 2.16 (same secondary source)
+interview_cost: 0.05      # no empirical basis; as in stress
+interviews_per_day: 3
+max_interviews: 3
+h0: 0.02                  # weak evidence: stated disengagement implies 0.012 to 0.017 (Cronofy 2024)
+quality_slope: 0.6        # no empirical basis; as in stress
+accept_base: 0.85         # low end of the notes' 0.85 to 0.90; chosen so realised acceptance lands in 76 to 84%
+accept_decay: 0.003       # inferred from 76 to 84% acceptance with offers after weeks (Ashby; Gem 2025); no source gives acceptance by day
+n_slots: 10
+signals: gaussian
+obs_belief: survival

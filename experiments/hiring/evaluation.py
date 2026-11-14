@@ -9,7 +9,7 @@ from .config import Scenario
 from .env import HiringEnv
 
 STAT_KEYS = ("ret", "interviews", "hires", "days", "days_pool_over_slots", "days_hidden_better",
-             "hires_at_interview_cap", "dropped_on_overflow")
+             "hires_at_interview_cap", "dropped_on_overflow", "offers")
 
 
 def run_episode(env: HiringEnv, policy, seed: Optional[int] = None, draws=None) -> dict:
@@ -69,6 +69,8 @@ def summarize(res: dict) -> dict:
         se=float(res["ret"].std(ddof=1) / np.sqrt(n)),
         interviews_per_episode=float(res["interviews"].mean()),
         hires_per_episode=float(res["hires"].mean()),
+        offers_per_episode=float(res["offers"].mean()),
+        realised_acceptance=float(hires / res["offers"].sum()) if res["offers"].sum() else float("nan"),
         share_days_pool_over_slots=float(res["days_pool_over_slots"].sum() / res["days"].sum()),
         share_days_hidden_better=float(res["days_hidden_better"].sum() / res["days"].sum()),
         share_hires_at_interview_cap=float(res["hires_at_interview_cap"].sum() / hires) if hires else 0.0,

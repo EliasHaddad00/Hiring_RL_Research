@@ -123,7 +123,7 @@ class HiringEnv(gym.Env):
         self.roles_left = sc.roles
         self.done = False
         self.stats = dict(ret=0.0, interviews=0, hires=0, days=0, days_pool_over_slots=0,
-                          days_hidden_better=0, hires_at_interview_cap=0, dropped_on_overflow=0)
+                          days_hidden_better=0, hires_at_interview_cap=0, dropped_on_overflow=0, offers=0)
         self._start_day()
 
     # ---- day mechanics --------------------------------------------------------------------------
@@ -223,6 +223,7 @@ class HiringEnv(gym.Env):
         else:                                                # offer
             c = self.order.pop(action - N)
             self.alive[c] = False
+            self.stats["offers"] += 1
             p = sc.accept_base * math.exp(-sc.accept_decay * (self.t - self.arr[c]))
             if self.draws.u_accept[c] < p:
                 reward = float(self.q[c])

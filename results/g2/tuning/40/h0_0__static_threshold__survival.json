@@ -1,0 +1,400 @@
+{
+ "scenario": "stress",
+ "h0": 0.0,
+ "accept_decay": 0.03,
+ "family": "static_threshold",
+ "belief": "survival",
+ "budget": 40,
+ "search_seed": 0,
+ "pool": "tuning",
+ "episodes": 4000,
+ "start": {
+  "configuration": 1,
+  "params": [
+   0.8000000000000003
+  ],
+  "mean": 3.128626129821767,
+  "se": 0.02374142629412345,
+  "accepted": true
+ },
+ "best_params": [
+  1.0903306264677466
+ ],
+ "best": {
+  "episodes": 4000,
+  "mean": 3.3878159370950263,
+  "se": 0.024826434848047668,
+  "interviews_per_episode": 0.0,
+  "hires_per_episode": 3.0,
+  "offers_per_episode": 4.90975,
+  "realised_acceptance": 0.6110290748001426,
+  "share_days_pool_over_slots": 0.8688700748941712,
+  "share_days_hidden_better": 0.0,
+  "share_hires_at_interview_cap": 0.0
+ },
+ "best_configuration": 31,
+ "history": [
+  {
+   "configuration": 1,
+   "params": [
+    0.8000000000000003
+   ],
+   "mean": 3.128626129821767,
+   "se": 0.02374142629412345,
+   "accepted": true
+  },
+  {
+   "configuration": 2,
+   "params": [
+    0.9723005236383403
+   ],
+   "mean": 3.3706378196541285,
+   "se": 0.02387601927610618,
+   "accepted": true
+  },
+  {
+   "configuration": 3,
+   "params": [
+    0.6669448151305724
+   ],
+   "mean": 2.8285832607345394,
+   "se": 0.023854504717949532,
+   "accepted": false
+  },
+  {
+   "configuration": 4,
+   "params": [
+    0.9743711100378774
+   ],
+   "mean": 3.3727850843063716,
+   "se": 0.02384240002461774,
+   "accepted": true
+  },
+  {
+   "configuration": 5,
+   "params": [
+    0.9594760260802456
+   ],
+   "mean": 3.3639860548006926,
+   "se": 0.02391697591606931,
+   "accepted": false
+  },
+  {
+   "configuration": 6,
+   "params": [
+    1.0983644409413595
+   ],
+   "mean": 3.382934567426587,
+   "se": 0.024896456686070635,
+   "accepted": true
+  },
+  {
+   "configuration": 7,
+   "params": [
+    1.196707239510831
+   ],
+   "mean": 3.3015013672524436,
+   "se": 0.025123390316224046,
+   "accepted": false
+  },
+  {
+   "configuration": 8,
+   "params": [
+    1.5448285612711001
+   ],
+   "mean": 3.0525850976026003,
+   "se": 0.025138844483328236,
+   "accepted": false
+  },
+  {
+   "configuration": 9,
+   "params": [
+    0.9969134212778156
+   ],
+   "mean": 3.3788690459961925,
+   "se": 0.023926738294672935,
+   "accepted": false
+  },
+  {
+   "configuration": 10,
+   "params": [
+    1.279007516687475
+   ],
+   "mean": 3.257415967818027,
+   "se": 0.025315844065835886,
+   "accepted": false
+  },
+  {
+   "configuration": 11,
+   "params": [
+    1.120990476674635
+   ],
+   "mean": 3.370319811829022,
+   "se": 0.024944511559979742,
+   "accepted": false
+  },
+  {
+   "configuration": 12,
+   "params": [
+    0.9406911817240203
+   ],
+   "mean": 3.339926347163226,
+   "se": 0.023886623295762945,
+   "accepted": false
+  },
+  {
+   "configuration": 13,
+   "params": [
+    1.1791149638414387
+   ],
+   "mean": 3.3173817822866143,
+   "se": 0.025052748557051613,
+   "accepted": false
+  },
+  {
+   "configuration": 14,
+   "params": [
+    1.0543886002669987
+   ],
+   "mean": 3.382535622341894,
+   "se": 0.024443110753716264,
+   "accepted": false
+  },
+  {
+   "configuration": 15,
+   "params": [
+    1.1158326999503387
+   ],
+   "mean": 3.370632091153131,
+   "se": 0.024910556187828163,
+   "accepted": false
+  },
+  {
+   "configuration": 16,
+   "params": [
+    1.2166721125201954
+   ],
+   "mean": 3.2917798110636953,
+   "se": 0.025197961485547125,
+   "accepted": false
+  },
+  {
+   "configuration": 17,
+   "params": [
+    1.1076263882848632
+   ],
+   "mean": 3.3776649855014576,
+   "se": 0.02486735622291206,
+   "accepted": false
+  },
+  {
+   "configuration": 18,
+   "params": [
+    1.1039158022556104
+   ],
+   "mean": 3.3843128707449854,
+   "se": 0.024895395848094456,
+   "accepted": true
+  },
+  {
+   "configuration": 19,
+   "params": [
+    1.142392906764506
+   ],
+   "mean": 3.362541111203539,
+   "se": 0.025069760271679606,
+   "accepted": false
+  },
+  {
+   "configuration": 20,
+   "params": [
+    1.1650291557998567
+   ],
+   "mean": 3.3420490695486125,
+   "se": 0.02511352419792239,
+   "accepted": false
+  },
+  {
+   "configuration": 21,
+   "params": [
+    1.092367176846977
+   ],
+   "mean": 3.3835680790682,
+   "se": 0.024872959913865806,
+   "accepted": false
+  },
+  {
+   "configuration": 22,
+   "params": [
+    1.12393850012913
+   ],
+   "mean": 3.369747486078682,
+   "se": 0.024974469526554823,
+   "accepted": false
+  },
+  {
+   "configuration": 23,
+   "params": [
+    1.0476734948369926
+   ],
+   "mean": 3.383354765199113,
+   "se": 0.02445298482168351,
+   "accepted": false
+  },
+  {
+   "configuration": 24,
+   "params": [
+    1.13018810860737
+   ],
+   "mean": 3.363289689351615,
+   "se": 0.025019037202083098,
+   "accepted": false
+  },
+  {
+   "configuration": 25,
+   "params": [
+    1.1151460150606027
+   ],
+   "mean": 3.37054758884993,
+   "se": 0.024897624020614233,
+   "accepted": false
+  },
+  {
+   "configuration": 26,
+   "params": [
+    1.0919047664504478
+   ],
+   "mean": 3.3850268436194657,
+   "se": 0.02486113683340028,
+   "accepted": true
+  },
+  {
+   "configuration": 27,
+   "params": [
+    1.0936840209798928
+   ],
+   "mean": 3.382981419655456,
+   "se": 0.024862732237825168,
+   "accepted": false
+  },
+  {
+   "configuration": 28,
+   "params": [
+    1.1086543636480881
+   ],
+   "mean": 3.3771718471845404,
+   "se": 0.024867205577401862,
+   "accepted": false
+  },
+  {
+   "configuration": 29,
+   "params": [
+    1.0794785597409096
+   ],
+   "mean": 3.3862178983506728,
+   "se": 0.024691980445803036,
+   "accepted": true
+  },
+  {
+   "configuration": 30,
+   "params": [
+    1.0946464860679426
+   ],
+   "mean": 3.383694996229763,
+   "se": 0.024827851884988462,
+   "accepted": false
+  },
+  {
+   "configuration": 31,
+   "params": [
+    1.0903306264677466
+   ],
+   "mean": 3.3878159370950263,
+   "se": 0.024826434848047668,
+   "accepted": true
+  },
+  {
+   "configuration": 32,
+   "params": [
+    1.0956237814427257
+   ],
+   "mean": 3.384226850784262,
+   "se": 0.024837161075741927,
+   "accepted": false
+  },
+  {
+   "configuration": 33,
+   "params": [
+    1.1204229431572372
+   ],
+   "mean": 3.369926226570423,
+   "se": 0.02491296756394633,
+   "accepted": false
+  },
+  {
+   "configuration": 34,
+   "params": [
+    1.0838081222381863
+   ],
+   "mean": 3.3862071899439323,
+   "se": 0.024725727877836653,
+   "accepted": false
+  },
+  {
+   "configuration": 35,
+   "params": [
+    1.1041110115848318
+   ],
+   "mean": 3.3839554900789346,
+   "se": 0.02489568472898211,
+   "accepted": false
+  },
+  {
+   "configuration": 36,
+   "params": [
+    1.1088615017183032
+   ],
+   "mean": 3.3772032838808275,
+   "se": 0.024862984494484815,
+   "accepted": false
+  },
+  {
+   "configuration": 37,
+   "params": [
+    1.0899122386078584
+   ],
+   "mean": 3.3877581019742906,
+   "se": 0.024820057893875175,
+   "accepted": false
+  },
+  {
+   "configuration": 38,
+   "params": [
+    1.090115649585185
+   ],
+   "mean": 3.3875171558840282,
+   "se": 0.024823801901612635,
+   "accepted": false
+  },
+  {
+   "configuration": 39,
+   "params": [
+    1.0773686702713352
+   ],
+   "mean": 3.386761552004173,
+   "se": 0.02463326308100325,
+   "accepted": false
+  },
+  {
+   "configuration": 40,
+   "params": [
+    1.0955238166957963
+   ],
+   "mean": 3.384647257442383,
+   "se": 0.024835490592947613,
+   "accepted": false
+  }
+ ],
+ "setting": "h0_0",
+ "seconds": 1352.2415902999928
+}

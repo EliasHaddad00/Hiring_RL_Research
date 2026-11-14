@@ -44,6 +44,7 @@ def job(setting):
     tb = GaussianTables(sc)
     base = lagrangian_bound(sc, lam_grid=LAMS, tables=tb)
     fine = lagrangian_bound(sc, n_grid=361, n_nodes=160, n_noise=30)
+    finest = lagrangian_bound(sc, n_grid=721)             # one more doubling of the grid of naive means
     cap6 = lagrangian_bound(sc.with_(max_interviews=6))
     z = base["z"]
     computed = float(relaxed_value(sc, tb.solve([z]), [z])[0])
@@ -51,6 +52,7 @@ def job(setting):
     return dict(setting=label, scenario=name, h0=sc.h0, accept_decay=sc.accept_decay,
                 bound=base["bound"], z=z, lam=base["lam"], per_lam=base["per_lam"],
                 bound_fine_grid=fine["bound"], grid_change=base["bound"] - fine["bound"],
+                bound_finest_grid=finest["bound"], second_change=fine["bound"] - finest["bound"],
                 bound_interview_cap_6=cap6["bound"], state_count=base["state_count"],
                 build_seconds=base["build_seconds"], solve_seconds=base["solve_seconds"],
                 relaxed_computed=computed, relaxed_simulated=float(sim.mean()),
@@ -69,12 +71,13 @@ def main():
                      exact_choose=ExactSolver(small, "choose").value(),
                      exact_automatic=ExactSolver(small, "automatic").value())
 
-    lines = [f"{'setting':30s} {'bound':>7s} {'fine':>7s} {'change':>7s} {'cap 6':>7s} {'z':>6s} {'lam':>6s} "
+    lines = [f"{'setting':30s} {'bound':>7s} {'fine':>7s} {'change':>7s} {'finest':>7s} {'change':>7s} {'cap 6':>7s} {'z':>6s} {'lam':>6s} "
              f"{'relaxed: computed':>18s} {'simulated':>10s} {'se':>6s} {'prototype':>10s}"]
     problems = []
     for r in rows:
         proto = f"{r['prototype']:.2f}" if r["prototype"] is not None else "none"
         lines.append(f"{r['setting']:30s} {r['bound']:7.4f} {r['bound_fine_grid']:7.4f} {r['grid_change']:+7.4f} "
+                     f"{r['bound_finest_grid']:7.4f} {r['second_change']:+7.4f} "
                      f"{r['bound_interview_cap_6']:7.4f} {r['z']:6.3f} {r['lam']:6.3f} {r['relaxed_computed']:18.4f} "
                      f"{r['relaxed_simulated']:10.4f} {r['relaxed_se']:6.4f} {proto:>10s}")
         if abs(r["grid_change"]) >= GRID_LIMIT:
@@ -82,7 +85,7 @@ def main():
         if abs(r["relaxed_simulated"] - r["relaxed_computed"]) > 3 * r["relaxed_se"]:
             problems.append(f"{r['setting']}: simulated relaxed value is more than 3 standard errors from the computed one")
     lines += ["",
-              "bound = default grid (181 points, 80 quality nodes, 15 noise nodes); fine = 361 / 160 / 30.",
+              "bound = default grid (181 points, 80 quality nodes, 15 noise nodes); fine = 361 / 160 / 30; finest = 721 / 80 / 15.",
               "change = bound minus fine; the coarser grid errs upward, which is the safe side for an upper bound.",
               f"relaxed: the priced problem without the role and slot limits, at the best z; simulated on {SIM_EPISODES} development episodes.",
               "prototype = notes/prototypes/lag.py as reported in context/ (a target, not a result). Rerun here, the prototype",

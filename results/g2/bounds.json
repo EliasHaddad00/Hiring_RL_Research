@@ -27,15 +27,17 @@
    ],
    "bound_fine_grid": 4.337882867826286,
    "grid_change": 0.0033474867072476044,
+   "bound_finest_grid": 4.33675751740073,
+   "second_change": 0.0011253504255561708,
    "bound_interview_cap_6": 4.342399089519633,
    "state_count": 1260484,
-   "build_seconds": 0.3430316000012681,
-   "solve_seconds": 17.521095299976878,
+   "build_seconds": 0.43470959999831393,
+   "solve_seconds": 19.395431699987967,
    "relaxed_computed": 4.3412303545335345,
    "relaxed_simulated": 4.335039284677982,
    "relaxed_se": 0.021994454152686315,
    "prototype": null,
-   "seconds": 58.675039699999616
+   "seconds": 136.11173259999487
   },
   {
    "setting": "stress, h0 = 0 (decay only)",
@@ -64,15 +66,17 @@
    ],
    "bound_fine_grid": 4.286784978936197,
    "grid_change": 0.003031982844832193,
+   "bound_finest_grid": 4.285636427184188,
+   "second_change": 0.0011485517520091193,
    "bound_interview_cap_6": 4.290290732378808,
    "state_count": 1260484,
-   "build_seconds": 0.35430219999398105,
-   "solve_seconds": 16.842975999985356,
+   "build_seconds": 0.4331819000071846,
+   "solve_seconds": 19.574545200011926,
    "relaxed_computed": 4.289816961781028,
    "relaxed_simulated": 4.275043521829313,
    "relaxed_se": 0.02195670170694628,
    "prototype": 4.31,
-   "seconds": 56.39145860000281
+   "seconds": 133.43370389999473
   },
   {
    "setting": "stress, h0 = 0.02",
@@ -101,15 +105,17 @@
    ],
    "bound_fine_grid": 4.154110658299745,
    "grid_change": 0.003861734344027923,
+   "bound_finest_grid": 4.153522559802492,
+   "second_change": 0.0005880984972526093,
    "bound_interview_cap_6": 4.157980670661475,
    "state_count": 1260484,
-   "build_seconds": 0.38479999999981374,
-   "solve_seconds": 16.73657199999434,
+   "build_seconds": 0.4545301999896765,
+   "solve_seconds": 19.5616624999966,
    "relaxed_computed": 4.157972392643772,
    "relaxed_simulated": 4.14112566597849,
    "relaxed_se": 0.02259099898142201,
    "prototype": 4.17,
-   "seconds": 56.906172899995
+   "seconds": 133.98902710000402
   },
   {
    "setting": "stress, h0 = 0.05 (primary)",
@@ -138,15 +144,17 @@
    ],
    "bound_fine_grid": 3.9828192043404727,
    "grid_change": 0.0019688538811188927,
+   "bound_finest_grid": 3.9820091374278306,
+   "second_change": 0.0008100669126420712,
    "bound_interview_cap_6": 3.9847880582215915,
    "state_count": 1260484,
-   "build_seconds": 0.35916769999312237,
-   "solve_seconds": 16.786014499986777,
+   "build_seconds": 0.45115909999003634,
+   "solve_seconds": 19.591560800006846,
    "relaxed_computed": 3.984788058221592,
    "relaxed_simulated": 3.975472392847788,
    "relaxed_se": 0.021734306875237242,
    "prototype": 4.0,
-   "seconds": 56.42845900001703
+   "seconds": 134.0697041999956
   },
   {
    "setting": "stress, h0 = 0.10",
@@ -175,15 +183,56 @@
    ],
    "bound_fine_grid": 3.7660893862622533,
    "grid_change": 0.002310970732231521,
+   "bound_finest_grid": 3.7654579633155505,
+   "second_change": 0.0006314229467028198,
    "bound_interview_cap_6": 3.768400356994485,
    "state_count": 1260484,
-   "build_seconds": 0.3494057000207249,
-   "solve_seconds": 17.122395699989283,
+   "build_seconds": 0.45158189997891895,
+   "solve_seconds": 19.502604400011478,
    "relaxed_computed": 3.7684003569944844,
    "relaxed_simulated": 3.7603462207316616,
    "relaxed_se": 0.022443677332015723,
    "prototype": null,
-   "seconds": 56.21661169998697
+   "seconds": 133.84151120000752
+  },
+  {
+   "setting": "calibrated",
+   "scenario": "calibrated",
+   "h0": 0.02,
+   "accept_decay": 0.003,
+   "bound": 2.7059156219229057,
+   "z": 0.7320000000000001,
+   "lam": 0.0,
+   "per_lam": [
+    {
+     "lam": 0.0,
+     "bound": 2.7059156219229057,
+     "z": 0.7320000000000001
+    },
+    {
+     "lam": 0.005,
+     "bound": 3.5499453402308037,
+     "z": 0.7400000000000001
+    },
+    {
+     "lam": 0.02,
+     "bound": 6.117614372231055,
+     "z": 0.7040000000000001
+    }
+   ],
+   "bound_fine_grid": 2.7006378054090825,
+   "grid_change": 0.005277816513823197,
+   "bound_finest_grid": 2.6999209199235215,
+   "second_change": 0.0007168854855610363,
+   "bound_interview_cap_6": 2.70669708403328,
+   "state_count": 1260484,
+   "build_seconds": 0.44145319997915067,
+   "solve_seconds": 19.54619699998875,
+   "relaxed_computed": 2.7059156219229057,
+   "relaxed_simulated": 2.6840527892976174,
+   "relaxed_se": 0.025171735967317553,
+   "prototype": null,
+   "seconds": 133.49227200000314
   }
  ],
  "small_instance": {
