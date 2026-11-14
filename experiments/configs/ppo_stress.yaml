@@ -1,0 +1,22 @@
+# MaskablePPO on the full problem: stress scenario at the primary setting (h0 = 0.05).
+# Starting values from the research plan; not yet tuned.
+scenario: stress
+scenario_overrides: {h0: 0.05, accept_decay: 0.03}
+total_timesteps: 3000000        # planning default
+n_envs: 8                       # DummyVecEnv, one torch thread
+hidden: 64                      # 64 x 64 tanh, separate actor and critic
+ppo:
+  n_steps: 512
+  batch_size: 256
+  n_epochs: 10
+  learning_rate: 3.0e-4
+  lr_schedule: linear           # decays linearly to zero
+  gamma: 0.999
+  gae_lambda: 0.95
+  ent_coef: 0.01
+  clip_range: 0.2
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+eval:
+  episodes: 1000                # fixed development episodes, greedy actions, masks on
+  freq_steps: 100000

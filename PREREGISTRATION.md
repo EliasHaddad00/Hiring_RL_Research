@@ -24,6 +24,10 @@ anything not in this file is labelled exploratory, and changes are recorded unde
 - **Unit of analysis.** The training seed; each seed's score is its 10,000-episode mean.
 - **Primary comparison.** PPO against the best tuned rule at the primary setting, stress scenario
   with h0 = 0.05 *(planning default)*, paired on the same evaluation episodes.
+- **How a PPO agent is scored** *(decided Nov 14)*. The action mask is always passed and the agent
+  takes its most probable valid action (greedy). The evaluation callback that draws the training
+  curves uses the same setting, so curves and final scores measure the same thing. The score with
+  sampled actions is reported beside it and is not used for any verdict.
 - **Reference points.** Random valid policy, best tuned rule, exact optimum under the
   automatic-drop rule (small instance), Lagrangian upper bound (full problem).
 
@@ -51,8 +55,15 @@ No choice is made on the final training seeds or the evaluation episodes. **No s
 ## Budgets
 
 - **Tuning.** 40 configurations *(planning default)* for each rule and each PPO architecture; PPO never
-  gets less than the rules. Open: what counts as one "configuration" for a rule (the earlier check
-  used 360 evaluations per rule family); to be settled in week 2.
+  gets less than the rules.
+- **One rule configuration** *(decided Nov 14)* is one full parameter vector of a rule family, scored
+  on all 4,000 tuning episodes. Each rule family gets 40 per estimate (naive, survival-aware) and
+  per setting. Configuration 1 is the earlier tuned vector (`results/g1/v3_fullprec.json`) where one
+  exists; the rest come from a seeded local search.
+- **Robustness search for the rules** *(decided Nov 14)*. At the primary setting every rule family
+  also gets a 360-evaluation search, with both estimates, on the tuning episodes. If the best rule
+  gains more than the 2% margin over its 40-configuration score, this is reported and the stronger
+  rule becomes the comparator.
 - **Training length.** 3 million steps per run *(planning default)*, then reset to at least twice the
   point where the curves flatten. Plateau test: the change in interquartile mean over the last 20%
   of training lies within its interval.
@@ -63,6 +74,14 @@ No choice is made on the final training seeds or the evaluation episodes. **No s
 
 Exact small instance; stress with no pressure (h0 = 0, no acceptance decay); stress at h0 = 0, 0.02,
 0.05 (primary), 0.10; calibrated scenario; optional: stress at h0 = 0.05 with one interview per day.
+Calibrated scenario *(decided Nov 14; frozen once the acceptance check below is done)*: as stress,
+with acceptance 0.85 x exp(-0.003 x days), h0 = 0.02, interview noise 2.2 and resume noise 2.4.
+Realised acceptance under the best tuned rule on the tuning episodes is reported against the
+76 to 84% benchmark before the file is frozen.
+Rule form *(decided Nov 14)*: rules using the survival-aware estimate offer to anyone with a positive
+estimate on the last day. Rules using the naive estimate keep the tuned linear bar, and their
+last-day bar is reported. The price-directed rule's naive version uses its own tables, solved
+under the naive belief (tonight's loss risk averaged over that belief), and is tuned separately.
 Simulator conventions are those in `experiments/hiring/env.py` (strict offer-then-interview phases,
 interview results visible next morning, 3 interviews per candidate, 10 slots *(planning default)*,
 last-day interviews masked, automatic drop on the small instance).
@@ -77,7 +96,9 @@ Optional, only if gate G3 is met on time: masking versus an invalid-action penal
 
 ## Known-answer tests
 
-Exact small instance (PPO within 2% of the optimum); degenerate regimes (zero interview cost, zero
+Exact small instance (PPO within 2% of the optimum; gate G2 form, decided Nov 14: on the same
+40,000 development episodes, the lower end of the 95% interval of PPO minus the exact optimal
+policy is above -0.0127, which is 2% of 0.63333; the absolute mean is reported beside it); degenerate regimes (zero interview cost, zero
 interview noise, no pressure, very high hazard); imitation of the exact optimal policy by each
 architecture; a standard reference task (CartPole); simulator statistics (arrival, acceptance,
 departure rates); upper bound at least as large as every evaluated policy at every setting.
