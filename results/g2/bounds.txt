@@ -4,7 +4,7 @@ stress, h0 = 0 (decay only)     4.2898  4.2868 +0.0030  4.2856 +0.0011  4.2903  
 stress, h0 = 0.02               4.1580  4.1541 +0.0039  4.1535 +0.0006  4.1580  1.128  0.000             4.1580     4.1411 0.0226       4.17
 stress, h0 = 0.05 (primary)     3.9848  3.9828 +0.0020  3.9820 +0.0008  3.9848  1.108  0.000             3.9848     3.9755 0.0217       4.00
 stress, h0 = 0.10               3.7684  3.7661 +0.0023  3.7655 +0.0006  3.7684  1.044  0.000             3.7684     3.7603 0.0224       none
-calibrated                      2.7059  2.7006 +0.0053  2.6999 +0.0007  2.7067  0.732  0.000             2.7059     2.6841 0.0252       none
+calibrated                      2.6506  2.6453 +0.0053  2.6445 +0.0008  2.6510  0.720  0.000             2.6506     2.6136 0.0248       none
 
 bound = default grid (181 points, 80 quality nodes, 15 noise nodes); fine = 361 / 160 / 30; finest = 721 / 80 / 15.
 change = bound minus fine; the coarser grid errs upward, which is the safe side for an upper bound.
@@ -12,7 +12,7 @@ relaxed: the priced problem without the role and slot limits, at the best z; sim
 prototype = notes/prototypes/lag.py as reported in context/ (a target, not a result). Rerun here, the prototype
 gives 4.172 at h0 = 0.02; our code gives the same 4.17237 when set to its grid (91 points on [-3, 4], 15 / 9
 nodes) and its arrival integration (41 Gauss-Hermite nodes), so there the added wait action changes nothing.
-one-candidate table: 1,260,484 states per price; build 0.43 s, bound search 19.4 s.
+one-candidate table: 1,260,484 states per price; build 0.67 s, bound search 35.5 s.
 
 small instance (T = 12): bound 0.86236 (z = 0.536, lam = 0.0), exact optimum 0.63348 (choose) / 0.63333 (automatic drop); 2,340 states.
 

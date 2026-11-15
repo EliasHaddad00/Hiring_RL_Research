@@ -1,17 +1,17 @@
-Calibrated scenario, best tuned rule on the 4,000 tuning episodes: price_directed (survival), 2.438
-  realised acceptance  84.6%   benchmark 76 to 84%: OUTSIDE
+Calibrated scenario, best tuned rule on the 4,000 tuning episodes: price_directed (survival), 2.382
+  realised acceptance  79.3%   benchmark 76 to 84%: inside
   share of roles filled 99.5%   (single vacancies: 84 to 93% within 60 days, constant-hazard reading)
-  interviews per hire  3.3   benchmark about 20
-  share of hires at the 3-interview cap 10.2%
+  interviews per hire  3.6   benchmark about 20
+  share of hires at the 3-interview cap 11.4%
 
 All rules on the tuning episodes (realised acceptance):
-  static_threshold       naive     2.131  85.1%
-  static_threshold       survival  2.216  84.7%
-  resume_falling_bar     naive     2.064  84.1%
-  resume_falling_bar     survival  2.271  84.8%
-  one_interview          naive     2.140  83.2%
-  one_interview          survival  2.418  84.3%
-  up_to_two_interviews   naive     2.211  83.2%
-  up_to_two_interviews   survival  2.372  84.2%
-  price_directed         naive     2.341  84.3%
-  price_directed         survival  2.438  84.6%
+  static_threshold       naive     2.127  79.0%
+  static_threshold       survival  2.174  79.4%
+  resume_falling_bar     naive     1.979  78.3%
+  resume_falling_bar     survival  2.224  79.7%
+  one_interview          naive     1.990  78.3%
+  one_interview          survival  2.353  79.3%
+  up_to_two_interviews   naive     2.159  78.2%
+  up_to_two_interviews   survival  2.321  79.1%
+  price_directed         naive     2.310  78.9%
+  price_directed         survival  2.382  79.3%

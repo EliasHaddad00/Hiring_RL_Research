@@ -2,13 +2,13 @@
 
 none: bound 4.3412
   family                 estimate   tuning     dev     se  bound - dev  % of bound  full - 10 slots  20 - 10  at cap
-  static_threshold       naive       3.096   3.076  0.025       +1.265       70.9%          +0.0000  +0.0000    0.0%
+  static_threshold       naive       3.535   3.521  0.024       +0.820       81.1%          +0.0000  +0.0000    0.0%
   static_threshold       survival    3.535   3.521  0.024       +0.820       81.1%          +0.0000  +0.0000    0.0%
-  resume_falling_bar     naive       3.439   3.415  0.024       +0.926       78.7%          +0.0000  +0.0000    0.0%
+  resume_falling_bar     naive       3.536   3.521  0.024       +0.820       81.1%          +0.0000  +0.0000    0.0%
   resume_falling_bar     survival    3.536   3.520  0.024       +0.821       81.1%          +0.0000  +0.0000    0.0%
-  one_interview          naive       3.917   3.878  0.022       +0.463       89.3%          +0.0008  +0.0008    0.0%
+  one_interview          naive       4.040   3.998  0.022       +0.344       92.1%          +0.0001  +0.0001    0.0%
   one_interview          survival    4.027   3.992  0.022       +0.349       92.0%          +0.0002  +0.0002    0.0%
-  up_to_two_interviews   naive       3.944   3.898  0.022       +0.443       89.8%          -0.0004  -0.0004    0.0%
+  up_to_two_interviews   naive       4.042   3.993  0.022       +0.348       92.0%          -0.0011  -0.0011    0.0%
   up_to_two_interviews   survival    4.049   4.003  0.022       +0.338       92.2%          -0.0016  -0.0016    0.0%
   price_directed         naive       4.039   4.016  0.021       +0.326       92.5%          +0.0005  +0.0005   14.2%
   price_directed         survival    4.038   4.011  0.021       +0.330       92.4%          -0.0011  -0.0011   17.7%
@@ -16,13 +16,13 @@ none: bound 4.3412
 
 h0_0: bound 4.2898
   family                 estimate   tuning     dev     se  bound - dev  % of bound  full - 10 slots  20 - 10  at cap
-  static_threshold       naive       3.096   3.076  0.025       +1.213       71.7%          +0.0000  +0.0000    0.0%
+  static_threshold       naive       3.391   3.368  0.024       +0.922       78.5%          +0.0000  +0.0000    0.0%
   static_threshold       survival    3.388   3.347  0.025       +0.942       78.0%          +0.0000  +0.0000    0.0%
-  resume_falling_bar     naive       3.336   3.305  0.024       +0.985       77.1%          +0.0000  +0.0000    0.0%
+  resume_falling_bar     naive       3.395   3.377  0.024       +0.913       78.7%          +0.0000  +0.0000    0.0%
   resume_falling_bar     survival    3.396   3.372  0.024       +0.918       78.6%          +0.0000  +0.0000    0.0%
-  one_interview          naive       3.764   3.706  0.022       +0.584       86.4%          +0.0000  +0.0000    0.0%
+  one_interview          naive       3.845   3.800  0.022       +0.490       88.6%          +0.0000  +0.0000    0.0%
   one_interview          survival    3.859   3.815  0.022       +0.475       88.9%          +0.0000  +0.0000    0.0%
-  up_to_two_interviews   naive       3.793   3.719  0.022       +0.570       86.7%          +0.0000  +0.0000    0.0%
+  up_to_two_interviews   naive       3.874   3.816  0.023       +0.474       88.9%          +0.0000  +0.0000    0.0%
   up_to_two_interviews   survival    3.860   3.807  0.022       +0.483       88.7%          +0.0008  +0.0008    0.0%
   price_directed         naive       3.910   3.875  0.022       +0.414       90.3%          -0.0009  -0.0011   11.6%
   price_directed         survival    3.896   3.892  0.022       +0.398       90.7%          -0.0024  -0.0034   10.0%
@@ -30,13 +30,13 @@ h0_0: bound 4.2898
 
 h0_0.02: bound 4.1580
   family                 estimate   tuning     dev     se  bound - dev  % of bound  full - 10 slots  20 - 10  at cap
-  static_threshold       naive       3.096   3.076  0.025       +1.082       74.0%          +0.0000  +0.0000    0.0%
+  static_threshold       naive       3.230   3.197  0.025       +0.961       76.9%          +0.0000  +0.0000    0.0%
   static_threshold       survival    3.252   3.223  0.024       +0.935       77.5%          +0.0001  +0.0001    0.0%
-  resume_falling_bar     naive       3.189   3.170  0.024       +0.988       76.2%          +0.0000  +0.0000    0.0%
+  resume_falling_bar     naive       3.246   3.208  0.024       +0.950       77.2%          +0.0000  +0.0000    0.0%
   resume_falling_bar     survival    3.326   3.316  0.024       +0.842       79.8%          +0.0000  +0.0000    0.0%
-  one_interview          naive       3.600   3.538  0.023       +0.620       85.1%          +0.0000  +0.0000    0.0%
+  one_interview          naive       3.662   3.607  0.022       +0.551       86.8%          +0.0000  +0.0000    0.0%
   one_interview          survival    3.726   3.662  0.023       +0.496       88.1%          +0.0006  +0.0006    0.0%
-  up_to_two_interviews   naive       3.621   3.556  0.023       +0.601       85.5%          +0.0000  +0.0000    0.0%
+  up_to_two_interviews   naive       3.684   3.612  0.023       +0.546       86.9%          +0.0000  +0.0000    0.0%
   up_to_two_interviews   survival    3.684   3.628  0.022       +0.530       87.3%          +0.0000  +0.0000    0.0%
   price_directed         naive       3.747   3.718  0.022       +0.440       89.4%          -0.0002  -0.0002    4.0%
   price_directed         survival    3.766   3.743  0.022       +0.415       90.0%          +0.0012  +0.0014    0.8%
@@ -44,13 +44,13 @@ h0_0.02: bound 4.1580
 
 h0_0.05: bound 3.9848
   family                 estimate   tuning     dev     se  bound - dev  % of bound  full - 10 slots  20 - 10  at cap
-  static_threshold       naive       3.096   3.076  0.025       +0.908       77.2%          +0.0000  +0.0000    0.0%
+  static_threshold       naive       3.174   3.153  0.025       +0.832       79.1%          +0.0000  +0.0000    0.0%
   static_threshold       survival    3.205   3.181  0.025       +0.803       79.8%          +0.0000  +0.0000    0.0%
-  resume_falling_bar     naive       3.170   3.132  0.024       +0.853       78.6%          +0.0000  +0.0000    0.0%
+  resume_falling_bar     naive       3.200   3.189  0.025       +0.796       80.0%          +0.0000  +0.0000    0.0%
   resume_falling_bar     survival    3.304   3.289  0.024       +0.696       82.5%          +0.0000  +0.0000    0.0%
-  one_interview          naive       3.369   3.356  0.022       +0.629       84.2%          +0.0000  +0.0000    0.0%
+  one_interview          naive       3.435   3.420  0.022       +0.565       85.8%          +0.0000  +0.0000    0.0%
   one_interview          survival    3.533   3.517  0.022       +0.468       88.3%          +0.0000  +0.0000    0.0%
-  up_to_two_interviews   naive       3.491   3.449  0.023       +0.536       86.5%          +0.0000  +0.0000    0.0%
+  up_to_two_interviews   naive       3.516   3.477  0.023       +0.508       87.3%          +0.0000  +0.0000    0.0%
   up_to_two_interviews   survival    3.558   3.526  0.023       +0.458       88.5%          +0.0000  +0.0000    0.0%
   price_directed         naive       3.564   3.529  0.022       +0.456       88.6%          -0.0004  -0.0004    2.3%
   price_directed         survival    3.594   3.560  0.023       +0.425       89.3%          +0.0020  +0.0020    0.8%
@@ -58,31 +58,31 @@ h0_0.05: bound 3.9848
 
 h0_0.10: bound 3.7684
   family                 estimate   tuning     dev     se  bound - dev  % of bound  full - 10 slots  20 - 10  at cap
-  static_threshold       naive       3.096   3.076  0.025       +0.692       81.6%          +0.0000  +0.0000    0.0%
+  static_threshold       naive       3.132   3.122  0.025       +0.647       82.8%          +0.0000  +0.0000    0.0%
   static_threshold       survival    3.167   3.145  0.025       +0.624       83.4%          +0.0000  +0.0000    0.0%
-  resume_falling_bar     naive       3.161   3.140  0.025       +0.629       83.3%          +0.0000  +0.0000    0.0%
+  resume_falling_bar     naive       3.178   3.192  0.025       +0.577       84.7%          +0.0000  +0.0000    0.0%
   resume_falling_bar     survival    3.278   3.269  0.025       +0.499       86.8%          +0.0000  +0.0000    0.0%
-  one_interview          naive       3.149   3.115  0.025       +0.653       82.7%          +0.0000  +0.0000    0.0%
+  one_interview          naive       3.158   3.135  0.025       +0.633       83.2%          +0.0000  +0.0000    0.0%
   one_interview          survival    3.263   3.255  0.025       +0.513       86.4%          +0.0000  +0.0000    0.0%
-  up_to_two_interviews   naive       3.153   3.123  0.025       +0.645       82.9%          +0.0000  +0.0000    0.0%
+  up_to_two_interviews   naive       3.168   3.150  0.025       +0.619       83.6%          +0.0000  +0.0000    0.0%
   up_to_two_interviews   survival    3.274   3.268  0.025       +0.500       86.7%          +0.0000  +0.0000    0.0%
   price_directed         naive       3.364   3.345  0.023       +0.423       88.8%          +0.0000  +0.0000    0.0%
   price_directed         survival    3.412   3.396  0.023       +0.372       90.1%          -0.0001  -0.0001    0.1%
   best on development episodes: price_directed (survival), 3.396, 90.1% of the bound
 
-calibrated: bound 2.7059
+calibrated: bound 2.6506
   family                 estimate   tuning     dev     se  bound - dev  % of bound  full - 10 slots  20 - 10  at cap
-  static_threshold       naive       2.131   2.091  0.026       +0.615       77.3%          +0.0000  +0.0000    0.0%
-  static_threshold       survival    2.216   2.182  0.026       +0.523       80.7%          -0.0021  -0.0021    0.0%
-  resume_falling_bar     naive       2.064   2.038  0.026       +0.668       75.3%          +0.0000  +0.0000    0.0%
-  resume_falling_bar     survival    2.271   2.268  0.026       +0.438       83.8%          -0.0040  -0.0040    0.0%
-  one_interview          naive       2.140   2.137  0.026       +0.569       79.0%          +0.0000  +0.0000    0.0%
-  one_interview          survival    2.418   2.372  0.026       +0.334       87.7%          -0.0016  -0.0016    0.0%
-  up_to_two_interviews   naive       2.211   2.181  0.025       +0.524       80.6%          +0.0000  +0.0000    0.0%
-  up_to_two_interviews   survival    2.372   2.349  0.025       +0.357       86.8%          -0.0020  -0.0020    0.0%
-  price_directed         naive       2.341   2.310  0.025       +0.396       85.4%          +0.0000  +0.0000    3.9%
-  price_directed         survival    2.438   2.411  0.025       +0.294       89.1%          -0.0029  -0.0034    9.8%
-  best on development episodes: price_directed (survival), 2.411, 89.1% of the bound
+  static_threshold       naive       2.127   2.108  0.026       +0.543       79.5%          +0.0000  +0.0000    0.0%
+  static_threshold       survival    2.174   2.148  0.026       +0.502       81.1%          -0.0023  -0.0023    0.0%
+  resume_falling_bar     naive       1.979   1.948  0.026       +0.702       73.5%          +0.0000  +0.0000    0.0%
+  resume_falling_bar     survival    2.224   2.211  0.026       +0.440       83.4%          -0.0020  -0.0020    0.0%
+  one_interview          naive       1.990   1.973  0.026       +0.678       74.4%          -0.0201  -0.0201    0.0%
+  one_interview          survival    2.353   2.296  0.026       +0.354       86.6%          +0.0016  +0.0016    0.0%
+  up_to_two_interviews   naive       2.159   2.121  0.026       +0.529       80.0%          +0.0000  +0.0000    0.0%
+  up_to_two_interviews   survival    2.321   2.288  0.025       +0.363       86.3%          +0.0010  +0.0010    0.0%
+  price_directed         naive       2.310   2.272  0.025       +0.378       85.7%          -0.0004  -0.0004    7.7%
+  price_directed         survival    2.382   2.324  0.025       +0.326       87.7%          +0.0032  +0.0025   11.1%
+  best on development episodes: price_directed (survival), 2.324, 87.7% of the bound
 
 2. PPO runs at h0 = 0.05 against the bound (greedy actions, masks on, 4,000 development episodes)
 
@@ -95,47 +95,49 @@ calibrated: bound 2.7059
 
 3. Shape facts for the tuned threshold rules
 
-  none        resume_falling_bar     naive     role term +0.296 (bar lower with more open roles); first bar on the last day +0.196
-  none        resume_falling_bar     survival  role term +0.309 (bar lower with more open roles); first bar on the last day +1.005 (forced to zero for this estimate)
-  none        one_interview          naive     role term +0.152 (bar lower with more open roles); first bar on the last day +2.429
-  none        one_interview          survival  role term +0.264 (bar lower with more open roles); first bar on the last day +2.024 (forced to zero for this estimate)
-  none        up_to_two_interviews   naive     role term +0.156 (bar lower with more open roles); first bar on the last day +2.187
-  none        up_to_two_interviews   survival  role term +0.089 (bar lower with more open roles); first bar on the last day +1.925 (forced to zero for this estimate)
-  h0_0        resume_falling_bar     naive     role term +0.349 (bar lower with more open roles); first bar on the last day -0.037
-  h0_0        resume_falling_bar     survival  role term +0.378 (bar lower with more open roles); first bar on the last day +0.121 (forced to zero for this estimate)
-  h0_0        one_interview          naive     role term +0.188 (bar lower with more open roles); first bar on the last day +1.122
-  h0_0        one_interview          survival  role term +0.198 (bar lower with more open roles); first bar on the last day +1.243 (forced to zero for this estimate)
-  h0_0        up_to_two_interviews   naive     role term +0.172 (bar lower with more open roles); first bar on the last day +0.632
-  h0_0        up_to_two_interviews   survival  role term +0.097 (bar lower with more open roles); first bar on the last day +1.023 (forced to zero for this estimate)
-  h0_0.02     resume_falling_bar     naive     role term +0.204 (bar lower with more open roles); first bar on the last day +0.296
-  h0_0.02     resume_falling_bar     survival  role term +0.177 (bar lower with more open roles); first bar on the last day +0.526 (forced to zero for this estimate)
-  h0_0.02     one_interview          naive     role term +0.019 (bar lower with more open roles); first bar on the last day +0.670
-  h0_0.02     one_interview          survival  role term +0.112 (bar lower with more open roles); first bar on the last day +0.596 (forced to zero for this estimate)
-  h0_0.02     up_to_two_interviews   naive     role term +0.095 (bar lower with more open roles); first bar on the last day +0.668
-  h0_0.02     up_to_two_interviews   survival  role term +0.010 (bar lower with more open roles); first bar on the last day +0.749 (forced to zero for this estimate)
-  h0_0.05     resume_falling_bar     naive     role term +0.191 (bar lower with more open roles); first bar on the last day +0.418
-  h0_0.05     resume_falling_bar     survival  role term +0.171 (bar lower with more open roles); first bar on the last day +0.409 (forced to zero for this estimate)
-  h0_0.05     one_interview          naive     role term +0.038 (bar lower with more open roles); first bar on the last day +1.652
-  h0_0.05     one_interview          survival  role term +0.129 (bar lower with more open roles); first bar on the last day +1.057 (forced to zero for this estimate)
-  h0_0.05     up_to_two_interviews   naive     role term +0.156 (bar lower with more open roles); first bar on the last day +0.499
-  h0_0.05     up_to_two_interviews   survival  role term +0.072 (bar lower with more open roles); first bar on the last day +0.643 (forced to zero for this estimate)
-  h0_0.10     resume_falling_bar     naive     role term +0.107 (bar lower with more open roles); first bar on the last day +0.591
-  h0_0.10     resume_falling_bar     survival  role term +0.144 (bar lower with more open roles); first bar on the last day +0.492 (forced to zero for this estimate)
-  h0_0.10     one_interview          naive     role term +0.096 (bar lower with more open roles); first bar on the last day +0.470
-  h0_0.10     one_interview          survival  role term +0.099 (bar lower with more open roles); first bar on the last day +0.572 (forced to zero for this estimate)
-  h0_0.10     up_to_two_interviews   naive     role term +0.107 (bar lower with more open roles); first bar on the last day +0.511
-  h0_0.10     up_to_two_interviews   survival  role term +0.136 (bar lower with more open roles); first bar on the last day +0.466 (forced to zero for this estimate)
-  calibrated  resume_falling_bar     naive     role term +0.316 (bar lower with more open roles); first bar on the last day -0.139
-  calibrated  resume_falling_bar     survival  role term +0.154 (bar lower with more open roles); first bar on the last day +0.339 (forced to zero for this estimate)
-  calibrated  one_interview          naive     role term -0.028 (NOT lower with more open roles); first bar on the last day +0.442
-  calibrated  one_interview          survival  role term +0.104 (bar lower with more open roles); first bar on the last day +0.535 (forced to zero for this estimate)
-  calibrated  up_to_two_interviews   naive     role term +0.100 (bar lower with more open roles); first bar on the last day +0.209
-  calibrated  up_to_two_interviews   survival  role term +0.040 (bar lower with more open roles); first bar on the last day +0.272 (forced to zero for this estimate)
+  none        resume_falling_bar     naive     role term +0.343 (bar lower with more open roles); tuned linear bar on the last day +1.196 (not used: the last-day bar is zero)
+  none        resume_falling_bar     survival  role term +0.309 (bar lower with more open roles); tuned linear bar on the last day +1.005 (not used: the last-day bar is zero)
+  none        one_interview          naive     role term +0.203 (bar lower with more open roles); tuned linear bar on the last day +2.927 (not used: the last-day bar is zero)
+  none        one_interview          survival  role term +0.264 (bar lower with more open roles); tuned linear bar on the last day +2.024 (not used: the last-day bar is zero)
+  none        up_to_two_interviews   naive     role term +0.174 (bar lower with more open roles); tuned linear bar on the last day +2.397 (not used: the last-day bar is zero)
+  none        up_to_two_interviews   survival  role term +0.089 (bar lower with more open roles); tuned linear bar on the last day +1.925 (not used: the last-day bar is zero)
+  h0_0        resume_falling_bar     naive     role term +0.401 (bar lower with more open roles); tuned linear bar on the last day +0.106 (not used: the last-day bar is zero)
+  h0_0        resume_falling_bar     survival  role term +0.378 (bar lower with more open roles); tuned linear bar on the last day +0.121 (not used: the last-day bar is zero)
+  h0_0        one_interview          naive     role term +0.201 (bar lower with more open roles); tuned linear bar on the last day +1.366 (not used: the last-day bar is zero)
+  h0_0        one_interview          survival  role term +0.198 (bar lower with more open roles); tuned linear bar on the last day +1.243 (not used: the last-day bar is zero)
+  h0_0        up_to_two_interviews   naive     role term +0.212 (bar lower with more open roles); tuned linear bar on the last day +0.871 (not used: the last-day bar is zero)
+  h0_0        up_to_two_interviews   survival  role term +0.097 (bar lower with more open roles); tuned linear bar on the last day +1.023 (not used: the last-day bar is zero)
+  h0_0.02     resume_falling_bar     naive     role term +0.250 (bar lower with more open roles); tuned linear bar on the last day +0.327 (not used: the last-day bar is zero)
+  h0_0.02     resume_falling_bar     survival  role term +0.177 (bar lower with more open roles); tuned linear bar on the last day +0.526 (not used: the last-day bar is zero)
+  h0_0.02     one_interview          naive     role term +0.054 (bar lower with more open roles); tuned linear bar on the last day +0.931 (not used: the last-day bar is zero)
+  h0_0.02     one_interview          survival  role term +0.112 (bar lower with more open roles); tuned linear bar on the last day +0.596 (not used: the last-day bar is zero)
+  h0_0.02     up_to_two_interviews   naive     role term +0.021 (bar lower with more open roles); tuned linear bar on the last day +0.820 (not used: the last-day bar is zero)
+  h0_0.02     up_to_two_interviews   survival  role term +0.010 (bar lower with more open roles); tuned linear bar on the last day +0.749 (not used: the last-day bar is zero)
+  h0_0.05     resume_falling_bar     naive     role term +0.191 (bar lower with more open roles); tuned linear bar on the last day +0.524 (not used: the last-day bar is zero)
+  h0_0.05     resume_falling_bar     survival  role term +0.171 (bar lower with more open roles); tuned linear bar on the last day +0.409 (not used: the last-day bar is zero)
+  h0_0.05     one_interview          naive     role term +0.057 (bar lower with more open roles); tuned linear bar on the last day +1.940 (not used: the last-day bar is zero)
+  h0_0.05     one_interview          survival  role term +0.129 (bar lower with more open roles); tuned linear bar on the last day +1.057 (not used: the last-day bar is zero)
+  h0_0.05     up_to_two_interviews   naive     role term +0.120 (bar lower with more open roles); tuned linear bar on the last day +0.728 (not used: the last-day bar is zero)
+  h0_0.05     up_to_two_interviews   survival  role term +0.072 (bar lower with more open roles); tuned linear bar on the last day +0.643 (not used: the last-day bar is zero)
+  h0_0.10     resume_falling_bar     naive     role term +0.132 (bar lower with more open roles); tuned linear bar on the last day +0.560 (not used: the last-day bar is zero)
+  h0_0.10     resume_falling_bar     survival  role term +0.144 (bar lower with more open roles); tuned linear bar on the last day +0.492 (not used: the last-day bar is zero)
+  h0_0.10     one_interview          naive     role term +0.098 (bar lower with more open roles); tuned linear bar on the last day +0.488 (not used: the last-day bar is zero)
+  h0_0.10     one_interview          survival  role term +0.099 (bar lower with more open roles); tuned linear bar on the last day +0.572 (not used: the last-day bar is zero)
+  h0_0.10     up_to_two_interviews   naive     role term +0.104 (bar lower with more open roles); tuned linear bar on the last day +0.522 (not used: the last-day bar is zero)
+  h0_0.10     up_to_two_interviews   survival  role term +0.136 (bar lower with more open roles); tuned linear bar on the last day +0.466 (not used: the last-day bar is zero)
+  calibrated  resume_falling_bar     naive     role term +0.227 (bar lower with more open roles); tuned linear bar on the last day -0.037 (not used: the last-day bar is zero)
+  calibrated  resume_falling_bar     survival  role term +0.210 (bar lower with more open roles); tuned linear bar on the last day +0.205 (not used: the last-day bar is zero)
+  calibrated  one_interview          naive     role term -0.138 (NOT lower with more open roles); tuned linear bar on the last day +0.741 (not used: the last-day bar is zero)
+  calibrated  one_interview          survival  role term +0.010 (bar lower with more open roles); tuned linear bar on the last day +0.631 (not used: the last-day bar is zero)
+  calibrated  up_to_two_interviews   naive     role term +0.101 (bar lower with more open roles); tuned linear bar on the last day +0.224 (not used: the last-day bar is zero)
+  calibrated  up_to_two_interviews   survival  role term +0.040 (bar lower with more open roles); tuned linear bar on the last day +0.272 (not used: the last-day bar is zero)
 
 Flags: 
   interview cap: none / price_directed / naive: 14.2% of hires at the cap of 3
   interview cap: none / price_directed / survival: 17.7% of hires at the cap of 3
   interview cap: h0_0 / price_directed / naive: 11.6% of hires at the cap of 3
   interview cap: h0_0 / price_directed / survival: 10.0% of hires at the cap of 3
-  interview cap: calibrated / price_directed / survival: 9.8% of hires at the cap of 3
+  SLOT VIEW: calibrated / one_interview / naive: full pool minus 10 slots = -0.0201 (limit 0.02)
+  interview cap: calibrated / price_directed / naive: 7.7% of hires at the cap of 3
+  interview cap: calibrated / price_directed / survival: 11.1% of hires at the cap of 3
 Problems: none

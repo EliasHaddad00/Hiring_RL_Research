@@ -31,13 +31,13 @@
    "second_change": 0.0011253504255561708,
    "bound_interview_cap_6": 4.342399089519633,
    "state_count": 1260484,
-   "build_seconds": 0.43470959999831393,
-   "solve_seconds": 19.395431699987967,
+   "build_seconds": 0.6650196999835316,
+   "solve_seconds": 35.50221850001253,
    "relaxed_computed": 4.3412303545335345,
    "relaxed_simulated": 4.335039284677982,
    "relaxed_se": 0.021994454152686315,
    "prototype": null,
-   "seconds": 136.11173259999487
+   "seconds": 276.90026699999
   },
   {
    "setting": "stress, h0 = 0 (decay only)",
@@ -70,13 +70,13 @@
    "second_change": 0.0011485517520091193,
    "bound_interview_cap_6": 4.290290732378808,
    "state_count": 1260484,
-   "build_seconds": 0.4331819000071846,
-   "solve_seconds": 19.574545200011926,
+   "build_seconds": 0.6640362000034656,
+   "solve_seconds": 35.70461110002361,
    "relaxed_computed": 4.289816961781028,
    "relaxed_simulated": 4.275043521829313,
    "relaxed_se": 0.02195670170694628,
    "prototype": 4.31,
-   "seconds": 133.43370389999473
+   "seconds": 249.9811316000123
   },
   {
    "setting": "stress, h0 = 0.02",
@@ -109,13 +109,13 @@
    "second_change": 0.0005880984972526093,
    "bound_interview_cap_6": 4.157980670661475,
    "state_count": 1260484,
-   "build_seconds": 0.4545301999896765,
-   "solve_seconds": 19.5616624999966,
+   "build_seconds": 0.7901027000043541,
+   "solve_seconds": 35.219334399997024,
    "relaxed_computed": 4.157972392643772,
    "relaxed_simulated": 4.14112566597849,
    "relaxed_se": 0.02259099898142201,
    "prototype": 4.17,
-   "seconds": 133.98902710000402
+   "seconds": 226.82378750000498
   },
   {
    "setting": "stress, h0 = 0.05 (primary)",
@@ -148,13 +148,13 @@
    "second_change": 0.0008100669126420712,
    "bound_interview_cap_6": 3.9847880582215915,
    "state_count": 1260484,
-   "build_seconds": 0.45115909999003634,
-   "solve_seconds": 19.591560800006846,
+   "build_seconds": 0.8135132000024896,
+   "solve_seconds": 35.83283550001215,
    "relaxed_computed": 3.984788058221592,
    "relaxed_simulated": 3.975472392847788,
    "relaxed_se": 0.021734306875237242,
    "prototype": 4.0,
-   "seconds": 134.0697041999956
+   "seconds": 266.82960690002074
   },
   {
    "setting": "stress, h0 = 0.10",
@@ -187,52 +187,52 @@
    "second_change": 0.0006314229467028198,
    "bound_interview_cap_6": 3.768400356994485,
    "state_count": 1260484,
-   "build_seconds": 0.45158189997891895,
-   "solve_seconds": 19.502604400011478,
+   "build_seconds": 0.886085300007835,
+   "solve_seconds": 33.92488740000408,
    "relaxed_computed": 3.7684003569944844,
    "relaxed_simulated": 3.7603462207316616,
    "relaxed_se": 0.022443677332015723,
    "prototype": null,
-   "seconds": 133.84151120000752
+   "seconds": 250.53594110000995
   },
   {
    "setting": "calibrated",
    "scenario": "calibrated",
    "h0": 0.02,
    "accept_decay": 0.003,
-   "bound": 2.7059156219229057,
-   "z": 0.7320000000000001,
+   "bound": 2.650634834319664,
+   "z": 0.7200000000000001,
    "lam": 0.0,
    "per_lam": [
     {
      "lam": 0.0,
-     "bound": 2.7059156219229057,
-     "z": 0.7320000000000001
+     "bound": 2.650634834319664,
+     "z": 0.7200000000000001
     },
     {
      "lam": 0.005,
-     "bound": 3.5499453402308037,
-     "z": 0.7400000000000001
+     "bound": 3.4963959935261393,
+     "z": 0.7080000000000001
     },
     {
      "lam": 0.02,
-     "bound": 6.117614372231055,
-     "z": 0.7040000000000001
+     "bound": 6.07017355639414,
+     "z": 0.6960000000000001
     }
    ],
-   "bound_fine_grid": 2.7006378054090825,
-   "grid_change": 0.005277816513823197,
-   "bound_finest_grid": 2.6999209199235215,
-   "second_change": 0.0007168854855610363,
-   "bound_interview_cap_6": 2.70669708403328,
+   "bound_fine_grid": 2.6452956090403883,
+   "grid_change": 0.005339225279275883,
+   "bound_finest_grid": 2.6445269972239274,
+   "second_change": 0.000768611816460929,
+   "bound_interview_cap_6": 2.6510202588498215,
    "state_count": 1260484,
-   "build_seconds": 0.44145319997915067,
-   "solve_seconds": 19.54619699998875,
-   "relaxed_computed": 2.7059156219229057,
-   "relaxed_simulated": 2.6840527892976174,
-   "relaxed_se": 0.025171735967317553,
+   "build_seconds": 0.9469166999915615,
+   "solve_seconds": 34.632874400005676,
+   "relaxed_computed": 2.650634834319664,
+   "relaxed_simulated": 2.613635390344389,
+   "relaxed_se": 0.024799449774213327,
    "prototype": null,
-   "seconds": 133.49227200000314
+   "seconds": 253.1022013000038
   }
  ],
  "small_instance": {

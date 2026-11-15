@@ -9,7 +9,8 @@ development episodes (not used for tuning):
   2. Slot view: each tuned rule through 10 slots, 20 slots and the full pool. Limit 0.02; above
      it the convention must go back to the user (CLAUDE.md).
   3. Share of hires at the 3-interview cap. Above 5% the user is told (CLAUDE.md).
-  4. Shape facts: role term (bar lower with more open roles) and the last-day bar of naive rules.
+  4. Shape facts: role term (bar lower with more open roles) and where the tuned linear bar would
+     stand on the last day (it is not used there: the last-day bar is zero for every threshold rule).
   5. Calibrated scenario under its best rule: realised acceptance against 76 to 84%, share of
      roles filled, interviews per hire.
 
@@ -132,8 +133,7 @@ def main():
             r["role_term"], r["last_day_bar_no_hires"] = role, bar0 - fall0 * f_last
             lines.append(f"  {r['setting']:11s} {r['family']:22s} {r['belief']:9s} role term {role:+.3f} "
                          f"({'bar lower with more open roles' if role > 0 else 'NOT lower with more open roles'}); "
-                         f"first bar on the last day {bar0 - fall0 * f_last:+.3f}"
-                         + (" (forced to zero for this estimate)" if r["belief"] == "survival" else ""))
+                         f"tuned linear bar on the last day {bar0 - fall0 * f_last:+.3f} (not used: the last-day bar is zero)")
 
     lines += ["", "Flags: " + ("none" if not flags else "")] + [f"  {f}" for f in flags]
     lines += ["Problems: " + ("none" if not problems else "")] + [f"  {p}" for p in problems]
