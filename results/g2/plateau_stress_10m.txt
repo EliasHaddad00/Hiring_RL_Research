@@ -1,0 +1,14 @@
+run                        steps   at 80%    final   change         95% interval  flat  columns
+unrestricted_s101        9900000    3.416    3.496   +0.080     [+0.007, +0.154]    no  all present
+unrestricted_s102        9900000    3.507    3.433   -0.073     [-0.152, +0.005]   yes  all present
+unrestricted_s103        9900000    3.412    3.478   +0.065     [-0.007, +0.137]   yes  all present
+
+actor          runs  change in IQM         95% interval  flat    three-evaluation windows         95% interval  flat
+unrestricted      3         +0.024     [-0.078, +0.117]   yes                      +0.019     [-0.054, +0.092]   yes
+
+change = last evaluation minus the evaluation at 80% of training, same development episodes (paired).
+Per actor: interquartile mean over runs (the plain mean with three runs); bootstrap over runs and episodes, 10,000 draws.
+Columns checked: rollout/ep_rew_mean, train/policy_gradient_loss, train/value_loss, train/entropy_loss, train/approx_kl, train/clip_fraction.
+Training seeds 101 to 103, development episodes: a gate check, not a reported result.
+
+Problems: none
