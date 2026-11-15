@@ -5,6 +5,7 @@ __pycache__/
 results/**/models/
 *.zip
 !results/**/model.zip
+!results/**/model_80.zip
 .claude/
 # Papers without a licence that allows redistribution; kept locally only (see notes/articles/README.md)
 notes/articles/Dynamic-Selection-Problems.pdf

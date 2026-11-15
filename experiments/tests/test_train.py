@@ -68,7 +68,59 @@ def test_last_evaluation_matches_the_harness_on_the_same_episodes(run):
         pytest.skip("the last evaluation was not at the final step")
     seeds = episode_seeds("dev", 20, offset=EVAL_POOL_OFFSET)
     ours = evaluate(sc, PPOPolicy.load(out / "model.zip"), seeds=seeds)["ret"]
-    assert np.allclose(sorted(ours), sorted(ev["results"][-1]), atol=1e-5)
+    assert np.allclose(ours, ev["results"][-1], atol=1e-5)      # same episodes, in the same order
+
+
+def test_every_evaluation_plays_the_episodes_in_the_same_order(run):
+    """Two evaluations in a row must play the same episode seeds in the same order, and so give
+    the same payoffs episode by episode. Before the fix the second started one episode later.
+    The seeds are checked directly: a barely trained greedy policy can score 0 on every episode."""
+    from sb3_contrib import MaskablePPO
+    from stable_baselines3.common.monitor import Monitor
+    from stable_baselines3.common.vec_env import DummyVecEnv
+
+    from hiring.env import HiringEnv
+    from hiring.training import _timed_eval_class
+
+    name, _, out, meta, _ = run
+    assert meta["eval_episode_order"] == "fixed"
+    cfg = load_run_config(name)
+    sc = load_scenario(cfg["scenario"], **(cfg.get("scenario_overrides") or {}))
+    seeds = list(episode_seeds("dev", 6, offset=EVAL_POOL_OFFSET))
+    env = DummyVecEnv([lambda: Monitor(HiringEnv(sc, episode_seeds=seeds))])
+    cb = _timed_eval_class()(env, n_eval_episodes=len(seeds), eval_freq=1, deterministic=True,
+                             log_path=str(out / "order_check"), verbose=0, warn=False)
+    model = MaskablePPO.load(out / "model.zip", device="cpu", env=DummyVecEnv([lambda: Monitor(HiringEnv(sc))]))
+    model.set_logger(__import__("stable_baselines3").common.logger.configure(None, []))
+    cb.init_callback(model)
+    base, played = env.envs[0].unwrapped, []
+    reset = base.reset
+
+    def recording_reset(*args, **kwargs):
+        result = reset(*args, **kwargs)
+        played.append(base.episode_seed)
+        return result
+
+    base.reset = recording_reset
+    cb.on_step()
+    cb.on_step()
+    first, second = cb.evaluations_results
+    n = len(seeds)                                  # each evaluation resets once more after its last episode
+    assert played[:n] == seeds and played[n + 1:2 * n + 1] == seeds, played
+    assert np.allclose(first, second, atol=1e-6)
+    ours = evaluate(sc, PPOPolicy.load(out / "model.zip"), seeds=seeds)["ret"]
+    assert np.allclose(ours, first, atol=1e-5)
+
+
+def test_checkpoint_at_80_percent_is_saved_and_loads(run):
+    name, _, out, meta, _ = run
+    assert (out / "model_80.zip").exists()
+    assert 0.8 * meta["total_timesteps"] <= meta["checkpoint_80_step"] < meta["total_timesteps"]
+    cfg = load_run_config(name)
+    sc = load_scenario(cfg["scenario"], **(cfg.get("scenario_overrides") or {}))
+    seeds = episode_seeds("dev", 5)
+    res = evaluate(sc, PPOPolicy.load(out / "model_80.zip"), seeds=seeds)
+    assert np.isfinite(res["ret"]).all()
 
 
 def test_run_metadata_and_saved_model(run):
@@ -93,8 +145,10 @@ def test_saved_model_holds_no_local_path(run):
     from hiring import training
 
     out = run[2]
-    data = json.loads(zipfile.ZipFile(Path(out) / "model.zip").read("data"))
-    blobs = [base64.b64decode(v[":serialized:"]) for v in data.values() if isinstance(v, dict) and ":serialized:" in v]
+    blobs = []
+    for name in ("model.zip", "model_80.zip"):
+        data = json.loads(zipfile.ZipFile(Path(out) / name).read("data"))
+        blobs += [base64.b64decode(v[":serialized:"]) for v in data.values() if isinstance(v, dict) and ":serialized:" in v]
     assert blobs
     here = str(Path(training.__file__).resolve().parents[2])
     for needle in (here, here.replace("\\", "/"), str(Path.home())):

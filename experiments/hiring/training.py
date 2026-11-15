@@ -27,6 +27,7 @@ REQUIRED_COLUMNS = ("rollout/ep_rew_mean", "train/policy_gradient_loss", "train/
                     "train/entropy_loss", "train/approx_kl", "train/clip_fraction")
 ACTORS = ("unrestricted", "index", "pooled")
 EVAL_POOL_OFFSET = 90_000       # curve episodes: dev seeds 1,090,000 onward, apart from scoring episodes
+CHECKPOINT_SHARE = 0.8          # model_80.zip: the model at 80% of training, for the plateau test
 ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -87,11 +88,19 @@ def _timed_eval_class():
     from sb3_contrib.common.maskable.callbacks import MaskableEvalCallback
 
     class TimedEval(MaskableEvalCallback):
-        """MaskableEvalCallback that also records how long the evaluations take."""
+        """MaskableEvalCallback that plays the fixed episodes in the same order at every evaluation
+        and records how long the evaluations take.
+
+        Without the rewind each evaluation would start one episode later: the vectorised environment
+        resets once more after the last episode of an evaluation, which uses up one seed of the list.
+        """
         seconds = 0.0
 
         def _on_step(self) -> bool:
             due = self.eval_freq > 0 and self.n_calls % self.eval_freq == 0
+            if due:
+                for e in self.eval_env.envs:
+                    e.unwrapped._seed_cursor = 0
             t0 = time.perf_counter()
             out = super()._on_step()
             if due:
@@ -101,9 +110,26 @@ def _timed_eval_class():
     return TimedEval
 
 
+def _checkpoint_callback(path: Path, at_step: int):
+    from stable_baselines3.common.callbacks import BaseCallback
+
+    class SaveOnce(BaseCallback):
+        """Saves the model once, at the first step at or past `at_step` (the plateau test scores it)."""
+        saved_at = None
+
+        def _on_step(self) -> bool:
+            if self.saved_at is None and self.num_timesteps >= at_step:
+                self.model.save(path)
+                self.saved_at = int(self.num_timesteps)
+            return True
+
+    return SaveOnce()
+
+
 def train(cfg: dict, actor: str, seed: int, out_dir, total_timesteps: int | None = None,
           allow_final_seed: bool = False) -> dict:
-    """Train one agent; write progress.csv, evaluations.npz, model.zip and run.json to out_dir."""
+    """Train one agent; write progress.csv, evaluations.npz, model.zip, model_80.zip (the model at
+    80% of training) and run.json to out_dir."""
     import torch as th
     from sb3_contrib import MaskablePPO
     from stable_baselines3.common.callbacks import CallbackList
@@ -151,6 +177,8 @@ def train(cfg: dict, actor: str, seed: int, out_dir, total_timesteps: int | None
                              deterministic=True, log_path=str(out_dir), best_model_save_path=None,
                              verbose=0, warn=False)
         callbacks.append(eval_cb)
+    ckpt_cb = _checkpoint_callback(out_dir / "model_80", int(np.ceil(CHECKPOINT_SHARE * steps)))
+    callbacks.append(ckpt_cb)
     t0 = time.perf_counter()
     model.learn(total_timesteps=steps, callback=CallbackList(callbacks))
     wall = time.perf_counter() - t0
@@ -163,7 +191,8 @@ def train(cfg: dict, actor: str, seed: int, out_dir, total_timesteps: int | None
                 obs_belief=sc.obs_belief, total_timesteps=int(model.num_timesteps), wall_seconds=wall,
                 steps_per_second=model.num_timesteps / wall, config=cfg, commit=commit_hash(),
                 eval_episode_seeds=[eval_seeds[0], eval_seeds[-1]] if eval_seeds else None,
-                eval_deterministic=True, torch_threads=th.get_num_threads(),
+                eval_deterministic=True, eval_episode_order="fixed", checkpoint_80_step=ckpt_cb.saved_at,
+                torch_threads=th.get_num_threads(),
                 eval_seconds=float(eval_cb.seconds) if eval_cb is not None else 0.0,
                 last_eval_mean=float(eval_cb.last_mean_reward) if eval_cb is not None else None)
     (out_dir / "run.json").write_text(json.dumps(meta, indent=1))
