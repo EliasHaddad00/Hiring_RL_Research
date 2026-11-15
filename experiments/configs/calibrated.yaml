@@ -15,7 +15,8 @@ interviews_per_day: 3
 max_interviews: 3
 h0: 0.02                  # weak evidence: stated disengagement implies 0.012 to 0.017 (Cronofy 2024)
 quality_slope: 0.6        # no empirical basis; as in stress
-accept_base: 0.85         # low end of the notes' 0.85 to 0.90; chosen so realised acceptance lands in 76 to 84%
+accept_base: 0.80         # below the notes' 0.85 to 0.90: at 0.85 realised acceptance was 84.6%, outside 76 to 84%;
+                          # 0.80 aims at the middle of that range (changed Nov 14; realised figure in results/g2/calibrated_check.txt)
 accept_decay: 0.003       # inferred from 76 to 84% acceptance with offers after weeks (Ashby; Gem 2025); no source gives acceptance by day
 n_slots: 10
 signals: gaussian

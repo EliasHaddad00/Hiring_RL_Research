@@ -1,4 +1,4 @@
-"""Rule tuning: pool lock, repeatability, the budget, and the last-day rule by estimate."""
+"""Rule tuning: pool lock, repeatability, the budget, and the last-day rule."""
 import numpy as np
 import pytest
 
@@ -57,7 +57,7 @@ def test_price_directed_parameters_stay_valid():
 
 def test_calibrated_scenario_values():
     c = load_scenario("calibrated")
-    assert (c.resume_sd, c.interview_sd, c.accept_base, c.accept_decay, c.h0) == (2.4, 2.2, 0.85, 0.003, 0.02)
+    assert (c.resume_sd, c.interview_sd, c.accept_base, c.accept_decay, c.h0) == (2.4, 2.2, 0.80, 0.003, 0.02)
     assert (c.horizon, c.roles, c.arrival_rate, c.interviews_per_day, c.max_interviews) == (60, 3, 1.5, 3, 3)
 
 
@@ -74,18 +74,38 @@ def last_day_action(rule, quality):
     return rule.act(env), env
 
 
-def test_survival_rules_offer_to_any_positive_estimate_on_the_last_day():
-    a, env = last_day_action(fixed_threshold(1.5, belief="survival"), quality=0.4)
-    assert 0 < env.view().survival[0] < 1.5 and a == env.N            # below the tuned bar, still offered
-    a, env = last_day_action(fixed_threshold(1.5, belief="survival"), quality=-0.4)
-    assert env.view().survival[0] < 0 and a == 2 * env.N              # negative estimate: no offer
+@pytest.mark.parametrize("belief", ["naive", "survival"])
+def test_rules_offer_to_any_positive_estimate_on_the_last_day(belief):
+    # Until Nov 14 (evening) this held for the survival-aware estimate only, and a second test
+    # required naive rules to keep their tuned bar. The decision was reversed; see rules.py.
+    a, env = last_day_action(fixed_threshold(1.5, belief=belief), quality=0.4)
+    est = env.view().survival[0] if belief == "survival" else env.view().naive[0]
+    assert 0 < est < 1.5 and a == env.N                               # below the tuned bar, still offered
+    a, env = last_day_action(fixed_threshold(1.5, belief=belief), quality=-0.4)
+    est = env.view().survival[0] if belief == "survival" else env.view().naive[0]
+    assert est < 0 and a == 2 * env.N                                 # negative estimate: no offer
 
 
-def test_naive_rules_keep_their_tuned_bar_on_the_last_day():
-    a, env = last_day_action(fixed_threshold(1.5, belief="naive"), quality=0.4)
-    assert a == 2 * env.N
-    a, env = last_day_action(falling_bar([1.5, 1.4, 0.0], belief="naive"), quality=0.4)
+def test_with_the_rule_off_the_tuned_bar_applies_on_the_last_day():
+    for belief in ("naive", "survival"):
+        a, env = last_day_action(fixed_threshold(1.5, belief=belief, last_day_zero=False), quality=0.4)
+        assert a == 2 * env.N
+    a, env = last_day_action(falling_bar([1.5, 1.4, 0.0], belief="naive", last_day_zero=False), quality=0.4)
     assert a == 2 * env.N                                             # bar on the last day is about 0.33
+
+
+@pytest.mark.parametrize("family", list(FAMILIES))
+def test_without_poaching_the_two_estimates_give_identical_episodes(family):
+    """At h0 = 0 nobody is poached, so the survival-aware estimate equals the naive one. A rule with
+    the same parameters must then earn the same payoff in every episode, whichever estimate it uses."""
+    sc = SC.with_(h0=0.0)
+    params = start_vector(family, sc)
+    seeds = range(1_000_000, 1_000_300)
+    a = evaluate(sc, FAMILIES[family](params, belief="naive"), seeds=seeds)
+    b = evaluate(sc, FAMILIES[family](params, belief="survival"), seeds=seeds)
+    assert np.array_equal(a["ret"], b["ret"])
+    assert np.array_equal(a["interviews"], b["interviews"]) and np.array_equal(a["hires"], b["hires"])
+    assert a["ret"].std() > 0
 
 
 def test_last_day_rule_only_acts_on_the_last_day_and_can_be_switched_off():
@@ -96,16 +116,16 @@ def test_last_day_rule_only_acts_on_the_last_day_and_can_be_switched_off():
     assert rule.act(env) == 2 * env.N                                 # day 0: the bar applies
     a, env = last_day_action(fixed_threshold(1.5, belief="survival", last_day_zero=False), quality=0.4)
     assert a == 2 * env.N
-    assert fixed_threshold(1.0, belief="naive").last_day_zero is False
+    assert fixed_threshold(1.0, belief="naive").last_day_zero is True
     assert fixed_threshold(1.0, belief="survival").last_day_zero is True
     assert fixed_threshold(1.0, belief="naive", v3_compat=True).last_day_zero is False
 
 
-def test_last_day_rule_never_lowers_a_survival_rule_on_average():
+def test_last_day_rule_never_lowers_a_rule_on_average():
     seeds = range(1_000_000, 1_000_400)
-    for h0 in (0.02, 0.10):
+    for h0, belief in ((0.02, "survival"), (0.10, "survival"), (0.02, "naive"), (0.10, "naive")):
         sc = SC.with_(h0=h0)
-        on = evaluate(sc, falling_bar([1.2, 0.3, 0.1], belief="survival"), seeds=seeds)["ret"]
-        off = evaluate(sc, falling_bar([1.2, 0.3, 0.1], belief="survival", last_day_zero=False), seeds=seeds)["ret"]
+        on = evaluate(sc, falling_bar([1.2, 0.3, 0.1], belief=belief), seeds=seeds)["ret"]
+        off = evaluate(sc, falling_bar([1.2, 0.3, 0.1], belief=belief, last_day_zero=False), seeds=seeds)["ret"]
         assert not np.array_equal(on, off)
         assert on.mean() > off.mean() - 2 * (on - off).std(ddof=1) / np.sqrt(len(on))

@@ -45,7 +45,7 @@ def job(args):
     sc = load_scenario("stress", h0=h0, accept_decay=0.03, n_slots=n_slots, max_interviews=cap)
     if kind == "one_interview":
         par = json.loads((ROOT / "results" / "g1" / "v3_fullprec.json").read_text())[f"h0={h0},b=0.03"]
-        policy = FAMILIES["one_interview"](par["one_interview"]["par_full"])
+        policy = FAMILIES["one_interview"](par["one_interview"]["par_full"], last_day_zero=False)   # earlier rule form
     else:
         policy = PriceDirectedRule(belief=kind)
     res = evaluate(sc, policy, seeds=episode_seeds("dev", EPISODES))

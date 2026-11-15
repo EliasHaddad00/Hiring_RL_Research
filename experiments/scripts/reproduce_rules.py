@@ -65,7 +65,7 @@ def v3_reference(h0, b, family, par):
 def ours(h0, b, family, par, variant):
     n_slots, compat = VARIANTS[variant]
     draws = [v3_episode_draws(d, e) for d in (v3.gen(1000, s) for s in EVAL_SEEDS) for e in range(1000)]
-    return evaluate(scenario(h0, b, n_slots), FAMILIES[family](par, v3_compat=compat), draws_list=draws)
+    return evaluate(scenario(h0, b, n_slots), FAMILIES[family](par, v3_compat=compat, last_day_zero=False), draws_list=draws)   # earlier rule form
 
 
 def job(args):

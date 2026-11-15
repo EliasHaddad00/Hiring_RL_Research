@@ -34,7 +34,7 @@ LIMIT = 0.02            # the gap agreed on Nov 12 as the point to reconsider 10
 def job(args):
     h0, family, par, belief, view = args
     sc = load_scenario("stress", h0=h0, accept_decay=DECAY, n_slots=VIEWS[view])
-    # earlier parameters, earlier rule form: no forced last-day bar (added for tuned rules on Nov 14)
+    # earlier parameters, earlier rule form: no forced last-day bar
     res = evaluate(sc, FAMILIES[family](par, belief=belief, last_day_zero=False), seeds=episode_seeds("dev", EPISODES))
     return args[:2] + args[3:], dict(ret=np.asarray(res["ret"], float),
                                      hidden=float(np.sum(res["days_hidden_better"]) / np.sum(res["days"])))
