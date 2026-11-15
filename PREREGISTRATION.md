@@ -122,8 +122,8 @@ because each reverses something written here earlier.
 - **Last-day rule applies to both estimates (Nov 14, evening).** The first decision of Nov 14
   forced the zero bar on the last day only for rules using the survival-aware estimate. That
   biased the comparison of the two estimates (research question 4): at h0 = 0 nobody is poached and
-  the two estimates are equal, yet the tuned "survival-aware" one-interview rule scored 3.812
-  against 3.714 for the naive one on development episodes. The whole difference came from the
+  the two estimates are equal, yet the tuned "survival-aware" one-interview rule scored 3.815
+  against 3.706 for the naive one on 4,000 development episodes (`results/g2/g2_check.txt` at commit e233f7a). The whole difference came from the
   last-day rule. Now the rule applies to both, the naive threshold rules were retuned at every
   setting, and a test requires identical per-episode payoffs from the two estimates at h0 = 0
   (`experiments/tests/test_tuning.py`). The price-directed rule is not affected: its tables handle
