@@ -13,7 +13,8 @@
     -0.04259439526982537,
     0.07244318860315871
    ],
-   "flat": true,
+   "verdict": "inconclusive",
+   "band": 0.035728447133333334,
    "pairing_correlation": 0.9224584492675625,
    "missing_columns": [],
    "curve": [
@@ -74,7 +75,8 @@
     -0.07903472668263342,
     0.09533667334930007
    ],
-   "flat": true,
+   "verdict": "inconclusive",
+   "band": 0.03533552076666667,
    "pairing_correlation": 0.8274196996150803,
    "missing_columns": [],
    "curve": [
@@ -135,7 +137,8 @@
     -0.10221273785922351,
     0.026217471192556838
    ],
-   "flat": true,
+   "verdict": "inconclusive",
+   "band": 0.035131502366666664,
    "pairing_correlation": 0.9089225064827257,
    "missing_columns": [],
    "curve": [
@@ -196,7 +199,8 @@
     -0.07472582120492353,
     0.0735193412049235
    ],
-   "flat": true,
+   "verdict": "inconclusive",
+   "band": 0.0345191734,
    "pairing_correlation": 0.8815296359364775,
    "missing_columns": [],
    "curve": [
@@ -257,7 +261,8 @@
     -0.017238315694844464,
     0.14873142902817782
    ],
-   "flat": true,
+   "verdict": "inconclusive",
+   "band": 0.0347794783,
    "pairing_correlation": 0.8571811167452861,
    "missing_columns": [],
    "curve": [
@@ -318,7 +323,8 @@
     -0.07373630248403187,
     0.08645608915069852
    ],
-   "flat": true,
+   "verdict": "inconclusive",
+   "band": 0.03500684343333333,
    "pairing_correlation": 0.8657244994483871,
    "missing_columns": [],
    "curve": [
@@ -371,35 +377,42 @@
   {
    "actor": "index",
    "runs": 3,
+   "final": 3.5398490088888885,
+   "band": 0.03539849008888889,
    "change": -0.004974087777777777,
    "interval": [
     -0.06694816877777789,
     0.05717403888888881
    ],
-   "flat": true,
+   "verdict": "inconclusive",
    "change_windows": -0.012328592962962967,
    "interval_windows": [
     -0.05833055463888889,
     0.03712645976851855
    ],
-   "flat_windows": true
+   "verdict_windows": "inconclusive"
   },
   {
    "actor": "unrestricted",
    "runs": 3,
+   "final": 3.4768498377777775,
+   "band": 0.034768498377777776,
    "change": 0.023834403333333327,
    "interval": [
     -0.04429012055555555,
     0.09167537883333338
    ],
-   "flat": true,
+   "verdict": "inconclusive",
    "change_windows": 0.026658755555555552,
    "interval_windows": [
     -0.02551605133333331,
     0.0858378033148147
    ],
-   "flat_windows": true
+   "verdict_windows": "inconclusive"
   }
  ],
- "problems": []
+ "problems": [
+  "index: plateau test is inconclusive, not flat",
+  "unrestricted: plateau test is inconclusive, not flat"
+ ]
 }

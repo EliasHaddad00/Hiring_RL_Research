@@ -13,7 +13,8 @@
     0.007021839919365225,
     0.15379028008063478
    ],
-   "flat": false,
+   "verdict": "changing",
+   "band": 0.03496075206666666,
    "pairing_correlation": 0.8842812207449173,
    "missing_columns": [],
    "curve": [
@@ -166,7 +167,8 @@
     -0.1518338897622022,
     0.004851569762202204
    ],
-   "flat": true,
+   "verdict": "inconclusive",
+   "band": 0.03433348563333333,
    "pairing_correlation": 0.8682480619188244,
    "missing_columns": [],
    "curve": [
@@ -319,7 +321,8 @@
     -0.006640988499592326,
     0.13734982183292566
    ],
-   "flat": true,
+   "verdict": "inconclusive",
+   "band": 0.034777110699999995,
    "pairing_correlation": 0.893987303948232,
    "missing_columns": [],
    "curve": [
@@ -464,19 +467,23 @@
   {
    "actor": "unrestricted",
    "runs": 3,
+   "final": 3.4690449466666657,
+   "band": 0.034690449466666655,
    "change": 0.024089772222222222,
    "interval": [
     -0.07840749516666663,
     0.11714857066666662
    ],
-   "flat": true,
+   "verdict": "inconclusive",
    "change_windows": 0.01882519740740742,
    "interval_windows": [
     -0.05353524846296302,
     0.09168845246296294
    ],
-   "flat_windows": true
+   "verdict_windows": "inconclusive"
   }
  ],
- "problems": []
+ "problems": [
+  "unrestricted: plateau test is inconclusive, not flat"
+ ]
 }

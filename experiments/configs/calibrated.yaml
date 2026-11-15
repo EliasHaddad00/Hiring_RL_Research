@@ -1,7 +1,7 @@
 # Calibrated scenario: the stress scenario with four values moved toward published hiring
 # benchmarks. Values decided Nov 14; sources and their strength are in configs/README.md.
-# NOT FROZEN until realised acceptance under the best tuned rule has been checked against the
-# 76 to 84% benchmark (results/g2/calibrated_check.txt).
+# FROZEN Nov 15: realised acceptance under the best tuned rule is 79.3% on the tuning episodes,
+# inside the 76 to 84% benchmark (results/g2/calibrated_check.txt). Do not change these values.
 name: calibrated
 horizon: 60               # supported: time to fill 60 to 61 days at large employers (SHRM 2025)
 roles: 3

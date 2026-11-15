@@ -65,8 +65,12 @@ No choice is made on the final training seeds or the evaluation episodes. **No s
   gains more than the 2% margin over its 40-configuration score, this is reported and the stronger
   rule becomes the comparator.
 - **Training length.** 3 million steps per run *(planning default)*, then reset to at least twice the
-  point where the curves flatten. Plateau test: the change in interquartile mean over the last 20%
-  of training lies within its interval.
+  point where the curves flatten. Plateau test *(wording fixed Nov 15)*: a curve is flat if the 95%
+  interval of the change in interquartile mean over the last 20% of training lies inside +-1% of the
+  final payoff. An interval that reaches outside that band is reported as "inconclusive" (if it
+  contains zero) or "changing" (if it does not), never as flat. The change is the last evaluation
+  minus the evaluation at 80% of training, paired by episode; the interval is a bootstrap over runs
+  and episodes (`experiments/scripts/check_plateau.py`).
 - **Logged for every run.** Evaluation payoff, policy loss, value loss, entropy, approximate KL,
   clip fraction.
 
@@ -74,11 +78,12 @@ No choice is made on the final training seeds or the evaluation episodes. **No s
 
 Exact small instance; stress with no pressure (h0 = 0, no acceptance decay); stress at h0 = 0, 0.02,
 0.05 (primary), 0.10; calibrated scenario; optional: stress at h0 = 0.05 with one interview per day.
-Calibrated scenario *(decided Nov 14; frozen once the acceptance check below is done)*: as stress,
+Calibrated scenario *(decided Nov 14; frozen Nov 15)*: as stress,
 with acceptance 0.80 x exp(-0.003 x days), h0 = 0.02, interview noise 2.2 and resume noise 2.4
 (base acceptance was 0.85 until Nov 14; see "Changes before the tag").
 Realised acceptance under the best tuned rule on the tuning episodes is reported against the
-76 to 84% benchmark before the file is frozen.
+76 to 84% benchmark before the file is frozen. Result: 79.3% at base acceptance 0.80
+(`results/g2/calibrated_check.txt`); the scenario is frozen with these values.
 Rule form *(decided Nov 14, revised the same day; see "Changes before the tag")*: every threshold
 rule, with either estimate, offers to anyone with a positive estimate on the last day. The
 price-directed rule's naive version uses its own tables, solved
@@ -97,9 +102,12 @@ Optional, only if gate G3 is met on time: masking versus an invalid-action penal
 
 ## Known-answer tests
 
-Exact small instance (PPO within 2% of the optimum; gate G2 form, decided Nov 14: on the same
-40,000 development episodes, the lower end of the 95% interval of PPO minus the exact optimal
-policy is above -0.0127, which is 2% of 0.63333; the absolute mean is reported beside it); degenerate regimes (zero interview cost, zero
+Exact small instance (PPO within 2% of the optimum, measured by the exact value of the greedy
+policy: a backward pass over every state, with no sampling, must give at least 0.62067, which is
+98% of 0.63333 (`experiments/scripts/exact_values.py`; decided Nov 15). The paired interval on
+40,000 development episodes, PPO minus the exact optimal policy with its lower end above -0.0127,
+is reported beside it as a cross-check; it was the pass rule from Nov 14 to Nov 15 and failed two
+agents on episode noise alone); degenerate regimes (zero interview cost, zero
 interview noise, no pressure, very high hazard); imitation of the exact optimal policy by each
 architecture; a standard reference task (CartPole); simulator statistics (arrival, acceptance,
 departure rates); upper bound at least as large as every evaluated policy at every setting.
@@ -133,6 +141,12 @@ because each reverses something written here earlier.
   the 0.85 to 0.90 range in our notes; it is chosen to put realised acceptance near the middle of
   the benchmark. All calibrated rules were retuned. The realised figure at 0.80 is in
   `results/g2/calibrated_check.txt`.
+
+- **Slot view (Nov 15).** The stop rule "full pool against 10 slots differs by more than 0.02"
+  fired once: the naive one-interview rule on the calibrated scenario scores 0.0201 lower with the
+  full pool than with 10 slots (interval -0.030 to -0.010, 2,000 development episodes, after the
+  retune under the new last-day rule). The 10-slot view costs that rule nothing; every other rule
+  and setting is within 0.004. Decision: 10 slots stay.
 
 ## Deviations
 
