@@ -75,12 +75,13 @@ No choice is made on the final training seeds or the evaluation episodes. **No s
 Exact small instance; stress with no pressure (h0 = 0, no acceptance decay); stress at h0 = 0, 0.02,
 0.05 (primary), 0.10; calibrated scenario; optional: stress at h0 = 0.05 with one interview per day.
 Calibrated scenario *(decided Nov 14; frozen once the acceptance check below is done)*: as stress,
-with acceptance 0.85 x exp(-0.003 x days), h0 = 0.02, interview noise 2.2 and resume noise 2.4.
+with acceptance 0.80 x exp(-0.003 x days), h0 = 0.02, interview noise 2.2 and resume noise 2.4
+(base acceptance was 0.85 until Nov 14; see "Changes before the tag").
 Realised acceptance under the best tuned rule on the tuning episodes is reported against the
 76 to 84% benchmark before the file is frozen.
-Rule form *(decided Nov 14)*: rules using the survival-aware estimate offer to anyone with a positive
-estimate on the last day. Rules using the naive estimate keep the tuned linear bar, and their
-last-day bar is reported. The price-directed rule's naive version uses its own tables, solved
+Rule form *(decided Nov 14, revised the same day; see "Changes before the tag")*: every threshold
+rule, with either estimate, offers to anyone with a positive estimate on the last day. The
+price-directed rule's naive version uses its own tables, solved
 under the naive belief (tonight's loss risk averaged over that belief), and is tuned separately.
 Simulator conventions are those in `experiments/hiring/env.py` (strict offer-then-interview phases,
 interview results visible next morning, 3 interviews per candidate, 10 slots *(planning default)*,
@@ -112,6 +113,26 @@ departure rates); upper bound at least as large as every evaluated policy at eve
   at most 0.001 (`results/g2/price_rule.txt`, `results/g2/bounds.txt`). Decision: the cap stays
   at 3. The check is repeated once on a trained full-problem PPO agent, which may use interviews
   differently from the rule.
+
+## Changes before the tag
+
+These were made while this file was still a draft, so they are not deviations; they are recorded
+because each reverses something written here earlier.
+
+- **Last-day rule applies to both estimates (Nov 14, evening).** The first decision of Nov 14
+  forced the zero bar on the last day only for rules using the survival-aware estimate. That
+  biased the comparison of the two estimates (research question 4): at h0 = 0 nobody is poached and
+  the two estimates are equal, yet the tuned "survival-aware" one-interview rule scored 3.812
+  against 3.714 for the naive one on development episodes. The whole difference came from the
+  last-day rule. Now the rule applies to both, the naive threshold rules were retuned at every
+  setting, and a test requires identical per-episode payoffs from the two estimates at h0 = 0
+  (`experiments/tests/test_tuning.py`). The price-directed rule is not affected: its tables handle
+  the last day for both versions.
+- **Calibrated base acceptance 0.85 to 0.80 (Nov 14).** At 0.85 the realised acceptance under the
+  best tuned rule was 84.6% on the tuning episodes, outside the 76 to 84% benchmark. 0.80 is below
+  the 0.85 to 0.90 range in our notes; it is chosen to put realised acceptance near the middle of
+  the benchmark. All calibrated rules were retuned. The realised figure at 0.80 is in
+  `results/g2/calibrated_check.txt`.
 
 ## Deviations
 
