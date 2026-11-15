@@ -1,0 +1,23 @@
+tuned price-directed rule (survival-aware): 3.560
+
+ppo_stress/index_s101              3.560  minus rule +0.000 [-0.029, +0.030] equivalent
+ppo_stress/index_s102              3.561  minus rule +0.001 [-0.029, +0.031] equivalent
+ppo_stress/index_s103              3.555  minus rule -0.005 [-0.036, +0.026] equivalent
+ppo_stress_10m/index_s101          3.576  minus rule +0.016 [-0.014, +0.046] equivalent
+ppo_stress_10m/index_s102          3.562  minus rule +0.002 [-0.027, +0.032] equivalent
+ppo_stress_10m/index_s103          3.555  minus rule -0.005 [-0.035, +0.026] equivalent
+ppo_stress/unrestricted_s101       3.476  minus rule -0.083 [-0.118, -0.049] worse
+ppo_stress/unrestricted_s102       3.477  minus rule -0.083 [-0.117, -0.049] worse
+ppo_stress/unrestricted_s103       3.487  minus rule -0.073 [-0.106, -0.040] worse
+ppo_stress_10m/unrestricted_s101   3.494  minus rule -0.066 [-0.100, -0.031] worse
+ppo_stress_10m/unrestricted_s102   3.505  minus rule -0.055 [-0.087, -0.023] worse
+ppo_stress_10m/unrestricted_s103   3.508  minus rule -0.052 [-0.084, -0.019] worse
+
+index seed 101: 10M minus 3M +0.0158 [-0.0059, +0.0375]
+index seed 102: 10M minus 3M +0.0013 [-0.0227, +0.0253]
+index seed 103: 10M minus 3M +0.0004 [-0.0231, +0.0240]
+index mean of three seeds: 10M minus 3M +0.0058 [-0.0097, +0.0213] (episode noise only, not seed noise)
+unrestricted seed 101: 10M minus 3M +0.0178 [-0.0065, +0.0420]
+unrestricted seed 102: 10M minus 3M +0.0278 [+0.0040, +0.0517]
+unrestricted seed 103: 10M minus 3M +0.0215 [-0.0024, +0.0454]
+unrestricted mean of three seeds: 10M minus 3M +0.0224 [+0.0081, +0.0366] (episode noise only, not seed noise)

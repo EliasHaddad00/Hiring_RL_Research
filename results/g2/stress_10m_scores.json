@@ -3,55 +3,7 @@
  "rule": 3.5595640401100237,
  "rows": [
   {
-   "run": "results/g2/ppo_stress_10m/unrestricted_s101",
-   "mean": 3.4939824625365525,
-   "minus_rule": -0.06558157757347104,
-   "lo": -0.09994642437936041,
-   "hi": -0.031216730767581656,
-   "verdict": "worse"
-  },
-  {
-   "run": "results/g2/ppo_stress_10m/unrestricted_s102",
-   "mean": 3.504669106463493,
-   "minus_rule": -0.0548949336465303,
-   "lo": -0.08711611218774853,
-   "hi": -0.02267375510531207,
-   "verdict": "worse"
-  },
-  {
-   "run": "results/g2/ppo_stress_10m/unrestricted_s103",
-   "mean": 3.508007807206081,
-   "minus_rule": -0.05155623290394273,
-   "lo": -0.08388357616870756,
-   "hi": -0.01922888963917789,
-   "verdict": "worse"
-  },
-  {
-   "run": "results/g2/ppo_stress/unrestricted_s101",
-   "mean": 3.4761872870129515,
-   "minus_rule": -0.08337675309707208,
-   "lo": -0.11816389753864456,
-   "hi": -0.0485896086554996,
-   "verdict": "worse"
-  },
-  {
-   "run": "results/g2/ppo_stress/unrestricted_s102",
-   "mean": 3.476831918622287,
-   "minus_rule": -0.08273212148773647,
-   "lo": -0.11663928226624502,
-   "hi": -0.04882496070922791,
-   "verdict": "worse"
-  },
-  {
-   "run": "results/g2/ppo_stress/unrestricted_s103",
-   "mean": 3.486543974408755,
-   "minus_rule": -0.07302006570126846,
-   "lo": -0.10629733635921385,
-   "hi": -0.03974279504332306,
-   "verdict": "worse"
-  },
-  {
-   "run": "results/g2/ppo_stress/index_s101",
+   "run": "ppo_stress/index_s101",
    "mean": 3.5598834065977973,
    "minus_rule": 0.00031936648777356337,
    "lo": -0.029081373387103086,
@@ -59,7 +11,7 @@
    "verdict": "equivalent"
   },
   {
-   "run": "results/g2/ppo_stress/index_s102",
+   "run": "ppo_stress/index_s102",
    "mean": 3.560752518134489,
    "minus_rule": 0.0011884780244656081,
    "lo": -0.029107310697201003,
@@ -67,12 +19,142 @@
    "verdict": "equivalent"
   },
   {
-   "run": "results/g2/ppo_stress/index_s103",
+   "run": "ppo_stress/index_s103",
    "mean": 3.5545655618227565,
    "minus_rule": -0.004998478287266699,
    "lo": -0.03648590483700721,
    "hi": 0.02648894826247382,
    "verdict": "equivalent"
+  },
+  {
+   "run": "ppo_stress_10m/index_s101",
+   "mean": 3.5756931414912287,
+   "minus_rule": 0.016129101381204988,
+   "lo": -0.013654913666767278,
+   "hi": 0.04591311642917725,
+   "verdict": "equivalent"
+  },
+  {
+   "run": "ppo_stress_10m/index_s102",
+   "mean": 3.562044821867885,
+   "minus_rule": 0.0024807817578620184,
+   "lo": -0.026672045563997104,
+   "hi": 0.03163360907972114,
+   "verdict": "equivalent"
+  },
+  {
+   "run": "ppo_stress_10m/index_s103",
+   "mean": 3.554989917824766,
+   "minus_rule": -0.0045741222852574166,
+   "lo": -0.03477024703775442,
+   "hi": 0.025622002467239585,
+   "verdict": "equivalent"
+  },
+  {
+   "run": "ppo_stress/unrestricted_s101",
+   "mean": 3.4761872870129515,
+   "minus_rule": -0.08337675309707208,
+   "lo": -0.11816389753864456,
+   "hi": -0.0485896086554996,
+   "verdict": "worse"
+  },
+  {
+   "run": "ppo_stress/unrestricted_s102",
+   "mean": 3.476831918622287,
+   "minus_rule": -0.08273212148773647,
+   "lo": -0.11663928226624502,
+   "hi": -0.04882496070922791,
+   "verdict": "worse"
+  },
+  {
+   "run": "ppo_stress/unrestricted_s103",
+   "mean": 3.486543974408755,
+   "minus_rule": -0.07302006570126846,
+   "lo": -0.10629733635921385,
+   "hi": -0.03974279504332306,
+   "verdict": "worse"
+  },
+  {
+   "run": "ppo_stress_10m/unrestricted_s101",
+   "mean": 3.4939824625365525,
+   "minus_rule": -0.06558157757347104,
+   "lo": -0.09994642437936041,
+   "hi": -0.031216730767581656,
+   "verdict": "worse"
+  },
+  {
+   "run": "ppo_stress_10m/unrestricted_s102",
+   "mean": 3.504669106463493,
+   "minus_rule": -0.0548949336465303,
+   "lo": -0.08711611218774853,
+   "hi": -0.02267375510531207,
+   "verdict": "worse"
+  },
+  {
+   "run": "ppo_stress_10m/unrestricted_s103",
+   "mean": 3.508007807206081,
+   "minus_rule": -0.05155623290394273,
+   "lo": -0.08388357616870756,
+   "hi": -0.01922888963917789,
+   "verdict": "worse"
+  }
+ ],
+ "gains": [
+  {
+   "actor": "index",
+   "seed": 101,
+   "gain": 0.015809734893431432,
+   "lo": -0.005896259775843769,
+   "hi": 0.03751572956270663
+  },
+  {
+   "actor": "index",
+   "seed": 102,
+   "gain": 0.0012923037333964138,
+   "lo": -0.022738098313197133,
+   "hi": 0.025322705779989962
+  },
+  {
+   "actor": "index",
+   "seed": 103,
+   "gain": 0.00042435600200928556,
+   "lo": -0.023136208813104922,
+   "hi": 0.023984920817123494
+  },
+  {
+   "actor": "index",
+   "seed": "mean of three",
+   "gain": 0.005842131542945707,
+   "lo": -0.0096639811428221,
+   "hi": 0.021348244228713516
+  },
+  {
+   "actor": "unrestricted",
+   "seed": 101,
+   "gain": 0.01779517552360103,
+   "lo": -0.00645632885988762,
+   "hi": 0.042046679907089685
+  },
+  {
+   "actor": "unrestricted",
+   "seed": 102,
+   "gain": 0.027837187841206163,
+   "lo": 0.004018958368958388,
+   "hi": 0.05165541731345394
+  },
+  {
+   "actor": "unrestricted",
+   "seed": 103,
+   "gain": 0.021463832797325715,
+   "lo": -0.0024287726615010614,
+   "hi": 0.04535643825615249
+  },
+  {
+   "actor": "unrestricted",
+   "seed": "mean of three",
+   "gain": 0.02236539872071097,
+   "lo": 0.008089981660582045,
+   "hi": 0.0366408157808399
   }
  ]
 }

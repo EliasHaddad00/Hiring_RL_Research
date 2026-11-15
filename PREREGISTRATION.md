@@ -64,8 +64,17 @@ No choice is made on the final training seeds or the evaluation episodes. **No s
   also gets a 360-evaluation search, with both estimates, on the tuning episodes. If the best rule
   gains more than the 2% margin over its 40-configuration score, this is reported and the stronger
   rule becomes the comparator.
-- **Training length.** 3 million steps per run *(planning default)*, then reset to at least twice the
-  point where the curves flatten. Plateau test *(wording fixed Nov 15)*: a curve is flat if the 95%
+- **Training length** *(decided Nov 15)*. 3 million steps for the index actor and 10 million for
+  the unrestricted actor. Rule set in advance: if the index actor gained under 0.01 from 3 to 10
+  million steps at the primary setting, use 3 and 10 million; otherwise 10 million for every actor.
+  Measured on tuning seeds 101 to 103 and 4,000 development episodes
+  (`results/g2/stress_10m_scores.txt`): index +0.006 (interval -0.010 to +0.021, episode noise
+  only), unrestricted +0.022 (+0.008 to +0.037). The index actor reaches its 3-million-step score
+  by about 1.5 million steps. The unrestricted actor is not shown to be flat at 10 million steps
+  (plateau test: inconclusive), so "twice past the plateau" is established for neither actor by the
+  plateau test; the final runs repeat that test with 15 seeds. The pooled variant uses the length
+  of the index actor unless its own check says otherwise. Earlier text: 3 million steps per run
+  *(planning default)*, then reset to at least twice the point where the curves flatten. Plateau test *(wording fixed Nov 15)*: a curve is flat if the 95%
   interval of the change in interquartile mean over the last 20% of training lies inside +-1% of the
   final payoff. An interval that reaches outside that band is reported as "inconclusive" (if it
   contains zero) or "changing" (if it does not), never as flat. The change is the last evaluation
