@@ -1,0 +1,41 @@
+{
+ "optimum": 0.6333277027645984,
+ "rows": [
+  {
+   "run": "pooled_s101",
+   "episodes": 40000,
+   "steps": 393391,
+   "mean_return": 0.625403511016116,
+   "loss_per_episode": {
+    "offer too early": 0.003881274676569314,
+    "offer too late": 0.00012884134219213645,
+    "wrong candidate": 0.00032301744796876954,
+    "unneeded interview": 0.00034784998277922883,
+    "missed interview": 0.0010338074256493904
+   },
+   "mistakes_per_100_episodes": {
+    "offer too early": 20.0875,
+    "offer too late": 0.71,
+    "wrong candidate": 1.18,
+    "unneeded interview": 9.3625,
+    "missed interview": 9.68
+   },
+   "loss_by_day": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.00016598342196767226,
+    0.000826701251602592,
+    0.0019120901201133765,
+    0.00034117542232944815,
+    0.0005613001875441758,
+    0.0016073430596631045,
+    0.00030019741193841186
+   ],
+   "total_loss": 0.0057147908751588395,
+   "percent_lost": 0.9023434235092935
+  }
+ ]
+}

@@ -1,0 +1,13 @@
+Exact optimum 0.63333. Loss per episode by mistake type, priced by the exact solver (40,000 development episodes, greedy actions).
+
+run                      offer too early      offer too late     wrong candidate  unneeded interview    missed interview    total  % of optimum lost  optimum - simulated
+pooled_s101                       0.0039              0.0001              0.0003              0.0003              0.0010   0.0057              0.90%               0.0079
+
+Mistakes per 100 episodes:
+pooled_s101                         20.1                 0.7                 1.2                 9.4                 9.7
+
+Share of the loss by day of the 12-day window (days 1-4 / 5-8 / 9-12):
+pooled_s101          0% / 51% / 49%
+
+total = exact expected shortfall of the agent (no episode luck). 'optimum - simulated' is the same
+quantity estimated from realised payoffs; it differs from total only by sampling error (about 0.004).

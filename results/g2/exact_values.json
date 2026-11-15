@@ -157,6 +157,19 @@
     0.0035940992346494127,
     0.010493635363480585
    ]
+  },
+  {
+   "agent": "ppo_pooled_small/pooled_s101",
+   "exact_value": 0.6276174976674269,
+   "exact_shortfall": 0.005710205097171461,
+   "percent_of_optimum": 99.09838065313654,
+   "within_2_percent": true,
+   "priced_shortfall": 0.0057147908751588395,
+   "realised_shortfall": 0.00536301204014195,
+   "realised_interval": [
+    0.0016903284885396276,
+    0.009035695591744271
+   ]
   }
  ]
 }
