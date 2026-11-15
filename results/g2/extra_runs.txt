@@ -1,0 +1,11 @@
+stress, no pressure: bound 4.341; best tuned rule up_to_two_interviews (survival) 4.003
+
+  index_s101           3.976 +- 0.021  minus rule -0.027 [-0.058, +0.003] equivalent   bound - run +0.366  interviews 13.2, hires 2.98, at cap 3.0%
+  pooled_s101          3.859 +- 0.021  minus rule -0.144 [-0.176, -0.112] worse        bound - run +0.482  interviews 12.3, hires 2.97, at cap 1.3%
+  unrestricted_s101    3.884 +- 0.022  minus rule -0.119 [-0.148, -0.089] worse        bound - run +0.457  interviews 8.3, hires 2.92, at cap 1.1%
+
+stress, h0 = 0.05 (primary): bound 3.985; best tuned rule price_directed (survival) 3.560
+
+  pooled_s101          3.567 +- 0.022  minus rule +0.007 [-0.022, +0.037] equivalent   bound - run +0.418  interviews 8.0, hires 2.93, at cap 0.2%
+
+Tuning seed 101, 3 million steps, development episodes: a check, not a reported result.

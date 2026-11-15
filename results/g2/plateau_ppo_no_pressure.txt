@@ -1,0 +1,20 @@
+run                        steps   at 80%    final   change         95% interval   +-1%       verdict  columns
+index_s101               3000000    3.826    3.920   +0.094     [+0.034, +0.154]  0.039      changing  all present
+pooled_s101              3000000    3.829    3.822   -0.007     [-0.079, +0.065]  0.038  inconclusive  all present
+unrestricted_s101        3000000    3.790    3.793   +0.002     [-0.086, +0.090]  0.038  inconclusive  all present
+
+actor          runs  change in IQM         95% interval   +-1%       verdict    three-evaluation windows         95% interval       verdict
+index             1         +0.094     [+0.034, +0.155]  0.039      changing                      +0.049     [+0.014, +0.086]      changing
+pooled            1         -0.007     [-0.079, +0.064]  0.038  inconclusive                      -0.021     [-0.063, +0.022]  inconclusive
+unrestricted      1         +0.002     [-0.088, +0.089]  0.038  inconclusive                      +0.043     [-0.018, +0.105]  inconclusive
+
+change = last evaluation minus the evaluation at 80% of training, same development episodes (paired).
+flat: the 95% interval lies inside +-1% of the final payoff. inconclusive: it reaches outside and contains zero. changing: it excludes zero.
+Per actor: interquartile mean over runs (the plain mean with three runs); bootstrap over runs and episodes, 10,000 draws.
+Columns checked: rollout/ep_rew_mean, train/policy_gradient_loss, train/value_loss, train/entropy_loss, train/approx_kl, train/clip_fraction.
+Training seeds 101 to 103, development episodes: a gate check, not a reported result.
+
+Problems: 
+  index: plateau test is changing, not flat
+  pooled: plateau test is inconclusive, not flat
+  unrestricted: plateau test is inconclusive, not flat
