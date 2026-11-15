@@ -20,7 +20,9 @@ from hiring.config import load_scenario  # noqa: E402
 from hiring.exact_dp import ExactSolver, PolicyEvaluator, greedy_choice, optimal_choice, uniform_choice  # noqa: E402
 
 OUT = Path(__file__).resolve().parents[2] / "results" / "g2"
-SOURCES = [("ppo_small", "small_ppo"), ("copy_test", "copy_test")]
+SOURCES = [("ppo_small", "small_ppo"), ("copy_test", "copy_test"), ("ppo_small_10m", "small_ppo_10m")]
+SOURCES = [(folder, tag) for folder, tag in SOURCES                      # later diagnostics are optional
+           if (OUT / f"{tag}.json").exists() and (OUT / f"{tag}_mistakes.json").exists()]
 
 
 def main():

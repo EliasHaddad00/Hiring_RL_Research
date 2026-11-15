@@ -118,6 +118,45 @@
     -0.00018336409128051254,
     0.000771960439413925
    ]
+  },
+  {
+   "agent": "ppo_small_10m/unrestricted_s101",
+   "exact_value": 0.6262707950005884,
+   "exact_shortfall": 0.007056907764010023,
+   "percent_of_optimum": 98.8857414995104,
+   "within_2_percent": true,
+   "priced_shortfall": 0.0071772399360845755,
+   "realised_shortfall": 0.008240834633037033,
+   "realised_interval": [
+    0.004784574323382071,
+    0.011697094942691996
+   ]
+  },
+  {
+   "agent": "ppo_small_10m/unrestricted_s102",
+   "exact_value": 0.6272907398908099,
+   "exact_shortfall": 0.006036962873788521,
+   "percent_of_optimum": 99.0467868612985,
+   "within_2_percent": true,
+   "priced_shortfall": 0.006137546821566565,
+   "realised_shortfall": 0.008382898202163534,
+   "realised_interval": [
+    0.004870413566894483,
+    0.011895382837432585
+   ]
+  },
+  {
+   "agent": "ppo_small_10m/unrestricted_s103",
+   "exact_value": 0.6277732133809075,
+   "exact_shortfall": 0.005554489383690853,
+   "percent_of_optimum": 99.12296756332552,
+   "within_2_percent": true,
+   "priced_shortfall": 0.005595871133725649,
+   "realised_shortfall": 0.007043867299064999,
+   "realised_interval": [
+    0.0035940992346494127,
+    0.010493635363480585
+   ]
   }
  ]
 }

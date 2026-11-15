@@ -11,8 +11,11 @@ ppo_small/unrestricted_s103       0.62082          0.01251        98.02%        
 copy_test/index_s0                0.63088          0.00245        99.61%        yes           0.00246             0.00268   [0.0007, 0.0047]
 copy_test/pooled_s0               0.63328          0.00005        99.99%        yes           0.00005             0.00023  [-0.0002, 0.0007]
 copy_test/unrestricted_s0         0.63329          0.00004        99.99%        yes           0.00004             0.00029  [-0.0002, 0.0008]
+ppo_small_10m/unrestricted_s101      0.62627          0.00706        98.89%        yes           0.00718             0.00824   [0.0048, 0.0117]
+ppo_small_10m/unrestricted_s102      0.62729          0.00604        99.05%        yes           0.00614             0.00838   [0.0049, 0.0119]
+ppo_small_10m/unrestricted_s103      0.62777          0.00555        99.12%        yes           0.00560             0.00704   [0.0036, 0.0105]
 
-exact minus priced shortfall:   largest |difference| 0.00007, mean +0.00001
-exact minus realised shortfall: largest |difference| 0.00348, mean -0.00189
+exact minus priced shortfall:   largest |difference| 0.00012, mean -0.00002
+exact minus realised shortfall: largest |difference| 0.00348, mean -0.00184
 
 Agents use training seeds 101 to 103 or supervised imitation (copy_test); a gate check, not a reported result.
