@@ -1,0 +1,20 @@
+Rule tuning budget at h0_0.05: 40 against 360 configurations.
+
+family                 estimate   tuning 40  tuning 360    gain   dev 40  dev 360  dev gain        95% interval
+static_threshold       naive          3.174       3.176   +0.1%    3.153    3.154    +0.002    [-0.005, +0.008]
+static_threshold       survival       3.205       3.206   +0.0%    3.181    3.181    +0.000    [-0.002, +0.002]
+resume_falling_bar     naive          3.200       3.201   +0.0%    3.189    3.189    -0.000    [-0.001, +0.001]
+resume_falling_bar     survival       3.304       3.312   +0.3%    3.289    3.280    -0.009    [-0.023, +0.005]
+one_interview          naive          3.435       3.443   +0.2%    3.420    3.418    -0.002    [-0.008, +0.005]
+one_interview          survival       3.533       3.584   +1.4%    3.517    3.549    +0.032    [+0.008, +0.056]
+up_to_two_interviews   naive          3.516       3.550   +1.0%    3.477    3.476    -0.001    [-0.017, +0.016]
+up_to_two_interviews   survival       3.558       3.587   +0.8%    3.526    3.531    +0.004    [-0.011, +0.019]
+price_directed         naive          3.564       3.564   +0.0%    3.529    3.529    +0.000    [+0.000, +0.000]
+price_directed         survival       3.594       3.594   +0.0%    3.560    3.560    +0.000    [+0.000, +0.000]
+
+Best rule with 40 configurations (tuning episodes):  price_directed (survival), 3.594
+Best rule with 360 configurations (tuning episodes): price_directed (survival), 3.594
+Gain of the best rule: +0.00% (margin 2%). The rule does not fire: the comparator stays the 40-configuration rule.
+On development episodes: best of the 40-configuration rules price_directed (survival) 3.560; best of the 360-configuration rules price_directed (survival) 3.560.
+
+dev = 4,000 development episodes, not used for tuning; dev gain is paired (360 minus 40).

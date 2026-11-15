@@ -1,0 +1,276 @@
+[
+ {
+  "setting": "h0_0.05",
+  "family": "static_threshold",
+  "belief": "naive",
+  "start": 3.0854470672519207,
+  "best": 3.17562094173592,
+  "se": 0.025227393439646403,
+  "best_configuration": 193,
+  "params": [
+   0.9078172762058239
+  ],
+  "summary": {
+   "episodes": 4000,
+   "mean": 3.17562094173592,
+   "se": 0.025227393439646403,
+   "interviews_per_episode": 0.0,
+   "hires_per_episode": 2.9985,
+   "offers_per_episode": 3.5055,
+   "realised_acceptance": 0.8553701326486949,
+   "share_days_pool_over_slots": 0.7602073718151356,
+   "share_days_hidden_better": 0.5208889169880508,
+   "share_hires_at_interview_cap": 0.0
+  }
+ },
+ {
+  "setting": "h0_0.05",
+  "family": "static_threshold",
+  "belief": "survival",
+  "start": 3.096318037443654,
+  "best": 3.205616554636642,
+  "se": 0.024910554793891093,
+  "best_configuration": 71,
+  "params": [
+   0.9083336393274134
+  ],
+  "summary": {
+   "episodes": 4000,
+   "mean": 3.205616554636642,
+   "se": 0.024910554793891093,
+   "interviews_per_episode": 0.0,
+   "hires_per_episode": 2.9875,
+   "offers_per_episode": 3.38775,
+   "realised_acceptance": 0.8818537377315327,
+   "share_days_pool_over_slots": 0.7604789662816327,
+   "share_days_hidden_better": 0.5212610757794885,
+   "share_hires_at_interview_cap": 0.0
+  }
+ },
+ {
+  "setting": "h0_0.05",
+  "family": "resume_falling_bar",
+  "belief": "naive",
+  "start": 3.1488205841236887,
+  "best": 3.20055471209512,
+  "se": 0.02474491569446511,
+  "best_configuration": 56,
+  "params": [
+   0.9441259057351709,
+   0.42722011415733824,
+   0.1909979007904082
+  ],
+  "summary": {
+   "episodes": 4000,
+   "mean": 3.20055471209512,
+   "se": 0.02474491569446511,
+   "interviews_per_episode": 0.0,
+   "hires_per_episode": 2.99875,
+   "offers_per_episode": 3.53775,
+   "realised_acceptance": 0.8476432760935623,
+   "share_days_pool_over_slots": 0.7912464516691458,
+   "share_days_hidden_better": 0.5583179413415279,
+   "share_hires_at_interview_cap": 0.0
+  }
+ },
+ {
+  "setting": "h0_0.05",
+  "family": "resume_falling_bar",
+  "belief": "survival",
+  "start": 3.261130673108126,
+  "best": 3.3120091633627315,
+  "se": 0.0245496790853389,
+  "best_configuration": 203,
+  "params": [
+   1.0008743069245452,
+   0.5763224742295683,
+   0.17892352683989537
+  ],
+  "summary": {
+   "episodes": 4000,
+   "mean": 3.3120091633627315,
+   "se": 0.0245496790853389,
+   "interviews_per_episode": 0.0,
+   "hires_per_episode": 2.9935,
+   "offers_per_episode": 3.371,
+   "realised_acceptance": 0.8880154256897064,
+   "share_days_pool_over_slots": 0.7954545454545454,
+   "share_days_hidden_better": 0.5621190583877151,
+   "share_hires_at_interview_cap": 0.0
+  }
+ },
+ {
+  "setting": "h0_0.05",
+  "family": "one_interview",
+  "belief": "naive",
+  "start": 3.3700700517553694,
+  "best": 3.442596573827148,
+  "se": 0.02230287226575274,
+  "best_configuration": 340,
+  "params": [
+   1.476058110558821,
+   1.0680404911942805,
+   -0.4023669913209019,
+   0.27029642082676153,
+   0.5742646450371078,
+   0.09748966566247796,
+   0.057458402167887605
+  ],
+  "summary": {
+   "episodes": 4000,
+   "mean": 3.442596573827148,
+   "se": 0.02230287226575274,
+   "interviews_per_episode": 9.886,
+   "hires_per_episode": 2.99875,
+   "offers_per_episode": 3.56575,
+   "realised_acceptance": 0.8409871695996635,
+   "share_days_pool_over_slots": 0.7611454543165422,
+   "share_days_hidden_better": 0.5206290052501039,
+   "share_hires_at_interview_cap": 0.0
+  }
+ },
+ {
+  "setting": "h0_0.05",
+  "family": "one_interview",
+  "belief": "survival",
+  "start": 3.4268634703532497,
+  "best": 3.5836626950299784,
+  "se": 0.02266291069809198,
+  "best_configuration": 360,
+  "params": [
+   1.2476643900413693,
+   0.9656622833514158,
+   0.4838002421920222,
+   0.25960204958325317,
+   0.7971333619627804,
+   0.4120889068624924,
+   0.14682021051603564
+  ],
+  "summary": {
+   "episodes": 4000,
+   "mean": 3.5836626950299784,
+   "se": 0.02266291069809198,
+   "interviews_per_episode": 7.005,
+   "hires_per_episode": 2.988,
+   "offers_per_episode": 3.44025,
+   "realised_acceptance": 0.868541530412034,
+   "share_days_pool_over_slots": 0.7802431751998422,
+   "share_days_hidden_better": 0.543257573120787,
+   "share_hires_at_interview_cap": 0.0
+  }
+ },
+ {
+  "setting": "h0_0.05",
+  "family": "up_to_two_interviews",
+  "belief": "naive",
+  "start": 3.470251167492159,
+  "best": 3.5496539744930837,
+  "se": 0.022469306481104987,
+  "best_configuration": 348,
+  "params": [
+   1.4350954633504798,
+   1.2288769164917042,
+   7.158793990895845,
+   0.7080231112710977,
+   0.6982712213855471,
+   0.6575500728718996,
+   29.425784131781036,
+   0.13362789306459924,
+   0.1260235049235888
+  ],
+  "summary": {
+   "episodes": 4000,
+   "mean": 3.5496539744930837,
+   "se": 0.022469306481104987,
+   "interviews_per_episode": 8.1255,
+   "hires_per_episode": 2.9995,
+   "offers_per_episode": 3.5355,
+   "realised_acceptance": 0.8483948522132655,
+   "share_days_pool_over_slots": 0.77493171435728,
+   "share_days_hidden_better": 0.5325564474767113,
+   "share_hires_at_interview_cap": 0.0
+  }
+ },
+ {
+  "setting": "h0_0.05",
+  "family": "up_to_two_interviews",
+  "belief": "survival",
+  "start": 3.5407156591905316,
+  "best": 3.586739006777136,
+  "se": 0.022677839619696643,
+  "best_configuration": 188,
+  "params": [
+   1.5083390468645488,
+   1.221159389383794,
+   7.1055012441132925,
+   0.8236176608269213,
+   0.6321525983530123,
+   0.6317965908076489,
+   29.305216176304032,
+   0.18517526665700484,
+   0.08274579894465717
+  ],
+  "summary": {
+   "episodes": 4000,
+   "mean": 3.586739006777136,
+   "se": 0.022677839619696643,
+   "interviews_per_episode": 8.746,
+   "hires_per_episode": 2.991,
+   "offers_per_episode": 3.44125,
+   "realised_acceptance": 0.8691609153650564,
+   "share_days_pool_over_slots": 0.778355161991622,
+   "share_days_hidden_better": 0.5391059971366456,
+   "share_hires_at_interview_cap": 0.0
+  }
+ },
+ {
+  "setting": "h0_0.05",
+  "family": "price_directed",
+  "belief": "naive",
+  "start": 3.4695691689387647,
+  "best": 3.5635140543990973,
+  "se": 0.022148563236009736,
+  "best_configuration": 26,
+  "params": [
+   0.9623042552965284,
+   0.01
+  ],
+  "summary": {
+   "episodes": 4000,
+   "mean": 3.5635140543990973,
+   "se": 0.022148563236009736,
+   "interviews_per_episode": 10.10975,
+   "hires_per_episode": 2.99475,
+   "offers_per_episode": 3.541,
+   "realised_acceptance": 0.8457356678904264,
+   "share_days_pool_over_slots": 0.7831660583941605,
+   "share_days_hidden_better": 0.5479527828467153,
+   "share_hires_at_interview_cap": 0.02462642958510727
+  }
+ },
+ {
+  "setting": "h0_0.05",
+  "family": "price_directed",
+  "belief": "survival",
+  "start": 3.5570665907896073,
+  "best": 3.5935273016117164,
+  "se": 0.022840267362563175,
+  "best_configuration": 4,
+  "params": [
+   1.0,
+   0.015
+  ],
+  "summary": {
+   "episodes": 4000,
+   "mean": 3.5935273016117164,
+   "se": 0.022840267362563175,
+   "interviews_per_episode": 8.5075,
+   "hires_per_episode": 2.98525,
+   "offers_per_episode": 3.45075,
+   "realised_acceptance": 0.8651017894660581,
+   "share_days_pool_over_slots": 0.809766951397333,
+   "share_days_hidden_better": 0.5880049848889247,
+   "share_hires_at_interview_cap": 0.0066158613181475584
+  }
+ }
+]
