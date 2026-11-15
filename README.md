@@ -42,7 +42,8 @@ python -m pip install -r requirements.txt torch==2.15.0
 | `python experiments/scripts/tune_rules.py` | Tune every rule family (40 configurations; `--robustness` for 360 at h0 = 0.05) |
 | `python experiments/scripts/check_g2.py` | Gate G2 check: bound above every rule and PPO run, slot view, interview cap |
 | `python experiments/scripts/exact_values.py` | Exact value of the trained small-instance agents |
-| `python experiments/scripts/check_plateau.py results/g2/ppo_stress` | Plateau test and logged columns for a folder of runs |
+| `python experiments/scripts/check_plateau.py results/g2/ppo_stress` | Logged columns and the plateau test on the curve, for a folder of runs |
+| `python experiments/scripts/check_plateau_checkpoints.py results/g2/ppo_pooled_stress_10m` | Plateau test from the saved 80% and final models, 4,000 development episodes |
 
 Without `make`, run the scripts listed under `g1` in the `Makefile` one by one.
 

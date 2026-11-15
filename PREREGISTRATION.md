@@ -79,7 +79,13 @@ No choice is made on the final training seeds or the evaluation episodes. **No s
   final payoff. An interval that reaches outside that band is reported as "inconclusive" (if it
   contains zero) or "changing" (if it does not), never as flat. The change is the last evaluation
   minus the evaluation at 80% of training, paired by episode; the interval is a bootstrap over runs
-  and episodes (`experiments/scripts/check_plateau.py`).
+  and episodes (`experiments/scripts/check_plateau.py`). *Measurement changed Nov 15, rule
+  unchanged:* every run saves its model at 80% of training (`model_80.zip`); the change is the
+  final model minus that model, both scored on the same 4,000 development episodes
+  (`check_plateau_checkpoints.py`), instead of on the 300 curve episodes. Reason: with 300 episodes
+  the interval was wider than the band (about +-0.06 against +-0.035 with three seeds), so the test
+  could not return "flat". The curve keeps 300 episodes per evaluation. Runs made before this
+  change have no 80% model and keep the curve-based test.
 - **Logged for every run.** Evaluation payoff, policy loss, value loss, entropy, approximate KL,
   clip fraction.
 
