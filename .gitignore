@@ -4,6 +4,7 @@ __pycache__/
 .pytest_cache/
 results/**/models/
 *.zip
+!results/**/model.zip
 .claude/
 # Papers without a licence that allows redistribution; kept locally only (see notes/articles/README.md)
 notes/articles/Dynamic-Selection-Problems.pdf

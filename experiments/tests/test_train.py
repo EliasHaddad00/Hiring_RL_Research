@@ -4,6 +4,7 @@ These check the code path only (a few thousand steps), not learning.
 """
 import csv
 import json
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -81,3 +82,20 @@ def test_run_metadata_and_saved_model(run):
 def test_final_seeds_are_refused(tmp_path):
     with pytest.raises(LockedPoolError):
         train(short_config("ppo_small"), "index", seed=1001, out_dir=tmp_path, total_timesteps=64)
+
+
+def test_saved_model_holds_no_local_path(run):
+    """Models are committed to a public repository. SB3 stores the learning-rate schedule inside
+    model.zip; a lambda would be stored with the full path of training.py on the training machine."""
+    import base64
+    import json
+    import zipfile
+    from hiring import training
+
+    out = run[2]
+    data = json.loads(zipfile.ZipFile(Path(out) / "model.zip").read("data"))
+    blobs = [base64.b64decode(v[":serialized:"]) for v in data.values() if isinstance(v, dict) and ":serialized:" in v]
+    assert blobs
+    here = str(Path(training.__file__).resolve().parents[2])
+    for needle in (here, here.replace("\\", "/"), str(Path.home())):
+        assert not any(needle.encode() in b for b in blobs), needle

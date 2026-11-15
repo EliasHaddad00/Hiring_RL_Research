@@ -30,6 +30,17 @@ EVAL_POOL_OFFSET = 90_000       # curve episodes: dev seeds 1,090,000 onward, ap
 ROOT = Path(__file__).resolve().parents[2]
 
 
+class LinearSchedule:
+    """Learning rate falling linearly to zero. A named class, not a lambda: SB3 stores the schedule
+    inside model.zip, and a lambda is stored with the full local path of this file."""
+
+    def __init__(self, start: float):
+        self.start = float(start)
+
+    def __call__(self, progress_remaining: float) -> float:
+        return self.start * progress_remaining
+
+
 def load_run_config(name_or_path: str) -> dict:
     path = Path(name_or_path)
     if not path.suffix:
@@ -118,7 +129,7 @@ def train(cfg: dict, actor: str, seed: int, out_dir, total_timesteps: int | None
     lr0 = float(p.pop("learning_rate"))
     schedule = p.pop("lr_schedule", "linear")
     assert schedule in ("linear", "constant")
-    lr = (lambda progress: lr0 * progress) if schedule == "linear" else lr0
+    lr = LinearSchedule(lr0) if schedule == "linear" else lr0
     if actor in ("index", "pooled"):
         policy = IndexPolicy if actor == "index" else PooledIndexPolicy
         policy_kwargs = dict(index_policy_kwargs(HiringEnv(sc)), hidden=hidden)
