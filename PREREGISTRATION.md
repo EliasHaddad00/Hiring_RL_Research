@@ -61,7 +61,15 @@ No choice is made on the final training seeds or the evaluation episodes. **No s
   Each configuration is trained with tuning seeds 101 to 103 for 30% of that architecture's final
   training length (the same fraction for every architecture) and scored as the mean of the three
   seeds. The five best are then trained at full length with the same seeds, and the winner is picked
-  among those five. No search library is used.
+  among those five. No search library is used. The same 40 sampled configurations are used for every
+  architecture, so a difference between architectures cannot come from one drawing luckier
+  settings. Every run is scored once, with greedy actions, on the 4,000 tuning episodes the rules
+  were tuned on. *Departure from the research plan:* the plan tunes at the primary setting and on
+  the small instance; we tune at the primary setting (h0 = 0.05) only, because every architecture
+  already reaches 98.9 to 99.3% of the small-instance optimum with the starting values. The
+  small-instance check is rerun on the tuned winners instead. Search-stage models are kept locally
+  and not committed; the 15 full-length finalist models are committed
+  (`experiments/scripts/tune_ppo.py`, results in `results/g3/`).
 - **One rule configuration** *(decided Nov 14)* is one full parameter vector of a rule family, scored
   on all 4,000 tuning episodes. Each rule family gets 40 per estimate (naive, survival-aware) and
   per setting. Configuration 1 is the earlier tuned vector (`results/g1/v3_fullprec.json`) where one

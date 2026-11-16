@@ -80,7 +80,7 @@ The environment runs Python 3.13.17 (since Nov 14; create it with `py -3.13 -m v
 
 - **Yardsticks before agents.** No full-problem PPO conclusions until the exact small instance, the bound and the tuned rules are in place and pass their checks.
 - **Seed pools are separate and fixed in a config file:** tuning seeds, final training seeds, and episode seeds split into tuning and evaluation pools. Never tune on the final or evaluation pools. Never drop a seed.
-- **Same tuning budget for rules and PPO.** PPO never gets less than the rules. PPO tuning (Nov 15): seeded random search, 40 configurations per actor, configuration 1 = starting values, seeds 101 to 103, 30% of the actor's final length, then the top 5 at full length; no Optuna.
+- **Same tuning budget for rules and PPO.** PPO never gets less than the rules. PPO tuning (Nov 15): seeded random search, 40 configurations per actor, configuration 1 = starting values, seeds 101 to 103, 30% of the actor's final length, then the top 5 at full length; no Optuna. Tuned at h0 = 0.05 only (a recorded departure from the plan; the small-instance check is rerun on the winners), same 40 configurations for every actor, scored on the 4,000 tuning episodes: `tune_ppo.py --stage search|finals|report`, results in `results/g3/` (search models stay local, not in git).
 - **Paired evaluation.** Every policy runs on the same evaluation episodes. Each episode seed fixes arrivals, qualities, interview noise and the departure and acceptance draws, indexed by candidate, not by call order.
 - **Log every run:** return, policy loss, value loss, entropy, approximate KL, clip fraction. The grading clarification requires complete curves.
 - **Always report unshaped return**, even when training uses reward shaping.
