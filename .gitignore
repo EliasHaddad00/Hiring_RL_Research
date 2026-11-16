@@ -20,3 +20,4 @@ paper/*.out
 paper/*.bbl
 paper/*.blg
 paper/main.pdf
+results/g3/ppo_tuning/search/**/model*.zip
