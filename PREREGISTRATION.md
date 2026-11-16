@@ -56,6 +56,12 @@ No choice is made on the final training seeds or the evaluation episodes. **No s
 
 - **Tuning.** 40 configurations *(planning default)* for each rule and each PPO architecture; PPO never
   gets less than the rules.
+- **One PPO configuration** *(decided Nov 15)*. Seeded random search over the ranges of the research
+  plan, 40 configurations per architecture; configuration 1 is the starting values, as for the rules.
+  Each configuration is trained with tuning seeds 101 to 103 for 30% of that architecture's final
+  training length (the same fraction for every architecture) and scored as the mean of the three
+  seeds. The five best are then trained at full length with the same seeds, and the winner is picked
+  among those five. No search library is used.
 - **One rule configuration** *(decided Nov 14)* is one full parameter vector of a rule family, scored
   on all 4,000 tuning episodes. Each rule family gets 40 per estimate (naive, survival-aware) and
   per setting. Configuration 1 is the earlier tuned vector (`results/g1/v3_fullprec.json`) where one
@@ -72,8 +78,16 @@ No choice is made on the final training seeds or the evaluation episodes. **No s
   only), unrestricted +0.022 (+0.008 to +0.037). The index actor reaches its 3-million-step score
   by about 1.5 million steps. The unrestricted actor is not shown to be flat at 10 million steps
   (plateau test: inconclusive), so "twice past the plateau" is established for neither actor by the
-  plateau test; the final runs repeat that test with 15 seeds. The pooled variant uses the length
-  of the index actor unless its own check says otherwise. Earlier text: 3 million steps per run
+  plateau test; the final runs repeat that test with 15 seeds. The pooled variant *(decided Nov 15)*:
+  10 million steps. Without pressure it was 0.14 below the best rule at 3 million steps (seed 101)
+  and within 0.04 at 10 million (seeds 101 to 103); at the primary setting it scores 3.575 to 3.585
+  at 10 million (`results/g2/extra_runs.txt`). **Doubling test** *(decided Nov 15)*: the saved-model
+  plateau test cannot separate "still learning" from "settling as the learning rate falls to zero",
+  so for the unrestricted and pooled actors the plateau evidence is the gain from 10 to 20 million
+  steps at the primary setting, seeds 101 to 103, on 4,000 development episodes. If its 95% interval
+  lies inside +-1% of the payoff, 10 million steps stand; if not, the gain and the cost of 20 million
+  are reported before the length is fixed. This is the test the index actor passed between 3 and 10
+  million steps. The 80% model test is reported beside it as a description only. Earlier text: 3 million steps per run
   *(planning default)*, then reset to at least twice the point where the curves flatten. Plateau test *(wording fixed Nov 15)*: a curve is flat if the 95%
   interval of the change in interquartile mean over the last 20% of training lies inside +-1% of the
   final payoff. An interval that reaches outside that band is reported as "inconclusive" (if it
