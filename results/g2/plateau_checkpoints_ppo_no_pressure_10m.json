@@ -1,0 +1,99 @@
+{
+ "episodes": 4000,
+ "runs": [
+  {
+   "run": "pooled_s101",
+   "actor": "pooled",
+   "seed": 101,
+   "steps": 10002432,
+   "step_80": 8000000,
+   "at_80": 3.9535534114824933,
+   "final": 3.9638963069305873,
+   "change": 0.010342895448093905,
+   "interval": [
+    -0.004623591534182448,
+    0.02530938243037026
+   ],
+   "band": 0.03963896306930587,
+   "verdict": "flat"
+  },
+  {
+   "run": "pooled_s102",
+   "actor": "pooled",
+   "seed": 102,
+   "steps": 10002432,
+   "step_80": 8000000,
+   "at_80": 3.995754051568291,
+   "final": 4.025226210006655,
+   "change": 0.02947215843836396,
+   "interval": [
+    0.012673702188521693,
+    0.04627061468820623
+   ],
+   "band": 0.04025226210006655,
+   "verdict": "changing"
+  },
+  {
+   "run": "pooled_s103",
+   "actor": "pooled",
+   "seed": 103,
+   "steps": 10002432,
+   "step_80": 8000000,
+   "at_80": 3.93654368832645,
+   "final": 3.9711927532890767,
+   "change": 0.03464906496262573,
+   "interval": [
+    0.016863022400071433,
+    0.052435107525180026
+   ],
+   "band": 0.03971192753289077,
+   "verdict": "changing"
+  },
+  {
+   "run": "unrestricted_s101",
+   "actor": "unrestricted",
+   "seed": 101,
+   "steps": 10002432,
+   "step_80": 8000000,
+   "at_80": 3.909183073908629,
+   "final": 3.9709268707307763,
+   "change": 0.06174379682214729,
+   "interval": [
+    0.04072355639572789,
+    0.0827640372485667
+   ],
+   "band": 0.03970926870730777,
+   "verdict": "changing"
+  }
+ ],
+ "actors": [
+  {
+   "actor": "pooled",
+   "runs": 3,
+   "final": 3.986771756742106,
+   "band": 0.03986771756742106,
+   "change": 0.024821372949694536,
+   "interval": [
+    0.007302063347272982,
+    0.04268731611985246
+   ],
+   "verdict": "changing"
+  },
+  {
+   "actor": "unrestricted",
+   "runs": 1,
+   "final": 3.9709268707307763,
+   "band": 0.03970926870730777,
+   "change": 0.06174379682214729,
+   "interval": [
+    0.040764336519450495,
+    0.08260382543706973
+   ],
+   "verdict": "changing"
+  }
+ ],
+ "problems": [
+  "pooled: plateau test is changing, not flat",
+  "unrestricted: plateau test is changing, not flat"
+ ]
+}

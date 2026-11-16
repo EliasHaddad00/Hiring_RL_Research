@@ -1,5 +1,7 @@
 # Gate G2 status (Nov 15, 2026)
 
+What each file and folder here is, and what was redone and why: `README.md` in this folder.
+
 **All four G2 conditions are met.** Everything below uses tuning seeds 101 to 103 and development or
 tuning episodes. The evaluation episodes and the final training seeds 1001 to 1015 have not been
 touched. No number here is a reported result; PPO-versus-rule verdicts wait for the final runs.
@@ -11,7 +13,7 @@ touched. No number here is a reported result; PPO-versus-rule verdicts wait for 
 | 1 | Upper bound at every setting, above every evaluated policy, stable on a finer grid | Met | `bounds.txt`, `g2_check.txt`, `extra_runs.txt` |
 | 2 | Price-directed rule built, tuned, evaluated, compared with the prototype | Met | `price_rule.txt`, `tuning_40.txt`, `robustness.txt` |
 | 3 | At least one MaskablePPO agent within 2% of 0.63333 on the small instance | Met (all 7 agents trained to their set length) | `exact_values.txt` |
-| 4 | Full-problem PPO curves at h0 = 0.05 with all six log columns, flattened | Columns: met. Flat: not shown by the pre-registered test (inconclusive with three seeds) | `plateau_*.txt`, `stress_10m_scores.txt` |
+| 4 | Full-problem PPO curves at h0 = 0.05 with all six log columns, flattened | Columns: met. Flat: shown for the index actor by its 3-to-10-million-step gain, not by the pre-registered curve test (inconclusive); the unrestricted and pooled actors are still rising slowly | `plateau_*.txt`, `stress_10m_scores.txt`, `plateau_checkpoints_*.txt` |
 
 ### 1. Upper bound
 
@@ -54,19 +56,30 @@ touched. No number here is a reported result; PPO-versus-rule verdicts wait for 
 | Index, seeds 101 to 103 | 3 million | 3.555 to 3.561 | equivalent within 2% |
 | Index, seeds 101 to 103 | 10 million | 3.555 to 3.576 | equivalent within 2% |
 | Pooled, seed 101 | 3 million | 3.567 | equivalent within 2% |
+| Pooled, seeds 101 to 103 | 10 million | 3.575 to 3.585 | equivalent within 2% (+0.015 to +0.026) |
 | Unrestricted, seeds 101 to 103 | 3 million | 3.476 to 3.487 | worse (0.07 to 0.08 below) |
 | Unrestricted, seeds 101 to 103 | 10 million | 3.494 to 3.508 | worse (0.05 to 0.07 below) |
 
 - All six log columns are present and filled in every run.
 - Gain from 3 to 10 million steps: index +0.006 (interval -0.010 to +0.021), unrestricted +0.022 (+0.008 to +0.037).
 - Plateau test (flat only if the 95% interval of the change over the last 20% lies inside +-1% of the final payoff): **inconclusive** for every actor with three seeds; the interval is about +-0.06 against a band of +-0.035.
-- Training length for the final runs: 3 million steps (index), 10 million (unrestricted).
+- The index actor's gain from 3 to 10 million steps lies inside the +-1% band (+-0.036): direct evidence that its curve is flat after 3 million steps, though not the pre-registered test.
+- Plateau test from saved models (added Nov 15: the model at 80% of training against the final model, 4,000 development episodes; only runs made after that date have the 80% model). Pooled actor at h0 = 0.05, 10 million steps: +0.029 (interval +0.006 to +0.052): **changing**, still rising. The learning rate falls to zero over the same stretch, which may account for part of the rise; not tested.
+- Training length for the final runs: 3 million steps (index), 10 million (unrestricted). Pooled: not yet decided; the runs here point to 10 million.
 
-## Known-answer run without pressure (seed 101, 3 million steps)
+## Known-answer runs without pressure (best tuned rule 4.003, bound 4.341)
 
-Best tuned rule 4.003. Index 3.976 (equivalent within 2%, and still rising at the end of training);
-unrestricted 3.884 and pooled 3.859 (0.12 and 0.14 below the rule). So this check passes for the
-index actor only. The other two were given 3 million steps; the unrestricted actor's set length is 10 million.
+| Agent | Steps | Score | Against the rule (paired) | Hires at the interview cap |
+| --- | --- | --- | --- | --- |
+| Index, seed 101 | 3 million | 3.976 | -0.027, equivalent within 2% | 3.0% |
+| Pooled, seed 101 | 3 million | 3.859 | -0.144, worse | 1.3% |
+| Unrestricted, seed 101 | 3 million | 3.884 | -0.119, worse | 1.1% |
+| Pooled, seeds 101 to 103 | 10 million | 3.964 / 4.025 / 3.971 | -0.039 / +0.022 / -0.032, equivalent within 2% | 5.1% / 4.2% / 4.1% |
+| Unrestricted, seed 101 | 10 million | 3.971 | -0.032, equivalent within 2% | 12.5% |
+
+- Every architecture passes this check at its longer training length; the shortfalls at 3 million steps were training length.
+- Still rising at the end of 10 million steps (80% model against final model): pooled +0.025 (interval +0.007 to +0.043), unrestricted +0.062 (+0.041 to +0.083).
+- **Interview cap flag:** two of these runs exceed the 5% trigger (unrestricted 12.5%, pooled seed 101 5.1%). The tuned rule itself is at 10 to 18% at this setting, and the cap was kept at 3 on Nov 14; these are the first trained agents over the trigger.
 
 ## Decisions taken this week (all in `PREREGISTRATION.md`)
 
@@ -85,16 +98,16 @@ below the naive static threshold, so 40 configurations did not tune it well.
 
 ## Verified, and not
 
-- **Verified here:** 215 fast and 18 slow tests pass at this commit; every figure above comes from a file in this folder written by a script in `experiments/scripts/`.
+- **Verified here:** 227 fast and 18 slow tests pass (commit `4e12506`); every figure above comes from a file in this folder written by a script in `experiments/scripts/`.
 - **Verified independently by the user:** tests, bounds and exact values at commit `e233f7a`.
-- **Not verified:** the paper has not been compiled (no LaTeX on this machine). Curves are tables, not plots (matplotlib is not in the lockfile). The benchmark sources for the calibrated scenario have not been opened, so they are not cited.
-- **Not established:** that any curve is flat by the pre-registered test; that the unrestricted actor has stopped improving at 10 million steps.
+- **Not verified:** the paper has not been compiled (no LaTeX on this machine). Curves are tables, not plots (matplotlib is in the lockfile since Nov 15; no figure script yet). The benchmark sources for the calibrated scenario have not been opened, so they are not cited.
+- **Not established:** that any curve is flat by the pre-registered test; that the unrestricted or the pooled actor has stopped improving at 10 million steps.
 
 ## Open for week 3
 
-- More tuning for the naive calibrated rules, or state the overstated gap.
-- Curve episodes per evaluation for the final runs: with 300, fifteen seeds may only just pass the plateau band.
-- Curve evaluations start one episode later each time; the analysis rotates them back. Fixing it in `training.py` before the final runs would remove the need.
+- Calibrated rules with 360 configurations, both estimates: running on Nov 15, results in `tuning/360/` and `tuning_360.txt` when finished.
+- Training length of the pooled actor; whether the interview-cap flag above changes anything.
+- Done Nov 15: curve evaluations now play the episodes in the same order every time; every run saves its model at 80% of training.
 - The rule search writes nothing until a search finishes; an interrupted search starts again.
 - PPO hyperparameter tuning with the same budget as the rules (not started).
 - Forward-citation search; compile the paper on Overleaf; fill in the author name.
