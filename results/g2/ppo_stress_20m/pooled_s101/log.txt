@@ -1,0 +1,1 @@
+pooled seed 101: 20000768 steps in 22797 s, last evaluation 3.5852

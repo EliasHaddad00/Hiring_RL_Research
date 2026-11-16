@@ -65,7 +65,8 @@ touched. No number here is a reported result; PPO-versus-rule verdicts wait for 
 - Plateau test (flat only if the 95% interval of the change over the last 20% lies inside +-1% of the final payoff): **inconclusive** for every actor with three seeds; the interval is about +-0.06 against a band of +-0.035.
 - The index actor's gain from 3 to 10 million steps lies inside the +-1% band (+-0.036): direct evidence that its curve is flat after 3 million steps, though not the pre-registered test.
 - Plateau test from saved models (added Nov 15: the model at 80% of training against the final model, 4,000 development episodes; only runs made after that date have the 80% model). Pooled actor at h0 = 0.05, 10 million steps: +0.029 (interval +0.006 to +0.052): **changing**, still rising. The learning rate falls to zero over the same stretch, which may account for part of the rise; not tested.
-- Training length for the final runs: 3 million steps (index), 10 million (unrestricted). Pooled: not yet decided; the runs here point to 10 million.
+- **Doubling test (Nov 16, the plateau evidence for the unrestricted and pooled actors; `doubling.txt`).** Gain from 10 to 20 million steps, seeds 101 to 103: unrestricted +0.011 (interval -0.008 to +0.030), pooled +0.001 (-0.022 to +0.023). Both inside +-1% (about +-0.036): **flat**. At 20 million steps the unrestricted actor scores 3.507 to 3.522, still 0.04 to 0.05 below the tuned rule; the pooled actor 3.571 to 3.590.
+- Training length for the final runs: 3 million steps (index), 10 million (unrestricted and pooled).
 
 ## Known-answer runs without pressure (best tuned rule 4.003, bound 4.341)
 
@@ -79,6 +80,7 @@ touched. No number here is a reported result; PPO-versus-rule verdicts wait for 
 
 - Every architecture passes this check at its longer training length; the shortfalls at 3 million steps were training length.
 - Still rising at the end of 10 million steps (80% model against final model): pooled +0.025 (interval +0.007 to +0.043), unrestricted +0.062 (+0.041 to +0.083).
+- **Cap-6 check (`cap6_check.txt`):** an unrestricted agent trained with a cap of 6 scores 3.916 against 3.971 with a cap of 3 (-0.055, interval -0.078 to -0.032; one seed each) and has no hire at its cap. Outside the 0.02 closing rule, in the direction where a higher cap does not help; open for the user's decision.
 - **Interview cap flag:** two of these runs exceed the 5% trigger (unrestricted 12.5%, pooled seed 101 5.1%). The tuned rule itself is at 10 to 18% at this setting, and the cap was kept at 3 on Nov 14; these are the first trained agents over the trigger.
 
 ## Decisions taken this week (all in `PREREGISTRATION.md`)
@@ -101,7 +103,7 @@ below the naive static threshold, so 40 configurations did not tune it well.
 - **Verified here:** 227 fast and 18 slow tests pass (commit `4e12506`); every figure above comes from a file in this folder written by a script in `experiments/scripts/`.
 - **Verified independently by the user:** tests, bounds and exact values at commit `e233f7a`.
 - **Not verified:** the paper has not been compiled (no LaTeX on this machine). Curves are tables, not plots (matplotlib is in the lockfile since Nov 15; no figure script yet). The benchmark sources for the calibrated scenario have not been opened, so they are not cited.
-- **Not established:** that any curve is flat by the pre-registered test; that the unrestricted or the pooled actor has stopped improving at 10 million steps.
+- **Not established:** flatness by the curve-based test (inconclusive with three seeds). Flatness rests on the doubling tests: 3 to 10 million steps for the index actor, 10 to 20 million for the other two.
 
 ## Open for week 3
 

@@ -37,6 +37,8 @@ Folders ending in `_s101` to `_s103` are the three tuning seeds.
 | `ppo_stress_10m/` | Full problem, h0 = 0.05 | index, unrestricted | 10 million | Sets the training length: does 3 to 10 million steps add anything? |
 | `ppo_pooled_stress/` | Full problem, h0 = 0.05 | pooled, seed 101 | 3 million | First pooled run on the full problem |
 | `ppo_pooled_stress_10m/` | Full problem, h0 = 0.05 | pooled | 10 million | Three seeds and longer training, to set the pooled actor's length |
+| `ppo_stress_20m/` | Full problem, h0 = 0.05 | pooled, unrestricted | 20 million | Doubling test: does 10 to 20 million steps add anything? (no) |
+| `ppo_no_pressure_cap6/` | Full problem, no pressure, interview cap 6 | unrestricted, seed 101 | 10 million | Interview-cap check for a trained agent |
 | `ppo_no_pressure/` | Full problem, no pressure | all three, seed 101 | 3 million | Known-answer check: can each agent match the best rule when waiting is free? |
 | `ppo_no_pressure_10m/` | Full problem, no pressure | pooled (three seeds), unrestricted (seed 101) | 10 million | The two actors that failed that check at 3 million steps, trained longer |
 
@@ -44,7 +46,7 @@ No run was repeated with the same settings. A folder with `_10m` is a longer tra
 kind of agent, started from scratch, not a continuation.
 
 **Two generations of runs.** Runs made after the fix of Nov 15 (`ppo_pooled_stress_10m/`,
-`ppo_no_pressure_10m/`) have `"eval_episode_order": "fixed"` in `run.json` and also hold
+`ppo_no_pressure_10m/`, `ppo_stress_20m/`, `ppo_no_pressure_cap6/`) have `"eval_episode_order": "fixed"` in `run.json` and also hold
 `model_80.zip`, the model at 80% of training. In earlier runs each curve evaluation starts one
 episode later than the one before (same episodes, rotated); `check_plateau.py` rotates them back.
 The earlier models were re-saved once, with identical weights, to remove a local file path that the
@@ -62,6 +64,9 @@ library had stored inside them.
 | `extra_runs.txt` | No-pressure runs and pooled runs at h0 = 0.05, against the best tuned rule | `score_extra_runs.py` |
 | `plateau_*.txt` | Plateau test on the learning curve (300 episodes) and the check of the six logged columns | `check_plateau.py <folder>` |
 | `plateau_checkpoints_*.txt` | Plateau test from the 80% model and the final model on 4,000 development episodes (runs after Nov 15) | `check_plateau_checkpoints.py <folder>` |
+| `doubling.txt` | Gain from 10 to 20 million steps at h0 = 0.05: the plateau evidence for the unrestricted and pooled actors | `check_doubling.py` |
+| `cap6_check.txt` | Unrestricted no-pressure agent trained with an interview cap of 6 against the cap-3 agent | `check_cap6.py` |
+| `robustness_calibrated.txt` | Calibrated scenario: 40 against 360 configurations, and the gap between the two estimates at both budgets | `check_robustness.py --setting calibrated` |
 | `throughput_diagnosis.txt` | Training speed alone and with several runs in parallel | `diagnose_throughput.py` |
 
 ## What was redone, and why

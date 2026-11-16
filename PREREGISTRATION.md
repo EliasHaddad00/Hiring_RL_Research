@@ -95,7 +95,13 @@ No choice is made on the final training seeds or the evaluation episodes. **No s
   steps at the primary setting, seeds 101 to 103, on 4,000 development episodes. If its 95% interval
   lies inside +-1% of the payoff, 10 million steps stand; if not, the gain and the cost of 20 million
   are reported before the length is fixed. This is the test the index actor passed between 3 and 10
-  million steps. The 80% model test is reported beside it as a description only. Earlier text: 3 million steps per run
+  million steps. The 80% model test is reported beside it as a description only.
+  *Result (Nov 16, `results/g2/doubling.txt`):* unrestricted +0.011 (interval -0.008 to +0.030),
+  pooled +0.001 (-0.022 to +0.023); both inside the band of about +-0.036, so both are flat and 10
+  million steps stand. For description: the 80% model test on the 20-million-step runs gives
+  unrestricted +0.015 (flat) and pooled +0.023 (inconclusive); the models at 16 of 20 million steps
+  score at or below the finished 10-million-step models, which is what settling under a falling
+  learning rate would look like. Earlier text: 3 million steps per run
   *(planning default)*, then reset to at least twice the point where the curves flatten. Plateau test *(wording fixed Nov 15)*: a curve is flat if the 95%
   interval of the change in interquartile mean over the last 20% of training lies inside +-1% of the
   final payoff. An interval that reaches outside that band is reported as "inconclusive" (if it

@@ -1,0 +1,14 @@
+run                       10M      20M     gain         95% interval
+unrestricted_s101       3.494    3.507   +0.013     [-0.011, +0.036]
+unrestricted_s102       3.505    3.511   +0.007     [-0.018, +0.031]
+unrestricted_s103       3.508    3.522   +0.014     [-0.013, +0.041]
+unrestricted: mean gain +0.011, 95% interval [-0.008, +0.030], band +-0.035: flat (10 million steps stand)
+
+pooled_s101             3.575    3.590   +0.015     [-0.004, +0.034]
+pooled_s102             3.585    3.571   -0.014     [-0.037, +0.008]
+pooled_s103             3.580    3.584   +0.004     [-0.021, +0.029]
+pooled: mean gain +0.001, 95% interval [-0.022, +0.023], band +-0.036: flat (10 million steps stand)
+
+Paired on 4,000 development episodes; interval: bootstrap over runs and episodes, 10,000 draws.
+flat: the interval lies inside +-1% of the 20-million-step payoff.
+Tuning seeds 101 to 103: a check, not a reported result.
