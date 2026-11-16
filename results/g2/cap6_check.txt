@@ -1,0 +1,10 @@
+Unrestricted actor, no pressure, 10 million steps, seed 101: interview cap 3 against cap 6.
+
+  cap 3: 3.971 +- 0.021  interviews 12.4, hires 3.00, hires at the cap 12.5%
+  cap 6: 3.916 +- 0.021  interviews 10.4, hires 2.98, hires at the cap 0.0%
+
+cap 6 minus cap 3 (paired, 4,000 development episodes): -0.055, 95% interval [-0.078, -0.032]
+Decision rule: within 0.02 -> NO: outside 0.02; reported to the user.
+
+Two separately trained agents, one seed each: the difference includes training-seed luck.
+Tuning seed, development episodes: a check, not a reported result.
