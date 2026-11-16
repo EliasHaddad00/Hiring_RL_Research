@@ -15,3 +15,17 @@ h0_0.05
   price_directed         survival    3.557   3.594  0.023  +0.036         4        8.5   2.99   86.5%    0.7%  1.000 0.015
   best rule: price_directed with the survival estimate, 3.594
 
+calibrated
+  family                 estimate    start    best     se    gain  found at interviews  hires  accept  at cap  parameters
+  static_threshold       naive       1.743   2.129  0.026  +0.386        80        0.0   3.00   79.0%    0.0%  0.595
+  static_threshold       survival    1.931   2.175  0.026  +0.243       173        0.0   3.00   79.4%    0.0%  0.625
+  resume_falling_bar     naive       1.813   1.994  0.026  +0.180       104        0.0   3.00   78.4%    0.0%  0.976 1.027 0.235
+  resume_falling_bar     survival    1.893   2.244  0.026  +0.351       154        0.0   3.00   79.6%    0.0%  0.598 0.404 0.197
+  one_interview          naive       1.662   2.018  0.026  +0.356       349        4.7   3.00   78.4%    0.0%  1.740 1.039 1.008 0.681 0.524 -0.018 -0.126
+  one_interview          survival    1.663   2.374  0.025  +0.711       315        6.8   2.99   79.2%    0.0%  0.965 0.834 0.318 0.340 0.594 0.318 0.020
+  up_to_two_interviews   naive       1.662   2.226  0.025  +0.564       349        7.0   3.00   78.5%    0.0%  1.313 1.073 99.150 1.120 0.795 0.454 98.974 -0.010 0.120
+  up_to_two_interviews   survival    1.663   2.340  0.025  +0.677       359        8.4   3.00   79.1%    0.0%  1.714 0.761 98.974 1.439 0.218 0.468 98.637 0.145 0.039
+  price_directed         naive       2.251   2.310  0.025  +0.059        18       11.2   2.99   78.9%    8.2%  0.945 0.005
+  price_directed         survival    2.382   2.382  0.025  +0.000         4       10.9   2.99   79.3%   11.4%  1.030 0.000
+  best rule: price_directed with the survival estimate, 2.382
+

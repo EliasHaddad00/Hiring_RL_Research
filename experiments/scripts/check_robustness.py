@@ -4,10 +4,15 @@ Pre-registered rule: every rule family also gets a 360-evaluation search. If the
 more than the 2% margin over its 40-configuration score, this is reported and the stronger rule
 becomes the comparator.
 
+With --setting calibrated the same comparison is made for the calibrated scenario (added Nov 15:
+its naive rules were poorly tuned by 40 configurations), and the gap between the two estimates is
+listed for both budgets.
+
 Reads results/g2/tuning/40 and /360. Tuning scores are biased upward (each configuration was picked
 on those episodes), so both chosen rules are also scored on 4,000 development episodes, paired.
-Writes results/g2/robustness.{txt,json}.
+Writes results/g2/robustness.{txt,json} (robustness_calibrated.{txt,json} for the calibrated scenario).
 """
+import argparse
 import json
 import os
 import sys
@@ -24,6 +29,7 @@ from hiring.rules import RULE_FAMILIES  # noqa: E402
 
 OUT = Path(__file__).resolve().parents[2] / "results" / "g2"
 SETTING, EPISODES, MARGIN = "h0_0.05", 4000, 0.02
+SCENARIOS = {"h0_0.05": ("stress", dict(h0=0.05, accept_decay=0.03)), "calibrated": ("calibrated", {})}
 FAMILIES = ["static_threshold", "resume_falling_bar", "one_interview", "up_to_two_interviews", "price_directed"]
 BELIEFS = ["naive", "survival"]
 
@@ -35,14 +41,21 @@ def load(budget, family, belief):
 
 
 def job(args):
-    budget, family, belief = args
+    global SETTING
+    budget, family, belief, SETTING = args
     params, _ = load(budget, family, belief)
-    sc = load_scenario("stress", h0=0.05, accept_decay=0.03)
-    return args, evaluate(sc, RULE_FAMILIES[family](params, belief=belief), seeds=episode_seeds("dev", EPISODES))["ret"]
+    name, overrides = SCENARIOS[SETTING]
+    sc = load_scenario(name, **overrides)
+    return args[:3], evaluate(sc, RULE_FAMILIES[family](params, belief=belief), seeds=episode_seeds("dev", EPISODES))["ret"]
 
 
 def main():
-    keys = [(b, f, e) for f in FAMILIES for e in BELIEFS for b in (40, 360)]
+    global SETTING
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--setting", default=SETTING, choices=list(SCENARIOS))
+    SETTING = ap.parse_args().setting
+    tag = "robustness" if SETTING == "h0_0.05" else f"robustness_{SETTING}"
+    keys = [(b, f, e, SETTING) for f in FAMILIES for e in BELIEFS for b in (40, 360)]
     with Pool(12) as pool:
         dev = dict(pool.map(job, keys))
     rows = []
@@ -71,11 +84,19 @@ def main():
                  else "The rule does not fire: the comparator stays the 40-configuration rule."),
               f"On development episodes: best of the 40-configuration rules {d40['family']} ({d40['belief']}) {d40['dev_40']:.3f}; "
               f"best of the 360-configuration rules {d360['family']} ({d360['belief']}) {d360['dev_360']:.3f}.",
-              "", f"dev = {EPISODES:,} development episodes, not used for tuning; dev gain is paired (360 minus 40)."]
+              "", f"dev = {EPISODES:,} development episodes, not used for tuning; dev gain is paired (360 minus 40).",
+              "", "Survival-aware minus naive estimate on development episodes (paired), by tuning budget:",
+              f"{'family':22s} {'40 configs':>11s} {'95% interval':>19s} {'360 configs':>12s} {'95% interval':>19s}"]
+    gaps = []
+    for f in FAMILIES:
+        g = {b: paired_compare(dev[(b, f, "survival")], dev[(b, f, "naive")]) for b in (40, 360)}
+        gaps.append(dict(family=f, **{f"gap_{b}": g[b]["diff"] for b in g}, **{f"interval_{b}": [g[b]["lo"], g[b]["hi"]] for b in g}))
+        lines.append(f"{f:22s} " + " ".join(f"{g[b]['diff']:+{w}.3f} {'[%+.3f, %+.3f]' % (g[b]['lo'], g[b]['hi']):>19s}"
+                                           for b, w in ((40, 11), (360, 12))))
     text = "\n".join(lines)
     print(text)
-    (OUT / "robustness.txt").write_text(text + "\n")
-    (OUT / "robustness.json").write_text(json.dumps(dict(rows=rows, best_gain=gain, rule_fires=bool(fired)), indent=1))
+    (OUT / f"{tag}.txt").write_text(text + "\n")
+    (OUT / f"{tag}.json").write_text(json.dumps(dict(setting=SETTING, gaps=gaps, rows=rows, best_gain=gain, rule_fires=bool(fired)), indent=1))
 
 
 if __name__ == "__main__":
