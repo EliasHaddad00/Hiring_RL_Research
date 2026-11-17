@@ -41,9 +41,14 @@ About 3 hours for the first line and about 8 for the second on 12 cores (estimat
 
 **Decisions waiting for the project owner (do not choose for them):**
 
-- Interview cap: the cap-6 agent without pressure scored 0.055 below the cap-3 agent, outside the 0.02 closing rule (`results/g2/cap6_check.txt`). Keep 3, add seeds, or move to 6.
-- Tuning ranges: the plan widens a range whose best value sits on its edge. It fires mechanically for every actor; only network width (to 512) and learning rate (above 0.001) could really be widened.
-- Calibrated scenario: the naive one-interview rule scores below the naive static rule after 360 configurations (`results/g2/robustness_calibrated.txt`); unchecked whether the search misses a region.
+| Decision | Options | Recommendation given to the owner (Nov 16) |
+| --- | --- | --- |
+| Interview cap: the cap-6 agent without pressure scored 0.055 below the cap-3 agent, outside the 0.02 closing rule (`results/g2/cap6_check.txt`) | A: record it and keep 3. B: two more seeds for each cap. C: move to 6 | A |
+| Tuning ranges: the plan widens a range whose best value sits on its edge; it fires mechanically for every actor (`results/g3/ppo_tuning_search.txt`) | A: no widening, record why. B: add network width 512. C: add width 512 and learning rates above 0.001 | A (the only edge that clearly wins is a discount of 1.0, which cannot be widened) |
+| Calibrated scenario: the naive one-interview rule scores below the naive static rule after 360 configurations (`results/g2/robustness_calibrated.txt`) | A: check whether the search misses the "never interview" region, and seed it if so. B: leave it and state the estimate gap as an upper estimate | A |
+| Calibrated benchmark sources: none has been opened, so none is cited | Owner opens them, or asks the agent to | none |
+
+None of these blocks finishing the tuning runs. All four must be settled and recorded in `PREREGISTRATION.md` before the configs are frozen.
 
 **Not allowed before G3:** the evaluation episode pool and final training seeds 1001 to 1015 (both locked in `hiring/config.py`).
 Search models (`results/g3/ppo_tuning/search/**/model*.zip`) are kept locally only, by decision.
