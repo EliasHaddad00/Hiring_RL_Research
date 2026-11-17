@@ -152,7 +152,7 @@ Out of scope unless the user says otherwise: adapted bandit baselines, DQN, atte
 | G4 | Dec 9 | Every run evaluated; every decision rule applied; figures regenerate with one command |
 | Submit | Dec 16 | Draft Dec 12, clean-clone reproduction Dec 14, PDF frozen Dec 15 |
 
-When asked what to do next, check which gate is current and what its pass test still needs.
+When asked what to do next, check which gate is current and what its pass test still needs. The current state, paused jobs and open decisions are in `README.md`, section "Where the project stands"; keep that section current.
 
 ## How to write for the user
 

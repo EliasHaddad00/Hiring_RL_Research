@@ -6,7 +6,47 @@ MaskablePPO and compared against tuned rules, an exact optimum on a small instan
 
 Status: gates G1 (simulator trusted) and G2 (yardsticks built, first agents trained) passed; see
 `results/g1/G1_STATUS.md` and `results/g2/G2_STATUS.md`. Everything so far uses tuning seeds and
-development episodes: there are no reported results yet.
+development or tuning episodes: there are no reported results yet.
+
+## Where the project stands (Nov 16, 2026)
+
+Working towards gate G3 (Dec 2): configurations frozen, pre-registration tagged, final seeds launched.
+Read `CLAUDE.md` first (binding rules), then `PREREGISTRATION.md` and `results/g2/README.md` (index of every result file).
+
+**PPO hyperparameter tuning is half done and paused** (stopped by hand on Nov 16 to rest the machine).
+
+| Stage | State | Where |
+| --- | --- | --- |
+| Search: 40 configurations x 3 seeds x 3 actors, 30% length | Done, 360 of 360 | `results/g3/ppo_tuning_search.txt` |
+| Finals: 5 best per actor x 3 seeds, full length | 15 of 45 done: unrestricted 12 of 15, index 3 of 15, pooled 0 of 15 | `results/g3/ppo_tuning/finals/` |
+
+A run is finished only if its folder has `score.json`. Folders without it were interrupted; their
+files are partial and are overwritten when the run restarts. To continue (finished runs are skipped):
+
+```
+.venv\Scripts\python.exe experiments\scripts	une_ppo.py --stage finals --actor unrestricted index
+.venv\Scripts\python.exe experiments\scripts	une_ppo.py --stage finals --actor pooled
+```
+
+About 3 hours for the first line and about 8 for the second on 12 cores (estimates). Each writes
+`results/g3/ppo_tuning_finals.txt` when it ends. Run nothing else heavy at the same time.
+
+**Then, in order:**
+
+1. Pick one configuration per actor (best mean over seeds 101 to 103 in the finals table).
+2. Rerun the small-instance check on the winners (`check_small_ppo.py`, `exact_values.py`); tuning was done at h0 = 0.05 only.
+3. Get the owner's decisions (below), record them in `PREREGISTRATION.md`.
+4. Open the calibrated-scenario benchmark sources before citing them.
+5. Freeze the configs, tag `PREREGISTRATION.md`, and only then launch final training seeds 1001 to 1015.
+
+**Decisions waiting for the project owner (do not choose for them):**
+
+- Interview cap: the cap-6 agent without pressure scored 0.055 below the cap-3 agent, outside the 0.02 closing rule (`results/g2/cap6_check.txt`). Keep 3, add seeds, or move to 6.
+- Tuning ranges: the plan widens a range whose best value sits on its edge. It fires mechanically for every actor; only network width (to 512) and learning rate (above 0.001) could really be widened.
+- Calibrated scenario: the naive one-interview rule scores below the naive static rule after 360 configurations (`results/g2/robustness_calibrated.txt`); unchecked whether the search misses a region.
+
+**Not allowed before G3:** the evaluation episode pool and final training seeds 1001 to 1015 (both locked in `hiring/config.py`).
+Search models (`results/g3/ppo_tuning/search/**/model*.zip`) are kept locally only, by decision.
 
 ## Install
 
@@ -42,6 +82,7 @@ python -m pip install -r requirements.txt torch==2.15.0
 | `python experiments/scripts/tune_rules.py` | Tune every rule family (40 configurations; `--robustness` for 360 at h0 = 0.05) |
 | `python experiments/scripts/check_g2.py` | Gate G2 check: bound above every rule and PPO run, slot view, interview cap |
 | `python experiments/scripts/exact_values.py` | Exact value of the trained small-instance agents |
+| `python experiments/scripts/tune_ppo.py --stage search` (then `finals`, `report`) | PPO hyperparameter search, results in `results/g3/` |
 | `python experiments/scripts/check_plateau.py results/g2/ppo_stress` | Logged columns and the plateau test on the curve, for a folder of runs |
 | `python experiments/scripts/check_plateau_checkpoints.py results/g2/ppo_pooled_stress_10m` | Plateau test from the saved 80% and final models, 4,000 development episodes |
 
