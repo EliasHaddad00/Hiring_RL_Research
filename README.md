@@ -24,8 +24,8 @@ A run is finished only if its folder has `score.json`. Folders without it were i
 files are partial and are overwritten when the run restarts. To continue (finished runs are skipped):
 
 ```
-.venv\Scripts\python.exe experiments\scripts	une_ppo.py --stage finals --actor unrestricted index
-.venv\Scripts\python.exe experiments\scripts	une_ppo.py --stage finals --actor pooled
+.venv\Scripts\python.exe experiments\scripts\tune_ppo.py --stage finals --actor unrestricted index
+.venv\Scripts\python.exe experiments\scripts\tune_ppo.py --stage finals --actor pooled
 ```
 
 About 3 hours for the first line and about 8 for the second on 12 cores (estimates). Each writes
