@@ -1,0 +1,23 @@
+{
+ "actor": "unrestricted",
+ "configuration": 36,
+ "seed": 101,
+ "steps": 3006464,
+ "mean": 3.491049682759486,
+ "se": 0.022677690429740383,
+ "interviews": 6.80075,
+ "hires": 2.89425,
+ "at_cap": 0.016930120065647404,
+ "wall_seconds": 2335.275193800044,
+ "params": {
+  "n_steps": 1024,
+  "batch_size": 256,
+  "n_epochs": 10,
+  "gamma": 0.999,
+  "clip_range": 0.3,
+  "hidden": 256,
+  "learning_rate": 0.0001181041791528797,
+  "ent_coef": 0.005476719326980432,
+  "gae_lambda": 0.9595277983426118
+ }
+}

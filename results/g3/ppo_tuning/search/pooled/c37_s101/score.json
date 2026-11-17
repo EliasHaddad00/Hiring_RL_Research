@@ -1,0 +1,23 @@
+{
+ "actor": "pooled",
+ "configuration": 37,
+ "seed": 101,
+ "steps": 3002368,
+ "mean": 3.5106890978520204,
+ "se": 0.022411125153501788,
+ "interviews": 4.8515,
+ "hires": 2.96825,
+ "at_cap": 0.0,
+ "wall_seconds": 5181.991514199995,
+ "params": {
+  "n_steps": 512,
+  "batch_size": 64,
+  "n_epochs": 10,
+  "gamma": 0.995,
+  "clip_range": 0.3,
+  "hidden": 64,
+  "learning_rate": 0.0005319623106599214,
+  "ent_coef": 0.0013478569769024942,
+  "gae_lambda": 0.9316073366686374
+ }
+}
