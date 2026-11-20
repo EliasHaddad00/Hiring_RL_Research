@@ -55,7 +55,9 @@ No choice is made on the final training seeds or the evaluation episodes. **No s
 ## Budgets
 
 - **Tuning.** 40 configurations *(planning default)* for each rule and each PPO architecture; PPO never
-  gets less than the rules.
+  gets less than the rules. *(Nov 20)* A threshold rule family is in addition scored at the best
+  vector of each family it contains, up to 3 evaluations; the price-directed rule gets none (see
+  "Checks triggered before the tag").
 - **One PPO configuration** *(decided Nov 15)*. Seeded random search over the ranges of the research
   plan, 40 configurations per architecture; configuration 1 is the starting values, as for the rules.
   Each configuration is trained with tuning seeds 101 to 103 for 30% of that architecture's final
@@ -177,18 +179,43 @@ departure rates); upper bound at least as large as every evaluated policy at eve
   (owner): no widening on the search, with one condition: if the configuration chosen for an actor
   after the full-length runs has a value on the edge of a range that can be widened, the question
   is reopened for that actor before the configurations are frozen.
-- **Rule search misses contained rules (found Nov 20; fix not yet decided).** Each threshold
+- **Rule search misses contained rules (found and fixed Nov 20).** Each threshold
   family contains the narrower ones (one interview with interviews off is the falling bar; a
   falling bar with no fall is the static rule), so its best score cannot be lower. The local
   search starts from the earlier tuned vector and does not always reach those regions. With 40
-  configurations a wider family scores below a family it contains in 8 of 48 threshold searches
-  (calibrated: 3; h0 = 0.02: 1; h0 = 0.10: 4); with 360 configurations in 3 of the 10 calibrated
-  searches, the largest being the naive one-interview rule at 2.018 against the naive static rule
-  at 2.129. Checked directly: the naive one-interview and falling-bar rules with the extra feature
-  switched off score exactly the static rule's 2.129 on the 4,000 tuning episodes. So the
-  calibrated naive scores for these two families are too low and the survival-aware minus naive
-  gaps reported for them (+0.243, +0.319) are overstated. The best rule at every setting is
-  price-directed and is not affected.
+  configurations a wider family scored below a family it contains in 8 of 48 threshold searches
+  (calibrated: 3; h0 = 0.02: 1; h0 = 0.10: 4); with 360 configurations in 3 of the 8 calibrated
+  threshold searches, the largest being the naive one-interview rule at 2.018 against the naive
+  static rule at 2.129. Checked directly: the naive one-interview and falling-bar rules with the
+  extra feature switched off score exactly the static rule's 2.129 on the 4,000 tuning episodes.
+  - *Fix (owner's decision).* After its search, every threshold family is also scored at the best
+    vector of each family it contains, at every setting and for both estimates, and keeps the best
+    (`hiring/tuning.py`, `seed_contained`; a test requires identical per-episode payoffs from a
+    rule and the same rule written as a wider family). This adds up to 3 evaluations beyond the 40
+    (or 360) of a threshold search. The price-directed rule, the rule PPO is compared with, gets
+    none, so PPO's 40 configurations are not fewer than its comparator's.
+  - *Effect.* 8 of the 60 searches at 40 configurations and 3 of the 20 at 360 rose; none fell;
+    no wider family is below a contained one any more. The best rule and its score are unchanged
+    at every setting (`results/g2/tuning_40.txt`, `tuning_360.txt`, `g2_check.txt`: no problems).
+  - *The earlier calibrated gaps were overstated.* Survival-aware minus naive estimate, paired,
+    4,000 development episodes, 360 configurations (`results/g2/robustness_calibrated.txt`):
+
+    | Family | Before the fix | After the fix (95% interval) |
+    | --- | --- | --- |
+    | Static | +0.038 | +0.038 (+0.009 to +0.067) |
+    | Falling bar | +0.243 | +0.097 (+0.057 to +0.136) |
+    | One interview | +0.319 | +0.192 (+0.143 to +0.241) |
+    | Up to two interviews | +0.105 | +0.120 (+0.085 to +0.155) |
+    | Price-directed | +0.052 | +0.052 (+0.021 to +0.084) |
+
+    The +0.243 and +0.319 were overstated because the naive searches for those two families had
+    not reached the static rule they contain: their naive scores were too low, not their
+    survival-aware scores too high. The two-interview gap rose slightly because its
+    survival-aware search had not reached the one-interview rule. After the fix the naive
+    falling-bar and one-interview rules are the static rule (no fall, no interviews).
+  - *Slot view.* The one firing of the 0.02 stop rule (naive one-interview rule, calibrated,
+    "Changes before the tag") concerned a rule that is now replaced; every rule and setting is
+    within 0.004. The decision (10 slots) stands.
 
 ## Changes before the tag
 

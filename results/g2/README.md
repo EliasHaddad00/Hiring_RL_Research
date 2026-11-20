@@ -76,6 +76,7 @@ library had stored inside them.
 | The four naive threshold families in `tuning/40/` (every setting) and `tuning/360/` (h0 = 0.05) | The last-day rule changed on Nov 14: the zero bar on the last day now applies with either estimate. The first version applied it to the survival-aware estimate only, which biased the comparison of the two estimates | Replaced in `tuning/40/`; the earlier files are in the git history at commit `e45737f`. The earlier 360-configuration naive searches were never committed |
 | All ten calibrated searches in `tuning/40/` | Base acceptance moved from 0.85 to 0.80 so that realised acceptance falls inside the benchmark range | Replaced; earlier files at commit `e45737f` |
 | `bounds.txt` (calibrated line), `g2_check.txt`, `calibrated_check.txt` | They depend on the two changes above | Replaced |
+| `tuning/40/` and `tuning/360/` threshold searches, `tuning_40.txt`, `tuning_360.txt`, `robustness.txt`, `robustness_calibrated.txt`, `g2_check.txt`, `calibrated_check.txt` (Nov 20) | A wider threshold family scored below a family it contains in 8 searches; each is now also scored at the best vector of every contained family (`PREREGISTRATION.md`) | Replaced; earlier files at commit `632b2e9`. Each search file keeps its own best under `search_best` |
 | Plateau tables | The plateau rule was fixed on Nov 15 (+-1% band), and the curve rotation was found | Replaced |
 
 Searches with the survival-aware estimate and the price-directed rule were not affected by the

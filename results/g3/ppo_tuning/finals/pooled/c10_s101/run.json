@@ -1,0 +1,49 @@
+{
+ "actor": "pooled",
+ "seed": 101,
+ "scenario": "stress",
+ "h0": 0.05,
+ "accept_decay": 0.03,
+ "obs_belief": "survival",
+ "total_timesteps": 10000384,
+ "wall_seconds": 24706.4195758,
+ "steps_per_second": 404.76864603219974,
+ "config": {
+  "scenario": "stress",
+  "scenario_overrides": {
+   "h0": 0.05,
+   "accept_decay": 0.03
+  },
+  "total_timesteps": 3000000,
+  "n_envs": 8,
+  "hidden": 256,
+  "ppo": {
+   "n_steps": 256,
+   "batch_size": 64,
+   "n_epochs": 5,
+   "learning_rate": 0.00017352795271199817,
+   "lr_schedule": "linear",
+   "gamma": 1.0,
+   "gae_lambda": 0.9046854427844155,
+   "ent_coef": 0.01970940377633241,
+   "clip_range": 0.2,
+   "vf_coef": 0.5,
+   "max_grad_norm": 0.5
+  },
+  "eval": {
+   "episodes": 300,
+   "freq_steps": 150000
+  }
+ },
+ "commit": "632b2e9",
+ "eval_episode_seeds": [
+  1090000,
+  1090299
+ ],
+ "eval_deterministic": true,
+ "eval_episode_order": "fixed",
+ "checkpoint_80_step": 8000000,
+ "torch_threads": 1,
+ "eval_seconds": 1516.1962783000054,
+ "last_eval_mean": 3.5877302433333336
+}

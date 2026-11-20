@@ -7,11 +7,11 @@ Calibrated scenario, best tuned rule on the 4,000 tuning episodes: price_directe
 All rules on the tuning episodes (realised acceptance):
   static_threshold       naive     2.127  79.0%
   static_threshold       survival  2.174  79.4%
-  resume_falling_bar     naive     1.979  78.3%
+  resume_falling_bar     naive     2.127  79.0%
   resume_falling_bar     survival  2.224  79.7%
-  one_interview          naive     1.990  78.3%
+  one_interview          naive     2.127  79.0%
   one_interview          survival  2.353  79.3%
   up_to_two_interviews   naive     2.159  78.2%
-  up_to_two_interviews   survival  2.321  79.1%
+  up_to_two_interviews   survival  2.353  79.3%
   price_directed         naive     2.310  78.9%
   price_directed         survival  2.382  79.3%

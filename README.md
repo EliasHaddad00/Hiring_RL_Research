@@ -13,42 +13,39 @@ development or tuning episodes: there are no reported results yet.
 Working towards gate G3 (Dec 2): configurations frozen, pre-registration tagged, final seeds launched.
 Read `CLAUDE.md` first (binding rules), then `PREREGISTRATION.md` and `results/g2/README.md` (index of every result file).
 
-**PPO hyperparameter tuning: the full-length runs were restarted on Nov 20, 01:05** (both lines below, one after the other; paused at 15 of 45 from Nov 16 to Nov 20). Count the `score.json` files to see how far they got.
+**PPO hyperparameter tuning is finished (Nov 20): 45 of 45 full-length runs.**
 
 | Stage | State | Where |
 | --- | --- | --- |
 | Search: 40 configurations x 3 seeds x 3 actors, 30% length | Done, 360 of 360 | `results/g3/ppo_tuning_search.txt` |
-| Finals: 5 best per actor x 3 seeds, full length | 15 of 45 done: unrestricted 12 of 15, index 3 of 15, pooled 0 of 15 | `results/g3/ppo_tuning/finals/` |
+| Finals: 5 best per actor x 3 seeds, full length | Done, 45 of 45 | `results/g3/ppo_tuning_finals.txt` |
 
-A run is finished only if its folder has `score.json`. Folders without it were interrupted; their
-files are partial and are overwritten when the run restarts. To continue (finished runs are skipped):
+Best configuration per actor at full length (mean over seeds 101 to 103, tuning episodes; the tuned
+rule scores 3.594 on the same episodes): unrestricted 8 (3.535), index 18 (3.573), pooled 8 (3.586).
+Not yet chosen: see the open decision below. One sitting was stopped when the machine ran low on
+memory; the last 6 runs were made with `--procs 6`.
 
-```
-.venv\Scripts\python.exe experiments\scripts\tune_ppo.py --stage finals --actor unrestricted index
-.venv\Scripts\python.exe experiments\scripts\tune_ppo.py --stage finals --actor pooled
-```
-
-About 3 hours for the first line and about 8 for the second on 12 cores (estimates). Each writes
-`results/g3/ppo_tuning_finals.txt` when it ends. Run nothing else heavy at the same time.
+Rule tuning was corrected on Nov 20: each threshold family is also scored at the best vector of every
+family it contains (`PREREGISTRATION.md`, "Checks triggered before the tag"). The best rule is
+unchanged at every setting. Corrected calibrated gaps between the two estimates: falling bar +0.097
+(was +0.243), one interview +0.192 (was +0.319), two interviews +0.120 (was +0.105).
 
 **Then, in order:**
 
 1. Pick one configuration per actor (best mean over seeds 101 to 103 in the finals table).
 2. Rerun the small-instance check on the winners (`check_small_ppo.py`, `exact_values.py`); tuning was done at h0 = 0.05 only.
-3. Get the owner's decisions (below), record them in `PREREGISTRATION.md`.
-4. Open the calibrated-scenario benchmark sources before citing them.
-5. Freeze the configs, tag `PREREGISTRATION.md`, and only then launch final training seeds 1001 to 1015.
+3. Get the owner's decision (below), record it in `PREREGISTRATION.md`.
+4. Freeze the configs, tag `PREREGISTRATION.md`, and only then launch final training seeds 1001 to 1015.
 
 **Decisions waiting for the project owner (do not choose for them):**
 
 | Decision | Options | Recommendation given to the owner (Nov 16) |
 | --- | --- | --- |
-| Rule search misses contained rules (found Nov 20, `PREREGISTRATION.md`, "Checks triggered before the tag"): a wider threshold family scores below a family it contains in 8 of 48 searches at 40 configurations, so some naive scores are too low and two calibrated estimate gaps are overstated | A: also score, in every threshold search, the best vector of each family it contains, at every setting and for both estimates. B: the same at the calibrated setting only. C: leave it and state the gaps as upper estimates | A |
-| Calibrated benchmark sources: none has been opened, so none is cited | Owner opens them, or asks the agent to | none |
+| Tuning ranges, reopened by the owner's own condition: each actor's best full-length configuration has values on the edge of a range that can be widened (unrestricted and pooled 8: 10 epochs, clip 0.1, width 256; index 18: batch 64, width 256; `results/g3/ppo_tuning_finals.txt`) | A: no widening, record why. B: add network width 512 (new search runs). C: wider still | none yet |
 
-Decided Nov 20 and recorded in `PREREGISTRATION.md`: the interview cap stays at 3; no widening of the PPO tuning ranges unless a chosen configuration sits on the edge of a range that can be widened.
+Decided Nov 20 and recorded in `PREREGISTRATION.md`: the interview cap stays at 3; no widening of the PPO tuning ranges unless a chosen configuration sits on the edge of a range that can be widened (it does: see the table); contained rules are scored in every threshold search. The calibrated benchmark sources were opened and confirmed (`experiments/configs/README.md`).
 
-None of these blocks finishing the tuning runs. Both must be settled and recorded in `PREREGISTRATION.md` before the configs are frozen.
+It must be settled and recorded in `PREREGISTRATION.md` before the configs are frozen.
 
 **Not allowed before G3:** the evaluation episode pool and final training seeds 1001 to 1015 (both locked in `hiring/config.py`).
 Search models (`results/g3/ppo_tuning/search/**/model*.zip`) are kept locally only, by decision.

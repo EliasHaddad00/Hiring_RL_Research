@@ -477,8 +477,38 @@
    "mean": 3.1782579640497244,
    "se": 0.025511849981844772,
    "accepted": true
+  },
+  {
+   "configuration": 41,
+   "params": [
+    0.8774601571505858,
+    0.0,
+    0.0
+   ],
+   "mean": 3.1324139486403393,
+   "se": 0.025215937887988385,
+   "accepted": false,
+   "contained": "static_threshold"
   }
  ],
  "setting": "h0_0.10",
- "seconds": 1704.442585599987
+ "seconds": 1704.442585599987,
+ "search_best": {
+  "episodes": 4000,
+  "mean": 3.1782579640497244,
+  "se": 0.025511849981844772,
+  "interviews_per_episode": 0.0,
+  "hires_per_episode": 2.99125,
+  "offers_per_episode": 3.45075,
+  "realised_acceptance": 0.8668405419111788,
+  "share_days_pool_over_slots": 0.6492581895110683,
+  "share_days_hidden_better": 0.4508684142738917,
+  "share_hires_at_interview_cap": 0.0
+ },
+ "search_best_params": [
+  1.028570635288719,
+  0.4761703844610935,
+  0.1323865566259531
+ ],
+ "search_best_configuration": 40
 }

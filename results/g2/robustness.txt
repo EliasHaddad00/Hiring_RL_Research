@@ -18,3 +18,11 @@ Gain of the best rule: +0.00% (margin 2%). The rule does not fire: the comparato
 On development episodes: best of the 40-configuration rules price_directed (survival) 3.560; best of the 360-configuration rules price_directed (survival) 3.560.
 
 dev = 4,000 development episodes, not used for tuning; dev gain is paired (360 minus 40).
+
+Survival-aware minus naive estimate on development episodes (paired), by tuning budget:
+family                  40 configs        95% interval  360 configs        95% interval
+static_threshold            +0.029    [+0.017, +0.041]       +0.027    [+0.015, +0.039]
+resume_falling_bar          +0.100    [+0.073, +0.127]       +0.091    [+0.066, +0.117]
+one_interview               +0.097    [+0.071, +0.123]       +0.131    [+0.099, +0.163]
+up_to_two_interviews        +0.050    [+0.028, +0.072]       +0.055    [+0.033, +0.077]
+price_directed              +0.031    [+0.003, +0.059]       +0.031    [+0.003, +0.059]
