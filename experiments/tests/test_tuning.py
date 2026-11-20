@@ -7,7 +7,7 @@ from hiring.config import load_scenario
 from hiring.env import HiringEnv
 from hiring.evaluation import evaluate
 from hiring.rules import FAMILIES, falling_bar, fixed_threshold
-from hiring.tuning import SCALES, clean, earlier_key, start_vector, tune
+from hiring.tuning import CHAIN, SCALES, clean, earlier_key, embed, seed_contained, start_vector, tune
 
 SC = load_scenario("stress")
 SHORT = SC.with_(horizon=6, max_candidates=20)
@@ -36,6 +36,28 @@ def test_best_is_the_highest_scoring_configuration_and_never_below_the_start():
     means = [h["mean"] for h in r["history"]]
     assert r["best"]["mean"] == pytest.approx(max(means)) and r["best"]["mean"] >= means[0]
     assert r["best_params"] == r["history"][r["best_configuration"] - 1]["params"]
+
+
+def test_a_contained_rule_written_as_a_wider_family_plays_identically():
+    sc, seeds = load_scenario("calibrated"), range(1_000_000, 1_000_040)
+    vectors = {"static_threshold": [0.6], "resume_falling_bar": [1.2, 0.8, 0.05],
+               "one_interview": [1.5, 0.9, 0.3, 0.25, 0.6, 0.1, 0.03]}
+    for i, narrow in enumerate(CHAIN[:-1]):
+        ref = evaluate(sc, FAMILIES[narrow](vectors[narrow]), seeds=seeds)["ret"]
+        for wide in CHAIN[i + 1:]:
+            got = evaluate(sc, FAMILIES[wide](embed(narrow, wide, vectors[narrow])), seeds=seeds)["ret"]
+            assert np.array_equal(ref, got), (narrow, wide)
+
+
+def test_seeding_never_scores_below_a_contained_family_and_runs_once():
+    sc = load_scenario("calibrated")
+    static = tune(sc, "static_threshold", "naive", budget=6, episodes=60)
+    r = tune(sc, "resume_falling_bar", "naive", budget=2, episodes=60)
+    r = seed_contained(sc, r, {"static_threshold": static["best_params"]}, episodes=60)
+    assert r["best"]["mean"] >= static["best"]["mean"] and len(r["history"]) == 3
+    assert r["history"][-1]["contained"] == "static_threshold"
+    assert r["best_params"] == r["history"][r["best_configuration"] - 1]["params"]
+    assert seed_contained(sc, r, {"static_threshold": [9.0]}, episodes=60) is r and len(r["history"]) == 3
 
 
 def test_start_vectors_and_scales_match_every_family():

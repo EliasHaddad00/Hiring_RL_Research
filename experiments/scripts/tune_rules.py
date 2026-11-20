@@ -4,6 +4,8 @@
   python experiments/scripts/tune_rules.py --robustness    360 configurations, primary setting only
 
 One configuration is one parameter vector scored on all 4,000 tuning episodes (hiring/tuning.py).
+After its search, each threshold family is also scored at the best vector of each narrower family
+it contains (decided Nov 20; hiring/tuning.py), and keeps the best.
 Writes results/g2/tuning/<tag>/<setting>__<family>__<estimate>.json (every configuration) and
 results/g2/tuning_<tag>.{txt,json} (the table of best configurations). Finished searches are
 reused on a rerun; delete the file to redo one.
@@ -21,7 +23,7 @@ for _var in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from hiring.config import load_scenario  # noqa: E402
-from hiring.tuning import BELIEFS, SCALES, tune  # noqa: E402
+from hiring.tuning import BELIEFS, CHAIN, SCALES, seed_contained, tune  # noqa: E402
 
 OUT = Path(__file__).resolve().parents[2] / "results" / "g2"
 SETTINGS = {"none": ("stress", dict(h0=0.0, accept_decay=0.0)),
@@ -46,6 +48,17 @@ def job(args):
     return res
 
 
+def seed_job(args):
+    """Contained rules (hiring/tuning.py): also score the best vector of each narrower family."""
+    setting, family, belief, folder, contained = args
+    path = Path(folder) / f"{setting}__{family}__{belief}.json"
+    res = json.loads(path.read_text())
+    if "search_best" not in res:
+        name, overrides = SETTINGS[setting]
+        path.write_text(json.dumps(seed_contained(load_scenario(name, **overrides), res, contained), indent=1))
+    return res
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--robustness", action="store_true", help="360 configurations at the primary setting")
@@ -64,10 +77,17 @@ def main():
     assert set(order) == set(SCALES)
     with Pool(a.procs) as pool:
         results = pool.map(job, jobs, chunksize=1)
+        # the narrower families' own search bests, read before any file is rewritten
+        own = {(r["setting"], r["family"], r["belief"]): r.get("search_best_params", r["best_params"]) for r in results}
+        seeds = [(s, f, b, str(folder), {n: own[(s, n, b)] for n in CHAIN[:CHAIN.index(f)]})
+                 for f in CHAIN[1:] for s in settings for b in BELIEFS]
+        seeded = {(r["setting"], r["family"], r["belief"]): r for r in pool.map(seed_job, seeds, chunksize=1)}
+    results = [seeded.get((r["setting"], r["family"], r["belief"]), r) for r in results]
 
     by = {(r["setting"], r["family"], r["belief"]): r for r in results}
     lines = [f"Best of {budget} configurations per rule family, estimate and setting, on the 4,000 tuning episodes.",
-             "Scores are biased upward for the chosen configuration (it was picked on these episodes).", ""]
+             "Scores are biased upward for the chosen configuration (it was picked on these episodes).",
+             f"A threshold family is also scored at the best vector of each family it contains (found at > {budget}).", ""]
     table = []
     for s in settings:
         lines.append(f"{s}")

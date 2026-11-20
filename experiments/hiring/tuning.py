@@ -11,6 +11,12 @@ THE SEARCH is a seeded (1+1) evolution strategy, the same for every rule family:
                     the step grows by 1.3 after an improvement and shrinks by 0.85 otherwise
 Every configuration and its score is kept; the tuning table is the full list.
 
+CONTAINED RULES (decided Nov 20). Each threshold family contains the narrower ones (CHAIN), so its
+best score cannot be lower, but the local search does not always reach them. After its search,
+every threshold family is therefore also scored at the best vector of each family it contains,
+written as its own vector (`embed`), and keeps the best. These are up to 3 evaluations on top of
+the budget; the price-directed rule gets none.
+
 Only the tuning pool can be used here. Scores of the chosen configuration on these episodes are
 biased upward (it was picked on them); held-out scores come from other episodes.
 """
@@ -23,7 +29,7 @@ import numpy as np
 
 from .config import Scenario, episode_seeds
 from .evaluation import evaluate, summarize
-from .rules import RULE_FAMILIES
+from .rules import INF, RULE_FAMILIES
 
 ROOT = Path(__file__).resolve().parents[2]
 BELIEFS = ("naive", "survival")
@@ -38,6 +44,23 @@ SCALES = {
 }
 BOUNDS = {"price_directed": ([0.3, 0.0], [2.0, 0.2])}      # price scale > 0, interview price >= 0
 INTERVIEW_PRICE_STEP = 0.005                                  # the price tables are cached on this grid
+
+
+# Narrowest first; each step writes a family's vector as the next family's vector (same policy).
+CHAIN = ["static_threshold", "resume_falling_bar", "one_interview", "up_to_two_interviews"]
+_WIDEN = [lambda v: [v[0], 0.0, 0.0],                                                # no fall, no role term
+          lambda v: [v[0], v[0], v[1], v[1], INF, 0.0, v[2]],                        # never interviews
+          lambda v: [v[0], v[1], v[1], v[2], v[3], v[4], INF, v[5], v[6]]]           # no second interview
+
+
+def embed(narrow: str, wide: str, params) -> list:
+    """The vector of `wide` that plays exactly as `narrow` does with `params`."""
+    a, b = CHAIN.index(narrow), CHAIN.index(wide)
+    assert a < b
+    v = [float(x) for x in params]
+    for step in _WIDEN[a:b]:
+        v = step(v)
+    return v
 
 
 def earlier_key(sc: Scenario) -> str:
@@ -102,3 +125,25 @@ def tune(sc: Scenario, family: str, belief: str, budget: int = 40, search_seed: 
                 budget=budget, search_seed=search_seed, pool=pool,
                 episodes=best_summary["episodes"], start=history[0], best_params=best, best=best_summary,
                 best_configuration=max(h["configuration"] for h in history if h["accepted"]), history=history)
+
+
+def seed_contained(sc: Scenario, result: dict, contained: dict, pool: str = "tuning", episodes: int | None = None) -> dict:
+    """Score the search's family at the best vector of each family it contains; keep the best.
+
+    `result` is a finished search (from `tune`); `contained` maps a narrower family to the best
+    vector of its own search. The extra configurations are appended to the history, marked with
+    `contained`. The search's own best is kept under `search_best*`. Does nothing the second time.
+    """
+    if "search_best" in result:
+        return result
+    result.update(search_best=result["best"], search_best_params=result["best_params"],
+                  search_best_configuration=result["best_configuration"])
+    for narrow in CHAIN[:CHAIN.index(result["family"])]:
+        cand = embed(narrow, result["family"], contained[narrow])
+        s = score(sc, result["family"], result["belief"], cand, pool, episodes)
+        accepted = s["mean"] > result["best"]["mean"]
+        result["history"].append(dict(configuration=len(result["history"]) + 1, params=cand, mean=s["mean"], se=s["se"],
+                                      accepted=accepted, contained=narrow))
+        if accepted:
+            result.update(best=s, best_params=cand, best_configuration=len(result["history"]))
+    return result
