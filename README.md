@@ -8,12 +8,12 @@ Status: gates G1 (simulator trusted) and G2 (yardsticks built, first agents trai
 `results/g1/G1_STATUS.md` and `results/g2/G2_STATUS.md`. Everything so far uses tuning seeds and
 development or tuning episodes: there are no reported results yet.
 
-## Where the project stands (Nov 16, 2026)
+## Where the project stands (Nov 20, 2026)
 
 Working towards gate G3 (Dec 2): configurations frozen, pre-registration tagged, final seeds launched.
 Read `CLAUDE.md` first (binding rules), then `PREREGISTRATION.md` and `results/g2/README.md` (index of every result file).
 
-**PPO hyperparameter tuning is half done and paused** (stopped by hand on Nov 16 to rest the machine).
+**PPO hyperparameter tuning: the full-length runs were restarted on Nov 20, 01:05** (both lines below, one after the other; paused at 15 of 45 from Nov 16 to Nov 20). Count the `score.json` files to see how far they got.
 
 | Stage | State | Where |
 | --- | --- | --- |
@@ -43,12 +43,12 @@ About 3 hours for the first line and about 8 for the second on 12 cores (estimat
 
 | Decision | Options | Recommendation given to the owner (Nov 16) |
 | --- | --- | --- |
-| Interview cap: the cap-6 agent without pressure scored 0.055 below the cap-3 agent, outside the 0.02 closing rule (`results/g2/cap6_check.txt`) | A: record it and keep 3. B: two more seeds for each cap. C: move to 6 | A |
-| Tuning ranges: the plan widens a range whose best value sits on its edge; it fires mechanically for every actor (`results/g3/ppo_tuning_search.txt`) | A: no widening, record why. B: add network width 512. C: add width 512 and learning rates above 0.001 | A (the only edge that clearly wins is a discount of 1.0, which cannot be widened) |
-| Calibrated scenario: the naive one-interview rule scores below the naive static rule after 360 configurations (`results/g2/robustness_calibrated.txt`) | A: check whether the search misses the "never interview" region, and seed it if so. B: leave it and state the estimate gap as an upper estimate | A |
+| Rule search misses contained rules (found Nov 20, `PREREGISTRATION.md`, "Checks triggered before the tag"): a wider threshold family scores below a family it contains in 8 of 48 searches at 40 configurations, so some naive scores are too low and two calibrated estimate gaps are overstated | A: also score, in every threshold search, the best vector of each family it contains, at every setting and for both estimates. B: the same at the calibrated setting only. C: leave it and state the gaps as upper estimates | A |
 | Calibrated benchmark sources: none has been opened, so none is cited | Owner opens them, or asks the agent to | none |
 
-None of these blocks finishing the tuning runs. All four must be settled and recorded in `PREREGISTRATION.md` before the configs are frozen.
+Decided Nov 20 and recorded in `PREREGISTRATION.md`: the interview cap stays at 3; no widening of the PPO tuning ranges unless a chosen configuration sits on the edge of a range that can be widened.
+
+None of these blocks finishing the tuning runs. Both must be settled and recorded in `PREREGISTRATION.md` before the configs are frozen.
 
 **Not allowed before G3:** the evaluation episode pool and final training seeds 1001 to 1015 (both locked in `hiring/config.py`).
 Search models (`results/g3/ppo_tuning/search/**/model*.zip`) are kept locally only, by decision.

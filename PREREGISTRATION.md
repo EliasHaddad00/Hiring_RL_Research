@@ -164,6 +164,31 @@ departure rates); upper bound at least as large as every evaluated policy at eve
   at most 0.001 (`results/g2/price_rule.txt`, `results/g2/bounds.txt`). Decision: the cap stays
   at 3. The check is repeated once on a trained full-problem PPO agent, which may use interviews
   differently from the rule.
+- **Interview cap, trained agent (decided Nov 20).** The repeat on a trained agent: unrestricted
+  actor, no pressure, 10 million steps, seed 101, 12.5% of hires at the cap of 3. An agent trained
+  with a cap of 6 scores 3.916 against 3.971 with a cap of 3: -0.055, interval -0.078 to -0.032,
+  4,000 development episodes, no hire at its cap (`results/g2/cap6_check.txt`). This is outside the
+  0.02 closing rule, in the direction where a higher cap does not help. One seed each, so the
+  difference includes training luck. Decision (owner): the cap stays at 3; the result is recorded
+  as a finding.
+- **PPO tuning ranges (decided Nov 20).** The plan widens a range whose best value sits on its
+  edge. In the 30%-length search this fires for every actor (`results/g3/ppo_tuning_search.txt`),
+  and the only edge that clearly wins is a discount of 1.0, which cannot be widened. Decision
+  (owner): no widening on the search, with one condition: if the configuration chosen for an actor
+  after the full-length runs has a value on the edge of a range that can be widened, the question
+  is reopened for that actor before the configurations are frozen.
+- **Rule search misses contained rules (found Nov 20; fix not yet decided).** Each threshold
+  family contains the narrower ones (one interview with interviews off is the falling bar; a
+  falling bar with no fall is the static rule), so its best score cannot be lower. The local
+  search starts from the earlier tuned vector and does not always reach those regions. With 40
+  configurations a wider family scores below a family it contains in 8 of 48 threshold searches
+  (calibrated: 3; h0 = 0.02: 1; h0 = 0.10: 4); with 360 configurations in 3 of the 10 calibrated
+  searches, the largest being the naive one-interview rule at 2.018 against the naive static rule
+  at 2.129. Checked directly: the naive one-interview and falling-bar rules with the extra feature
+  switched off score exactly the static rule's 2.129 on the 4,000 tuning episodes. So the
+  calibrated naive scores for these two families are too low and the survival-aware minus naive
+  gaps reported for them (+0.243, +0.319) are overstated. The best rule at every setting is
+  price-directed and is not affected.
 
 ## Changes before the tag
 
