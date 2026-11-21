@@ -11,6 +11,8 @@ so a stopped launch continues where it was. Final seeds are refused without --al
 (gate G3: only after PREREGISTRATION.md is tagged and the owner says so).
 """
 import argparse
+import datetime
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -33,6 +35,21 @@ def expand(spec):
             rows.append(dict(group=b["group"], setting=b["setting"], belief=b["belief"], actor=actor, seeds=spec["seeds"],
                              steps=steps, hours=hours[actor], out=f"{spec['out']}/{b['setting']}_{b['belief']}"))
     return rows
+
+
+def block_seeds(spec, block, folder: Path, today: datetime.date) -> list:
+    """Seeds of a block, fixed when the block first starts and kept in <folder>/seeds.json.
+
+    Pre-registered cutoff: an "other settings" block not yet started at the end of cutoff_date
+    runs the first cutoff_seeds seeds only. The date decides, never a result."""
+    marker = folder / "seeds.json"
+    if marker.exists():
+        return json.loads(marker.read_text())
+    late = block["group"] == "other settings" and today > spec["cutoff_date"]
+    seeds = spec["seeds"][:spec["cutoff_seeds"]] if late else spec["seeds"]
+    folder.mkdir(parents=True, exist_ok=True)
+    marker.write_text(json.dumps(seeds))
+    return seeds
 
 
 def table(spec):
@@ -61,14 +78,15 @@ def main():
     if a.list or not a.launch:
         print(table(spec))
         return
+    if not a.allow_final_seeds:
+        sys.exit("stopped: final seeds are locked; --allow-final-seeds only after the tag and the owner's word")
     for b in spec["blocks"]:   # one pool per block, so the six slots stay full across actors
+        out = ROOT / spec["out"] / f"{b['setting']}_{b['belief']}"
+        seeds = block_seeds(spec, b, out, datetime.date.today())
         cmd = [sys.executable, str(Path(__file__).with_name("train.py")), "--config", "ppo_final_{actor}",
-               "--setting", b["setting"], "--belief", b["belief"], "--actor", *spec["actors"],
-               "--out", str(ROOT / spec["out"] / f"{b['setting']}_{b['belief']}"),
-               "--procs", str(spec["procs"]), "--skip-finished", "--seed", *map(str, spec["seeds"])]
-        if a.allow_final_seeds:
-            cmd.append("--allow-final-seeds")
-        print(f"{b['group']}: {b['setting']} / {b['belief']}", flush=True)
+               "--setting", b["setting"], "--belief", b["belief"], "--actor", *spec["actors"], "--out", str(out),
+               "--procs", str(spec["procs"]), "--skip-finished", "--allow-final-seeds", "--seed", *map(str, seeds)]
+        print(f"{b['group']}: {b['setting']} / {b['belief']}, {len(seeds)} seeds", flush=True)
         if subprocess.run(cmd).returncode != 0:
             sys.exit("stopped: a run failed or final seeds are locked; see the message above")
 
