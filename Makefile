@@ -20,6 +20,8 @@ g1:
 paper-setup:
 	$(PY) experiments/scripts/paper_setup.py
 
-# Stub: analysis scripts arrive in weeks 2 to 4.
+# Every figure and table of the paper, from saved results only (one script each).
 figures:
-	@echo "No figures yet (analysis/ is empty until week 2)."
+	$(PY) experiments/analysis/table_rules.py
+	$(PY) experiments/analysis/table_belief.py
+	$(PY) experiments/analysis/fig_curves.py
