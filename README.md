@@ -32,11 +32,14 @@ unchanged at every setting. Corrected calibrated gaps between the two estimates:
 
 | Decision | Options | Note (Nov 21) |
 | --- | --- | --- |
-| Machine time of the final runs: about 6 days at 6 runs at a time, above the owner's line of about 4 days | Run as listed; 10 seeds (the stated floor) at some or all settings; pooled actor at fewer settings; more runs at a time | Nothing has been cut. As listed, a launch on Nov 22 ends about Nov 28, before gate G4 (Dec 9) |
-| Must-run ablations: values, actor and seeds were never fixed | The proposal in `PREREGISTRATION.md` ("Final run list": index actor, seeds 1001 to 1003, 30 runs), or other choices | Reward shaping and the second end-day variant are not implemented yet |
+| Two definitions proposed by the assistant in `PREREGISTRATION.md` ("Final run list"): the reward-shaping potential, and the end-day logit variant | Yes, or other definitions | The research plan fixes the form of both but gives no formula |
+| Tag `PREREGISTRATION.md` and launch | Yes or no | Nothing is unlocked before the owner's word |
 
-Decided Nov 20 and recorded in `PREREGISTRATION.md`: interview cap stays at 3; no widening of the PPO
-tuning ranges; chosen configurations; small-instance check and its fallback; model storage; launch order.
+Decided and recorded in `PREREGISTRATION.md`: interview cap stays at 3; no widening of the PPO tuning
+ranges; chosen configurations; small-instance check (pass rule on the mean of three seeds) and its
+fallback; model storage (Nov 20). Full list of 360 runs, with a date cutoff of Dec 4 after which a
+setting not yet started gets 10 seeds; launch order primary, H4b arm, other settings, ablations;
+the 30 ablation runs (Nov 21).
 
 **Final-run models are not in git.** They stay in `results/final/` on the training machine
 (`.gitignore`) and will be attached to a GitHub Release; every other file of a run is committed.

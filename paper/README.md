@@ -14,7 +14,7 @@ The ICML 2026 style files are not in the repository. Download
 ## Build
 
 ```
-pdflatex main && bibtex main && pdflatex main && pdflatex main
+latexmk -pdf main.tex
 ```
 
 ## Rules
