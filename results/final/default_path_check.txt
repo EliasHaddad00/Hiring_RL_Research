@@ -1,0 +1,12 @@
+Default training path: tagged commit 0f64099 against current commit 3e73cbd (training code, configs: no uncommitted changes).
+Each actor's frozen configuration, setting h0_0.05, tuning seed 101, 20480 steps, one run with each code.
+Compared: every tensor of the saved policy (model.zip and model_80.zip), bit for bit.
+
+index         model.zip      16 tensors, 151,300 values: IDENTICAL
+index         model_80.zip   16 tensors, 151,300 values: IDENTICAL
+unrestricted  model.zip      12 tensors, 165,910 values: IDENTICAL
+unrestricted  model_80.zip   12 tensors, 165,910 values: IDENTICAL
+pooled        model.zip      18 tensors, 285,700 values: IDENTICAL
+pooled        model_80.zip   18 tensors, 285,700 values: IDENTICAL
+
+Result: the default path gives identical weights at both commits.

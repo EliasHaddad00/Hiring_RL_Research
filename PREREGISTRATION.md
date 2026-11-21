@@ -405,4 +405,20 @@ because each reverses something written here earlier.
 
 ## Deviations
 
-*(empty)*
+- **Nov 21, 2026: final runs record different commits.** The training code gained the ablation
+  options (reward shaping, the end-day variant, one-value overrides) at commit d2f45d6, after the
+  tag (0f64099) and while the final runs were in progress. It is the only commit since the tag
+  that touches the training code, the environment, the policies or the frozen configurations;
+  the other commits add result files, scripts and documentation. Each run's `run.json` records
+  the commit that was checked out when it started, so the runs carry several different commits
+  (the first six carry 0f64099).
+  The default path, the one every main run and the H4b arm uses, is unchanged. Evidence
+  (`experiments/scripts/check_default_path.py`, output in `results/final/default_path_check.txt`):
+  each actor's frozen configuration was trained for 20,480 steps at h0 = 0.05 with tuning seed
+  101, once with the code of the tagged commit and once with the code after the change (commit
+  3e73cbd). Every tensor of the saved policies is identical bit for bit, for all three actors,
+  both for the final model and for the model saved at 80% of training. The check also confirms
+  that the final model differs from the 80% model, so training did change the weights.
+  From this note until the last final run has finished, no further change is made to the
+  training code, the environment or the policies; if one becomes unavoidable, the owner is asked
+  first.
