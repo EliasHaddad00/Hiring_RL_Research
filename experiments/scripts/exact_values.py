@@ -7,7 +7,12 @@
              episodes (check_small_ppo.py)
 
 Writes results/g2/exact_values.{txt,json}.
+
+  python experiments/scripts/exact_values.py --runs results/g3/small_check
+      exact values only, for every <runs>/<actor>_s<seed>/model.zip, with the mean per actor against
+      the pass mark (98% of the optimum). Writes <runs>_exact_values.{txt,json}.
 """
+import argparse
 import json
 import sys
 from pathlib import Path
@@ -26,7 +31,43 @@ SOURCES = [(folder, tag) for folder, tag in SOURCES                      # later
            if (OUT / f"{tag}.json").exists() and (OUT / f"{tag}_mistakes.json").exists()]
 
 
+def runs_only(folder: Path):
+    """Exact value of every agent in a runs folder; pass rule on the mean per actor."""
+    from sb3_contrib import MaskablePPO
+    th.set_num_threads(1)
+    solver = ExactSolver(load_scenario("small_exact"), "automatic")
+    optimum = solver.value()
+    mark = 0.98 * optimum
+    rows, lines = [], [f"Exact optimum {optimum:.5f}; pass mark {mark:.5f} (98%). Exact value of the greedy policy, no sampling.", ""]
+    for path in sorted(folder.glob("*/model.zip")):
+        actor, seed = path.parent.name.rsplit("_s", 1)
+        value = PolicyEvaluator(solver, greedy_choice(solver, MaskablePPO.load(path, device="cpu"))).value()
+        rows.append(dict(actor=actor, seed=int(seed), exact_value=value, percent_of_optimum=100 * value / optimum,
+                         passes=bool(value >= mark)))
+        lines.append(f"{path.parent.name:22s} {value:.5f}  {100 * value / optimum:6.2f}% of the optimum  "
+                     f"{'pass' if value >= mark else 'BELOW THE MARK'}")
+        print(lines[-1], flush=True)
+    lines.append("")
+    summary = {}
+    for actor in sorted({r["actor"] for r in rows}):
+        v = [r["exact_value"] for r in rows if r["actor"] == actor]
+        summary[actor] = dict(mean=float(np.mean(v)), seeds=len(v), passes=bool(np.mean(v) >= mark))
+        lines.append(f"{actor:13s} mean of {len(v)} seeds {np.mean(v):.5f}  {100 * np.mean(v) / optimum:6.2f}% of the optimum  "
+                     f"{'PASS' if np.mean(v) >= mark else 'FAIL'}")
+    lines += ["", "Tuning seeds; a gate check, not a reported result."]
+    text = "\n".join(lines)
+    print("\n" + text)
+    out = folder.parent / f"{folder.name}_exact_values"
+    out.with_suffix(".txt").write_text(text + "\n")
+    out.with_suffix(".json").write_text(json.dumps(dict(optimum=optimum, pass_mark=mark, rows=rows, by_actor=summary), indent=1))
+
+
 def main():
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--runs", type=Path, help="a folder of runs: exact values only")
+    a = ap.parse_args()
+    if a.runs:
+        return runs_only(a.runs)
     from sb3_contrib import MaskablePPO
     th.set_num_threads(1)
     sc = load_scenario("small_exact")
