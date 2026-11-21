@@ -1,8 +1,8 @@
 # Paper
 
 `main.tex` is the ICML 2026 source (at most 5 pages). Status, Nov 14: skeleton with all section
-headings; only Section 3 (problem and simulator) is drafted. It has not been compiled yet: there
-is no LaTeX installation on the development machine.
+headings; only Section 3 (problem and simulator) is drafted. It compiles (Nov 21, MiKTeX 25.12, 3 pages; one overfull line). Earlier: there
+was no LaTeX installation on the development machine.
 
 ## Style files
 

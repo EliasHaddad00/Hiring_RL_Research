@@ -64,7 +64,7 @@ Commands (fill in as they come to exist, and keep this list current):
 - Final runs: `python experiments/scripts/final_runs.py --list` (run table, count, hours) and `--launch --allow-final-seeds` (**only after the tag and the owner's word**); list in `configs/final_runs.yaml`, output in `results/final/<setting>_<estimate>/<actor>_s<seed>/`
 - G3 checks: `search_medians.py` (median search score by value, `results/g3/search_medians.txt`), `exact_values.py --runs <folder>` (exact value of every small-instance agent in a folder, pass rule on the mean per actor)
 - Diagnostics: `check_plateau.py <runs folder>` (logged columns, plateau test on the curve), `check_plateau_checkpoints.py <runs folder>` (plateau test from `model_80.zip` and `model.zip` on 4,000 development episodes; the one that counts for runs made after Nov 15), `exact_values.py` (exact value of trained small-instance agents), `price_mistakes.py`, `copy_test.py`, `diagnose_throughput.py`
-- Paper: `paper/main.tex`; style files are fetched locally (`paper/README.md`). No LaTeX on this machine.
+- Paper: `paper/main.tex`; style files are fetched locally (`paper/README.md`). MiKTeX is installed since Nov 21 (`%LOCALAPPDATA%ProgramsMiKTeXmiktexbind`); build with `pdflatex main && bibtex main && pdflatex main && pdflatex main` in `paper/`.
 - Regenerate all figures and tables: `make figures` (stub until week 2)
 
 The environment runs Python 3.13.17 (since Nov 14; create it with `py -3.13 -m venv .venv`). Do not use Python 3.12.0: its `zipfile` breaks loading of saved SB3 models, and `test_setup.py` fails there.
