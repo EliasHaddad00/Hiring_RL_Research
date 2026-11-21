@@ -71,31 +71,21 @@
 \label{sec:intro}
 \draft{whole section, for the owner to revise}
 
-Hiring is a search under time pressure. Each interview makes the employer's estimate of a
-candidate more accurate, but its result arrives a day later, and during that day the candidate
-may accept another job. Strong candidates are the first to go. The employer therefore faces two
-linked questions every day: whom to learn more about, and when to stop learning and make an
-offer.
+Hiring is a search under time pressure. Each interview sharpens the employer's estimate of a
+candidate, but its result arrives a day later, and in that day the candidate may accept another
+job; strong candidates go first. We model this as a partially observable decision problem and
+ask four questions. \textbf{RQ1}: how close do simple, tuned rules get to the best achievable
+payoff? \textbf{RQ2}: does a learned policy reach the optimum where it can be computed, and match
+or beat the best rule on the full problem? \textbf{RQ3}: is a policy that scores each candidate
+separately (index-structured) enough once candidates can leave? \textbf{RQ4}: does correcting
+the quality estimate for survival change decisions and payoff?
 
-We model this as a partially observable decision problem and ask four questions.
-\textbf{RQ1}: how close do simple, tuned decision rules get to the best achievable payoff?
-\textbf{RQ2}: does a policy trained by reinforcement learning reach the optimum where the optimum
-can be computed, and does it match or beat the best rule on the full problem?
-\textbf{RQ3}: is a policy that scores each candidate separately (an index-structured policy)
-enough once candidates can leave, or does an unrestricted policy do better?
-\textbf{RQ4}: does correcting the quality estimate for survival change decisions and payoff?
-
-Our contributions are these. (i) A simulator of the hiring race with fixed timing rules, in which
-rules and learned agents act through the same interface (\cref{sec:problem}). (ii) Three
-yardsticks built and checked before any agent was trained: tuned rules, the exact optimum of a
-small instance by dynamic programming, and a Lagrangian upper bound on the full problem
-(\cref{sec:yardsticks}). (iii) A controlled comparison of three actor architectures and two
-quality estimates under a pre-registered protocol, with equal tuning budgets for rules and
-agents and a 2\% equivalence margin fixed in advance (\cref{sec:protocol}).
-
-We expected, and wrote down before the final runs, that the trained agents would most likely tie
-the best rule on the full problem. A tie is a planned outcome here, judged by the equivalence
-margin, and the yardsticks tell how much payoff any policy could still gain.
+We contribute (i) a simulator in which rules and learned agents act through the same interface
+(\cref{sec:problem}); (ii) three yardsticks built before any agent was trained: tuned rules, the
+exact optimum of a small instance, and a Lagrangian upper bound (\cref{sec:yardsticks}); and
+(iii) a pre-registered comparison of three actors and two estimates with equal tuning budgets
+and a 2\% equivalence margin (\cref{sec:protocol}). We wrote down in advance that the agents
+would most likely tie the best rule; a tie is a planned outcome here.
 \pending{headline verdicts, one per question.}
 
 % ---------------------------------------------------------------------------------------------
@@ -160,25 +150,13 @@ but its result arrives the next morning, after one more night of poaching and wi
 acceptance probability. And by \cref{eq:hazard} the candidates who are still available are, on
 average, weaker than their scores suggest (\cref{sec:belief}).
 
-\textbf{Order of a day.} The results depend on the timing rules, so we fix them: (1) yesterday's
-interview results are revealed; (2) new candidates arrive; (3) the firm makes offers, one at a
-time, each resolved before the next; (4) the firm chooses interviews, after which no further
-offer is possible that day; (5) poaching happens overnight. A candidate can be interviewed at
-most once per day and at most three times in total, at most $K$ interviews take place per day,
-and none on the last day, when a result could no longer be used. A candidate interviewed today
-can therefore receive an offer tomorrow at the earliest, and an interview result is lost if the
-candidate is poached that night. Reaching the deadline ends the episode as a terminal state, not
-as a time-limit truncation, because the deadline is part of the task.
-
-\textbf{Decision interface.} The policy acts one step at a time: it picks one of the $N = 10$
-shown candidates and either interviews or makes an offer, or it ends the day. That is one choice
-among $2N + 1$ actions, with invalid choices masked. The shown candidates are the $N$ with the
-highest resume-and-interview estimate, in that order, for every policy we compare; rules and
-learned agents act through this same view. The observation holds, for each shown candidate, the
-quality estimate, the number of interview results seen, the days waited and whether the candidate
-was interviewed today, and, for the firm, the days left, the roles left, the interview slots left
-today, the pool size and whether offers are still open today. Features are scaled by fixed
-constants inside the simulator, identically for every candidate slot.
+\textbf{Timing and interface.} Each day runs in a fixed order: yesterday's interview results,
+arrivals, offers one at a time, interviews (at most $K$ per day and three per candidate), then
+poaching overnight, so a candidate interviewed today can be offered tomorrow at the earliest.
+The policy makes one masked choice at a time, to interview or make an offer to one of the
+$N = 10$ shown candidates (those with the highest estimates) or to end the day, through a view
+that rules and learned agents share; the supplement gives the full timing rules and the
+observation.
 
 \textbf{Two parameter sets.} The \emph{stress} scenario, our main test bed, has $T = 60$,
 $m = 3$, $\lambda = 1.5$, $K = 3$, $\sigma_R = 1.5$, $\sigma_I = 1$, $c = 0.05$, $a_0 = 0.9$ and
@@ -357,17 +335,30 @@ hypothesis, a margin or a seed list. \pending{any further deviation.}
 
 \subsection{Rules against the bound (RQ1)}
 \label{sec:rq1}
-\begin{table}[t]
-  \caption{Upper bound and best tuned rule of each family (better of the two estimates). Last
-    column: best rule as a percentage of the bound. The bound involves no sampling and is final.
-    \prov Rule scores are on the 4{,}000 tuning episodes the rules were fitted on, so they are
-    biased upward; evaluation-pool values will replace them.}
-  \label{tab:rules}
+\begin{table*}[t]
   \centering
-  \begin{footnotesize}
-    \input{tables/rules}
-  \end{footnotesize}
-\end{table}
+  \begin{minipage}[t]{0.50\textwidth}
+    \caption{Upper bound and best tuned rule of each family (better of the two estimates); last
+      column: best rule as a percentage of the bound. The bound involves no sampling and is
+      final. \prov Rule scores are on the 4{,}000 tuning episodes the rules were fitted on, so
+      they are biased upward; evaluation-pool values will replace them.}
+    \label{tab:rules}
+    \centering
+    \begin{footnotesize}
+      \input{tables/rules}
+    \end{footnotesize}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.47\textwidth}
+    \caption{Survival-aware minus naive estimate inside the same rule family, each version tuned
+      separately. At $h_0 = 0$ the estimates are equal, so that column shows the noise of the
+      parameter search. \prov Tuning episodes; unpaired.}
+    \label{tab:belief}
+    \centering
+    \begin{footnotesize}
+      \input{tables/belief}
+    \end{footnotesize}
+  \end{minipage}
+\end{table*}
 
 \Cref{tab:rules} gives the bound and the tuned rules. Three observations hold on the tuning
 episodes\prov. First, interviews are worth their cost when there is time: without pressure the
@@ -388,17 +379,6 @@ rule was selected on the tuning episodes; the two-interview rule with the naive 
 
 \subsection{The two estimates inside a rule (H4a)}
 \label{sec:h4a}
-\begin{table}[t]
-  \caption{Payoff with the survival-aware estimate minus payoff with the naive estimate, for the
-    same rule family, each version tuned separately. At $h_0 = 0$ the two estimates are equal,
-    so that column shows the noise of the parameter search. \prov Tuning episodes; unpaired.}
-  \label{tab:belief}
-  \centering
-  \begin{footnotesize}
-    \input{tables/belief}
-  \end{footnotesize}
-\end{table}
-
 \Cref{tab:belief} compares the two estimates inside each rule family\prov. Without poaching the
 estimates coincide and the differences, at most 0.014 in size, measure only the noise of
 separate tuning. With poaching the survival-aware version scores higher in every family at
@@ -541,6 +521,26 @@ download. \texttt{make figures} regenerates every table and figure from saved re
 \label{sec:supplement}
 The assignment allows the detailed methodology of an algorithm as supplementary material. Nothing
 here is needed to read the results.
+
+\textbf{Order of a day.} The results depend on the timing rules, so we fix them: (1) yesterday's
+interview results are revealed; (2) new candidates arrive; (3) the firm makes offers, one at a
+time, each resolved before the next; (4) the firm chooses interviews, after which no further
+offer is possible that day; (5) poaching happens overnight. A candidate can be interviewed at
+most once per day and at most three times in total, at most $K$ interviews take place per day,
+and none on the last day, when a result could no longer be used. A candidate interviewed today
+can therefore receive an offer tomorrow at the earliest, and an interview result is lost if the
+candidate is poached that night. Reaching the deadline ends the episode as a terminal state, not
+as a time-limit truncation, because the deadline is part of the task.
+
+\textbf{Decision interface and observation.} The policy acts one step at a time: it picks one of
+the $N = 10$ shown candidates and either interviews or makes an offer, or it ends the day. That
+is one choice among $2N + 1$ actions, with invalid choices masked. The shown candidates are the
+$N$ with the highest resume-and-interview estimate, in that order, for every policy we compare.
+The observation holds, for each shown candidate, the quality estimate, the number of interview
+results seen, the days waited and whether the candidate was interviewed today, and, for the
+firm, the days left, the roles left, the interview slots left today, the pool size and whether
+offers are still open today. Features are scaled by fixed constants inside the simulator,
+identically for every candidate slot.
 
 \textbf{Parameter sets.} \Cref{tab:scenarios} lists the two parameter sets. In the calibrated
 scenario the horizon matches a median time to fill of 60 to 61 days at large
