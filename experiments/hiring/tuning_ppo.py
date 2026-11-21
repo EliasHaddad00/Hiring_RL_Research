@@ -17,6 +17,7 @@ SEARCH_SHARE = 0.30
 FINALISTS = 5
 FINAL_STEPS = {"index": 3_000_000, "unrestricted": 10_000_000, "pooled": 10_000_000}
 TUNING_SEEDS = (101, 102, 103)
+CHOSEN = {"unrestricted": 8, "index": 18, "pooled": 8}   # frozen Nov 20: configs/ppo_final_<actor>.yaml
 
 CHOICES = {"n_steps": (256, 512, 1024, 2048),
            "batch_size": (64, 128, 256, 512, 1024),

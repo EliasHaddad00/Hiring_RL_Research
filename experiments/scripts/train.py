@@ -4,6 +4,8 @@ Examples
   python experiments/scripts/train.py --config ppo_small --actor index --seed 101 --out results/g2/ppo_small
   python experiments/scripts/train.py --config ppo_small --actor unrestricted index --seed 101 102 103 \
       --out results/g2/ppo_small --procs 6
+  python experiments/scripts/train.py --config ppo_final_index --setting small --actor index --seed 101 \
+      --out results/g3/small_check          (a frozen configuration at another setting)
 
 Each run writes to <out>/<actor>_s<seed>/: progress.csv (return, policy loss, value loss, entropy,
 approximate KL, clip fraction), evaluations.npz, model.zip, run.json and log.txt.
@@ -16,8 +18,8 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from hiring.config import check_training_seed  # noqa: E402
-from hiring.training import ACTORS, load_run_config, train  # noqa: E402
+from hiring.config import SETTINGS, check_training_seed  # noqa: E402
+from hiring.training import ACTORS, run_config, train  # noqa: E402
 
 
 def main():
@@ -27,6 +29,8 @@ def main():
     ap.add_argument("--seed", nargs="+", type=int, required=True)
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--steps", type=int, help="override total_timesteps")
+    ap.add_argument("--setting", choices=list(SETTINGS), help="run the config's hyperparameters at another setting")
+    ap.add_argument("--belief", choices=["naive", "survival"], help="estimate shown in the observation (default: the scenario's)")
     ap.add_argument("--procs", type=int, default=6, help="runs in parallel")
     ap.add_argument("--allow-final-seeds", action="store_true")
     a = ap.parse_args()
@@ -36,7 +40,7 @@ def main():
 
     if len(runs) == 1:
         actor, seed = runs[0]
-        meta = train(load_run_config(a.config), actor, seed, a.out / f"{actor}_s{seed}", a.steps,
+        meta = train(run_config(a.config, a.setting, a.belief), actor, seed, a.out / f"{actor}_s{seed}", a.steps,
                      allow_final_seed=a.allow_final_seeds)
         print(f"{actor} seed {seed}: {meta['total_timesteps']} steps in {meta['wall_seconds']:.0f} s, "
               f"last evaluation {meta['last_eval_mean']:.4f}")
@@ -52,6 +56,10 @@ def main():
                    "--out", str(a.out)]
             if a.steps:
                 cmd += ["--steps", str(a.steps)]
+            if a.setting:
+                cmd += ["--setting", a.setting]
+            if a.belief:
+                cmd += ["--belief", a.belief]
             if a.allow_final_seeds:
                 cmd += ["--allow-final-seeds"]
             log = open(out / "log.txt", "w")

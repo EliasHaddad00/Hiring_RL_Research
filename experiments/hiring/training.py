@@ -20,7 +20,7 @@ from pathlib import Path
 import numpy as np
 import yaml
 
-from .config import CONFIG_DIR, check_training_seed, episode_seeds, load_scenario
+from .config import CONFIG_DIR, SETTINGS, check_training_seed, episode_seeds, load_scenario
 from .env import HiringEnv
 
 REQUIRED_COLUMNS = ("rollout/ep_rew_mean", "train/policy_gradient_loss", "train/value_loss",
@@ -47,6 +47,22 @@ def load_run_config(name_or_path: str) -> dict:
     if not path.suffix:
         path = CONFIG_DIR / f"{name_or_path}.yaml"
     return yaml.safe_load(path.read_text())
+
+
+def run_config(name_or_path: str, setting: str | None = None, belief: str | None = None) -> dict:
+    """A run config moved to another setting (config.SETTINGS) and, for the belief arm, to the other
+    estimate in the observation. Hyperparameters are untouched. On the small instance the curve
+    uses the small-instance evaluation block (short episodes: more of them, more often)."""
+    cfg = load_run_config(name_or_path)
+    if setting is not None:
+        scenario, overrides = SETTINGS[setting]
+        cfg["scenario"], cfg["scenario_overrides"] = scenario, dict(overrides)
+        if setting == "small":
+            cfg["eval"] = load_run_config("ppo_small")["eval"]
+    if belief is not None:
+        assert belief in ("naive", "survival")
+        cfg["scenario_overrides"] = dict(cfg.get("scenario_overrides") or {}, obs_belief=belief)
+    return cfg
 
 
 def commit_hash() -> str:

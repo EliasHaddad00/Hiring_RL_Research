@@ -75,3 +75,18 @@ def test_one_tiny_search_run_is_scored_on_tuning_episodes_and_resumes(tmp_path, 
     stamp = (out / "model.zip").stat().st_mtime_ns
     _, again = mod.job(job)                              # a finished run is read back, not retrained
     assert again == score and (out / "model.zip").stat().st_mtime_ns == stamp
+
+
+def test_frozen_final_configs_are_the_chosen_search_configurations():
+    from hiring.training import run_config
+    from hiring.tuning_ppo import CHOSEN
+    configs = sample_configs(BASE, 40)
+    for actor, c in CHOSEN.items():
+        cfg = load_run_config(f"ppo_final_{actor}")
+        want = apply(BASE, configs[c - 1], curve=True)
+        want["total_timesteps"] = FINAL_STEPS[actor]
+        assert cfg == want, actor
+        small = run_config(f"ppo_final_{actor}", "small", "naive")
+        assert small["ppo"] == cfg["ppo"] and small["hidden"] == cfg["hidden"]          # only the setting moves
+        assert small["scenario"] == "small_exact" and small["scenario_overrides"] == {"obs_belief": "naive"}
+        assert run_config(f"ppo_final_{actor}", "h0_0.05") == cfg                        # the file is the primary setting

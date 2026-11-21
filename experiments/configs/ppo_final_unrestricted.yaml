@@ -1,0 +1,27 @@
+# FROZEN Nov 20, 2026 (PREREGISTRATION.md, "Chosen configurations"). Do not edit.
+# MaskablePPO, unrestricted actor: configuration 8 of the 40-configuration search, the best of the five
+# full-length finalists (mean 3.535 over seeds 101 to 103, tuning episodes;
+# results/g3/ppo_tuning_finals.txt). The scenario below is the primary setting; other settings are
+# chosen with train.py --setting. A test checks this file against the search's configuration 8.
+scenario: stress
+scenario_overrides:
+  h0: 0.05
+  accept_decay: 0.03
+total_timesteps: 10000000
+n_envs: 8
+hidden: 256
+ppo:
+  n_steps: 512
+  batch_size: 256
+  n_epochs: 10
+  learning_rate: 0.00022792669686333704
+  lr_schedule: linear
+  gamma: 1.0
+  gae_lambda: 0.9257495512860754
+  ent_coef: 0.006985843637152476
+  clip_range: 0.1
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+eval:
+  episodes: 300
+  freq_steps: 150000

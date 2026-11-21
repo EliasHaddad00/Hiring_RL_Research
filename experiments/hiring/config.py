@@ -9,6 +9,16 @@ import yaml
 
 CONFIG_DIR = Path(__file__).resolve().parents[1] / "configs"
 
+# Every setting of PREREGISTRATION.md ("Settings"): name -> (scenario file, overrides).
+PRIMARY_SETTING = "h0_0.05"
+SETTINGS = {"small": ("small_exact", {}),
+            "none": ("stress", dict(h0=0.0, accept_decay=0.0)),
+            "h0_0": ("stress", dict(h0=0.0, accept_decay=0.03)),
+            "h0_0.02": ("stress", dict(h0=0.02, accept_decay=0.03)),
+            "h0_0.05": ("stress", dict(h0=0.05, accept_decay=0.03)),
+            "h0_0.10": ("stress", dict(h0=0.10, accept_decay=0.03)),
+            "calibrated": ("calibrated", {})}
+
 
 @dataclass(frozen=True)
 class Scenario:
