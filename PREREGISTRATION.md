@@ -1,7 +1,7 @@
 # Pre-registration: hiring as a race against poaching
 
-**Status: DRAFT, not tagged.** Written Nov 12, 2026 for gate G1. Nothing here is binding until this
-file is committed and tagged at gate G3 (Dec 2), before the final seeds run. Every value that was
+**Status: TAGGED Nov 21, 2026 (git tag `preregistration`), with the owner's yes, before any final
+seed was run.** Written Nov 12, 2026 for gate G1 and revised until the tag; binding from the tag on. Every value that was
 a planning default is now marked *(final, Nov 20)* with what fixed it. After the tag,
 anything not in this file is labelled exploratory, and changes are recorded under Deviations.
 
@@ -218,8 +218,8 @@ main runs train; no ablation run starts before its tests pass.
 
 - *Reward shaping.* The research plan fixes the form: a potential equal to "a simple estimate of
   the pool's value", zero in the terminal state, with the same discount as PPO. It gives no
-  formula. **The formula below is the assistant's proposal, not the plan's, and is binding only
-  with the owner's yes.** Let k be the number of roles still open, and let m_i be the estimate of
+  formula. The formula below was proposed by the assistant and **accepted by the owner as written
+  on Nov 21, 2026**. Let k be the number of roles still open, and let m_i be the estimate of
   candidate i that the agent is shown (the survival-aware estimate, in the same units as the
   reward), for every candidate now in the pool, shown in a slot or not. Then
 
@@ -235,8 +235,8 @@ main runs train; no ablation run starts before its tests pass.
 - *End-day logit.* The research plan names the two sources (global features, or a pooled summary)
   and no more. In the main run (index actor) the end-day logit is computed from the global
   features only: days left, roles left, interview slots left today, pool size, and whether offers
-  are still open today (the `end_body` of `IndexExtractor` in `hiring/policies.py`). **The variant below is the assistant's
-  reading of "from a pooled summary", binding only with the owner's yes.** In the variant the
+  are still open today (the `end_body` of `IndexExtractor` in `hiring/policies.py`). The variant below is the assistant's
+  reading of "from a pooled summary", **accepted by the owner as written on Nov 21, 2026**. In the variant the
   end-day logit is computed from the global features together with the pool summary of the pooled
   actor: the mean, over the candidates present, of a learned embedding of (candidate features,
   global features), plus the number present divided by the number of slots (`PooledExtractor`).

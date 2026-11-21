@@ -20,20 +20,15 @@ Read `CLAUDE.md` first (binding rules), then `PREREGISTRATION.md` and `results/g
 | Configurations chosen and frozen | Unrestricted 8, index 18, pooled 8 | `experiments/configs/ppo_final_<actor>.yaml` |
 | Small-instance check on the chosen configurations | Passed Nov 21: 99.0%, 99.3%, 99.4% of the optimum (index, unrestricted, pooled; mean of seeds 101 to 103) | `results/g3/small_check_exact_values.txt` |
 | Final run list | Written: 360 runs, about 870 run-hours | `PREREGISTRATION.md`, "Final run list"; `experiments/configs/final_runs.yaml` |
-| `PREREGISTRATION.md` tagged | **Not yet: waits for the owner's yes** | |
-| Final seeds launched | **Not yet: waits for the owner's word after the tag** | `python experiments/scripts/final_runs.py --launch --allow-final-seeds` |
+| `PREREGISTRATION.md` tagged | Done Nov 21, tag `preregistration` | |
+| Final seeds launched | Launched Nov 21 with the owner's word; log in `results/final/launch_log.txt`. A stopped launch is continued with the same command | `python experiments/scripts/final_runs.py --launch --allow-final-seeds` |
 
 Rule tuning was corrected on Nov 20: each threshold family is also scored at the best vector of every
 family it contains (`PREREGISTRATION.md`, "Checks triggered before the tag"). The best rule is
 unchanged at every setting. Corrected calibrated gaps between the two estimates: falling bar +0.097
 (was +0.243), one interview +0.192 (was +0.319), two interviews +0.120 (was +0.105).
 
-**Decisions waiting for the project owner (do not choose for them):**
-
-| Decision | Options | Note (Nov 21) |
-| --- | --- | --- |
-| Two definitions proposed by the assistant in `PREREGISTRATION.md` ("Final run list"): the reward-shaping potential, and the end-day logit variant | Yes, or other definitions | The research plan fixes the form of both but gives no formula |
-| Tag `PREREGISTRATION.md` and launch | Yes or no | Nothing is unlocked before the owner's word |
+**No decision is waiting for the project owner.** The two ablation definitions were accepted on Nov 21.
 
 Decided and recorded in `PREREGISTRATION.md`: interview cap stays at 3; no widening of the PPO tuning
 ranges; chosen configurations; small-instance check (pass rule on the mean of three seeds) and its
@@ -45,7 +40,7 @@ the 30 ablation runs (Nov 21).
 (`.gitignore`) and will be attached to a GitHub Release; every other file of a run is committed.
 The tuning models already in the repository stay.
 
-**Not allowed before G3:** the evaluation episode pool and final training seeds 1001 to 1015 (both locked in `hiring/config.py`).
+**Still locked:** the evaluation episode pool (`hiring/config.py`); it is opened only for the final paired evaluation, on the owner's word. Final training seeds 1001 to 1015 are used only by `final_runs.py`.
 Search models (`results/g3/ppo_tuning/search/**/model*.zip`) are kept locally only, by decision.
 
 ## Install
