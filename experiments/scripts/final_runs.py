@@ -61,13 +61,14 @@ def main():
     if a.list or not a.launch:
         print(table(spec))
         return
-    for r in expand(spec):
-        cmd = [sys.executable, str(Path(__file__).with_name("train.py")), "--config", f"ppo_final_{r['actor']}",
-               "--setting", r["setting"], "--belief", r["belief"], "--actor", r["actor"], "--out", str(ROOT / r["out"]),
-               "--procs", str(spec["procs"]), "--skip-finished", "--seed", *map(str, r["seeds"])]
+    for b in spec["blocks"]:   # one pool per block, so the six slots stay full across actors
+        cmd = [sys.executable, str(Path(__file__).with_name("train.py")), "--config", "ppo_final_{actor}",
+               "--setting", b["setting"], "--belief", b["belief"], "--actor", *spec["actors"],
+               "--out", str(ROOT / spec["out"] / f"{b['setting']}_{b['belief']}"),
+               "--procs", str(spec["procs"]), "--skip-finished", "--seed", *map(str, spec["seeds"])]
         if a.allow_final_seeds:
             cmd.append("--allow-final-seeds")
-        print(f"{r['group']}: {r['setting']} / {r['belief']} / {r['actor']}", flush=True)
+        print(f"{b['group']}: {b['setting']} / {b['belief']}", flush=True)
         if subprocess.run(cmd).returncode != 0:
             sys.exit("stopped: a run failed or final seeds are locked; see the message above")
 

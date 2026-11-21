@@ -24,7 +24,7 @@ from hiring.training import ACTORS, run_config, train  # noqa: E402
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--config", required=True, help="name in experiments/configs or a path")
+    ap.add_argument("--config", required=True, help="name in experiments/configs or a path; {actor} is filled in per run")
     ap.add_argument("--actor", nargs="+", required=True, choices=ACTORS)
     ap.add_argument("--seed", nargs="+", type=int, required=True)
     ap.add_argument("--out", type=Path, required=True)
@@ -44,7 +44,7 @@ def main():
 
     if len(runs) == 1:
         actor, seed = runs[0]
-        meta = train(run_config(a.config, a.setting, a.belief), actor, seed, a.out / f"{actor}_s{seed}", a.steps,
+        meta = train(run_config(a.config.format(actor=actor), a.setting, a.belief), actor, seed, a.out / f"{actor}_s{seed}", a.steps,
                      allow_final_seed=a.allow_final_seeds)
         print(f"{actor} seed {seed}: {meta['total_timesteps']} steps in {meta['wall_seconds']:.0f} s, "
               f"last evaluation {meta['last_eval_mean']:.4f}")

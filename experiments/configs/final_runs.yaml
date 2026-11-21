@@ -10,7 +10,7 @@ out: results/final
 # full problem from results/g3/ppo_tuning/finals, small instance from results/g3/small_check.
 hours_per_run:
   full: {index: 1.20, unrestricted: 1.97, pooled: 4.54}
-  small: {index: 0.0, unrestricted: 0.0, pooled: 0.0}
+  small: {index: 0.40, unrestricted: 1.39, pooled: 2.25}
 blocks:
   - {group: primary, setting: h0_0.05, belief: survival}
   - {group: other settings, setting: small, belief: survival}
