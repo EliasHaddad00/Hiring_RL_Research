@@ -162,6 +162,9 @@ estimate; no other setting gets a naive-estimate PPO run.
 | primary | h0_0.05 | survival | index | 3 million | 1001 to 1015 | 15 | 18 |
 | primary | h0_0.05 | survival | unrestricted | 10 million | 1001 to 1015 | 15 | 30 |
 | primary | h0_0.05 | survival | pooled | 10 million | 1001 to 1015 | 15 | 68 |
+| belief arm (H4b) | h0_0.05 | naive | index | 3 million | 1001 to 1015 | 15 | 18 |
+| belief arm (H4b) | h0_0.05 | naive | unrestricted | 10 million | 1001 to 1015 | 15 | 30 |
+| belief arm (H4b) | h0_0.05 | naive | pooled | 10 million | 1001 to 1015 | 15 | 68 |
 | other settings | small | survival | index | 3 million | 1001 to 1015 | 15 | 6 |
 | other settings | small | survival | unrestricted | 10 million | 1001 to 1015 | 15 | 21 |
 | other settings | small | survival | pooled | 10 million | 1001 to 1015 | 15 | 34 |
@@ -180,9 +183,6 @@ estimate; no other setting gets a naive-estimate PPO run.
 | other settings | calibrated | survival | index | 3 million | 1001 to 1015 | 15 | 18 |
 | other settings | calibrated | survival | unrestricted | 10 million | 1001 to 1015 | 15 | 30 |
 | other settings | calibrated | survival | pooled | 10 million | 1001 to 1015 | 15 | 68 |
-| belief arm (H4b) | h0_0.05 | naive | index | 3 million | 1001 to 1015 | 15 | 18 |
-| belief arm (H4b) | h0_0.05 | naive | unrestricted | 10 million | 1001 to 1015 | 15 | 30 |
-| belief arm (H4b) | h0_0.05 | naive | pooled | 10 million | 1001 to 1015 | 15 | 68 |
 
 Total: 360 runs, 870 run-hours; with 6 runs at a time about 145 hours (6.0 days) of machine time. An estimate from the tuning runs' times.
 The hours per run are the measured times of the same configurations on tuning seeds: index 1.20,
@@ -190,15 +190,18 @@ unrestricted 1.97, pooled 4.54 on the full problem (`results/g3/ppo_tuning/final
 2.25 on the small instance (`results/g3/small_check`). The first two full-problem times were
 measured with about 12 runs on the machine and the others with 6, so the total leans high.
 
-**Machine time is above the owner's line of about 4 days.** Nothing has been cut. The list above
-is the list as specified; the owner chooses whether to run it as it is or change it, and the choice
-is recorded here before the tag.
+**Machine time (decided by the owner, Nov 21).** The estimate is above the owner's line of about
+4 days. The owner chose to run the full list of 360 runs, with this rule fixed before the tag:
+if the main runs are not finished by the end of Dec 4, any setting not yet started then is run
+with seeds 1001 to 1010 only, and this is reported as a deviation. The cutoff is a date; it is
+never a look at results. The primary setting and the H4b arm always get all 15 seeds, and the H4b
+arm is second in the launch order so that the rule cannot touch it. A setting counts as started
+when its first run has been launched; its seed list is written to `seeds.json` in its folder at
+that moment and is not changed afterwards (`block_seeds` in `final_runs.py`).
 
-**Must-run ablations: PROPOSAL, NOT YET DECIDED BY THE OWNER.** Two items of the list under
+**Must-run ablations (accepted by the owner as written, Nov 21).** Two items of the list under
 "Planned ablations" are already in the table: naive versus survival-aware estimate (the H4b arm)
-and the pooled variant (the pooled actor). The other three need choices this file had not fixed
-(values, actor, seeds), so they are written here as a proposal and are not binding until the
-owner confirms them:
+and the pooled variant (the pooled actor). The other three are these runs:
 
 | Ablation | Proposed runs | Seeds | Runs | Run-hours |
 | --- | --- | --- | --- | --- |
@@ -206,9 +209,42 @@ owner confirms them:
 | Reward shaping on (potential-based; off is the main run) | index actor, h0 = 0.05 | 1001 to 1003 | 3 | 4 |
 | End-day logit from the other source (global features or pooled summary; the main run has one) | index actor, h0 = 0.05 | 1001 to 1003 | 3 | 4 |
 
-The unchanged arm of each ablation is the main run with the same seed. As proposed: 30 runs, about
-36 run-hours, about 6 hours of machine time. Reward shaping and the second end-day variant are not
-implemented yet; unshaped return is reported in every case.
+The unchanged arm of each ablation is the main run with the same seed. In total: 30 runs, about
+36 run-hours, about 6 hours of machine time.
+
+**Definitions of the two ablations that need new code (written Nov 21, before the tag).** Both
+stay must-run (owner, Nov 21). Their code and tests may be written after the launch, while the
+main runs train; no ablation run starts before its tests pass.
+
+- *Reward shaping.* The research plan fixes the form: a potential equal to "a simple estimate of
+  the pool's value", zero in the terminal state, with the same discount as PPO. It gives no
+  formula. **The formula below is the assistant's proposal, not the plan's, and is binding only
+  with the owner's yes.** Let k be the number of roles still open, and let m_i be the estimate of
+  candidate i that the agent is shown (the survival-aware estimate, in the same units as the
+  reward), for every candidate now in the pool, shown in a slot or not. Then
+
+      Phi(s) = sum of max(m_i, 0) over the k candidates with the highest m_i   (all of them if fewer than k)
+      Phi(s) = 0 in every terminal state (all roles filled, or the end of the last day)
+
+  and the reward used in training is r' = r + gamma x Phi(s') - Phi(s), with r the unshaped
+  reward (quality of an accepted hire, minus the interview cost), s and s' the states before and
+  after the action, and gamma the discount of the frozen index configuration (1.0). Shaping is
+  applied in training only. Curves, evaluations and every reported number use the unshaped
+  return. With gamma = 1 the shaped return of every episode equals the unshaped return minus
+  Phi of the first state, which is a test the code must pass.
+- *End-day logit.* The research plan names the two sources (global features, or a pooled summary)
+  and no more. In the main run (index actor) the end-day logit is computed from the global
+  features only: days left, roles left, interview slots left today, pool size, and whether offers
+  are still open today (the `end_body` of `IndexExtractor` in `hiring/policies.py`). **The variant below is the assistant's
+  reading of "from a pooled summary", binding only with the owner's yes.** In the variant the
+  end-day logit is computed from the global features together with the pool summary of the pooled
+  actor: the mean, over the candidates present, of a learned embedding of (candidate features,
+  global features), plus the number present divided by the number of slots (`PooledExtractor`).
+  Nothing else changes: the interview and offer logits of each candidate still come from that
+  candidate's own features and the global features only, and the critic, the hyperparameters and
+  the training length are those of the frozen index configuration. The variant therefore sits
+  between the index actor and the pooled actor: pool awareness in the decision to end the day
+  only.
 
 **Model storage (decided Nov 20).** Final-run models (`model.zip`, `model_80.zip`) are not put in
 git: `results/final/**/model*.zip` is in `.gitignore`, the files stay in `results/final/` on the
@@ -216,8 +252,9 @@ training machine and are attached to a GitHub Release afterwards. Everything els
 is committed: `run.json`, `progress.csv`, `evaluations.npz`, `log.txt`, and the per-episode
 payoffs once the run is evaluated. The finalist models already in git stay.
 
-**Launch order (decided Nov 20).** Primary setting (h0 = 0.05) first, then the other settings in
-the order of the table, then the H4b arm, then the ablations. Six runs at a time: every chosen
+**Launch order (decided Nov 20; H4b arm moved to second by the owner, Nov 21).** Primary setting
+(h0 = 0.05) first, then the H4b arm, then the other settings in the order of the table, then the
+ablations. Six runs at a time: every chosen
 configuration has width 256, and the machine ran out of memory with 12 during tuning. A finished
 run (one with `run.json`) is never rerun; a stopped launch continues where it was.
 
@@ -282,7 +319,8 @@ departure rates); upper bound at least as large as every evaluated policy at eve
   101 to 103 among the five full-length finalists, `results/g3/ppo_tuning_finals.txt`):
   unrestricted 8 (3.535), index 18 (3.573), pooled 8 (3.586); the tuned rule scores 3.594 on the
   same tuning episodes. Frozen in `experiments/configs/ppo_final_<actor>.yaml`.
-- **Small-instance check on the chosen configurations (rule written Nov 20, before the runs).**
+- **Small-instance check on the chosen configurations (rule written Nov 20, before the runs;
+  the pass rule on the mean of the three seeds confirmed by the owner, Nov 21).**
   Each chosen configuration is trained on the small instance with seeds 101 to 103 at its own
   length (index 3 million steps, unrestricted and pooled 10 million) and scored by the exact
   value of its greedy policy (`exact_values.py`). Pass mark as before: at least 0.62067 (98% of
