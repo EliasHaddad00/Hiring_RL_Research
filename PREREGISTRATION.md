@@ -143,6 +143,86 @@ Must run: one-at-a-time sweeps of discount, entropy coefficient, learning rate a
 end-day logit from global features versus a pooled summary.
 Optional, only if gate G3 is met on time: masking versus an invalid-action penalty; network width;
 20 slots; posterior-mean reward; wrong assumed h0; one interview per day.
+The runs for the must-run items, with their seeds, are under "Final run list".
+
+## Final run list (written Nov 21, from the owner's decisions of Nov 20)
+
+Every run uses the frozen configuration of its actor (`experiments/configs/ppo_final_<actor>.yaml`:
+unrestricted 8, index 18, pooled 8) and final training seeds 1001 to 1015. The list is
+`experiments/configs/final_runs.yaml`; `experiments/scripts/final_runs.py --list` prints this
+table and `--launch` runs it. Setting names: `small` = exact small instance, `none` = no pressure,
+`h0_x` = stress at that h0, `calibrated` = calibrated scenario.
+
+**Main runs.** Three actors at every setting, with the survival-aware estimate in the observation
+(the estimate used in tuning). **H4b arm.** The same three actors at h0 = 0.05 only, with the naive
+estimate; no other setting gets a naive-estimate PPO run.
+
+| Group | Setting | Estimate | Actor | Steps | Seeds | Runs | Run-hours |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| primary | h0_0.05 | survival | index | 3 million | 1001 to 1015 | 15 | 18 |
+| primary | h0_0.05 | survival | unrestricted | 10 million | 1001 to 1015 | 15 | 30 |
+| primary | h0_0.05 | survival | pooled | 10 million | 1001 to 1015 | 15 | 68 |
+| other settings | small | survival | index | 3 million | 1001 to 1015 | 15 | 6 |
+| other settings | small | survival | unrestricted | 10 million | 1001 to 1015 | 15 | 21 |
+| other settings | small | survival | pooled | 10 million | 1001 to 1015 | 15 | 34 |
+| other settings | none | survival | index | 3 million | 1001 to 1015 | 15 | 18 |
+| other settings | none | survival | unrestricted | 10 million | 1001 to 1015 | 15 | 30 |
+| other settings | none | survival | pooled | 10 million | 1001 to 1015 | 15 | 68 |
+| other settings | h0_0 | survival | index | 3 million | 1001 to 1015 | 15 | 18 |
+| other settings | h0_0 | survival | unrestricted | 10 million | 1001 to 1015 | 15 | 30 |
+| other settings | h0_0 | survival | pooled | 10 million | 1001 to 1015 | 15 | 68 |
+| other settings | h0_0.02 | survival | index | 3 million | 1001 to 1015 | 15 | 18 |
+| other settings | h0_0.02 | survival | unrestricted | 10 million | 1001 to 1015 | 15 | 30 |
+| other settings | h0_0.02 | survival | pooled | 10 million | 1001 to 1015 | 15 | 68 |
+| other settings | h0_0.10 | survival | index | 3 million | 1001 to 1015 | 15 | 18 |
+| other settings | h0_0.10 | survival | unrestricted | 10 million | 1001 to 1015 | 15 | 30 |
+| other settings | h0_0.10 | survival | pooled | 10 million | 1001 to 1015 | 15 | 68 |
+| other settings | calibrated | survival | index | 3 million | 1001 to 1015 | 15 | 18 |
+| other settings | calibrated | survival | unrestricted | 10 million | 1001 to 1015 | 15 | 30 |
+| other settings | calibrated | survival | pooled | 10 million | 1001 to 1015 | 15 | 68 |
+| belief arm (H4b) | h0_0.05 | naive | index | 3 million | 1001 to 1015 | 15 | 18 |
+| belief arm (H4b) | h0_0.05 | naive | unrestricted | 10 million | 1001 to 1015 | 15 | 30 |
+| belief arm (H4b) | h0_0.05 | naive | pooled | 10 million | 1001 to 1015 | 15 | 68 |
+
+Total: 360 runs, 870 run-hours; with 6 runs at a time about 145 hours (6.0 days) of machine time. An estimate from the tuning runs' times.
+The hours per run are the measured times of the same configurations on tuning seeds: index 1.20,
+unrestricted 1.97, pooled 4.54 on the full problem (`results/g3/ppo_tuning/finals`); 0.40, 1.39,
+2.25 on the small instance (`results/g3/small_check`). The first two full-problem times were
+measured with about 12 runs on the machine and the others with 6, so the total leans high.
+
+**Machine time is above the owner's line of about 4 days.** Nothing has been cut. The list above
+is the list as specified; the owner chooses whether to run it as it is or change it, and the choice
+is recorded here before the tag.
+
+**Must-run ablations: PROPOSAL, NOT YET DECIDED BY THE OWNER.** Two items of the list under
+"Planned ablations" are already in the table: naive versus survival-aware estimate (the H4b arm)
+and the pooled variant (the pooled actor). The other three need choices this file had not fixed
+(values, actor, seeds), so they are written here as a proposal and are not binding until the
+owner confirms them:
+
+| Ablation | Proposed runs | Seeds | Runs | Run-hours |
+| --- | --- | --- | --- | --- |
+| Sweeps, one value changed at a time from the frozen index configuration, h0 = 0.05: discount 0.99 and 0.999 (frozen 1.0); entropy coefficient one third and three times the frozen value; learning rate one third and three times; rollout size 256 and 1024 (frozen 512) | index actor, 8 arms | 1001 to 1003 | 24 | 29 |
+| Reward shaping on (potential-based; off is the main run) | index actor, h0 = 0.05 | 1001 to 1003 | 3 | 4 |
+| End-day logit from the other source (global features or pooled summary; the main run has one) | index actor, h0 = 0.05 | 1001 to 1003 | 3 | 4 |
+
+The unchanged arm of each ablation is the main run with the same seed. As proposed: 30 runs, about
+36 run-hours, about 6 hours of machine time. Reward shaping and the second end-day variant are not
+implemented yet; unshaped return is reported in every case.
+
+**Model storage (decided Nov 20).** Final-run models (`model.zip`, `model_80.zip`) are not put in
+git: `results/final/**/model*.zip` is in `.gitignore`, the files stay in `results/final/` on the
+training machine and are attached to a GitHub Release afterwards. Everything else in a run folder
+is committed: `run.json`, `progress.csv`, `evaluations.npz`, `log.txt`, and the per-episode
+payoffs once the run is evaluated. The finalist models already in git stay.
+
+**Launch order (decided Nov 20).** Primary setting (h0 = 0.05) first, then the other settings in
+the order of the table, then the H4b arm, then the ablations. Six runs at a time: every chosen
+configuration has width 256, and the machine ran out of memory with 12 during tuning. A finished
+run (one with `run.json`) is never rerun; a stopped launch continues where it was.
+
+**Not before the owner says so.** The tag does not unlock anything: the evaluation episodes and
+seeds 1001 to 1015 stay locked until the owner gives the word after the tag.
 
 ## Known-answer tests
 
@@ -211,6 +291,16 @@ departure rates); upper bound at least as large as every evaluated policy at eve
   are reported, and a single seed below the mark is reported to the owner. Fallback, fixed before running: if a
   chosen configuration fails, the next-ranked finalist of that actor that passes is used instead,
   and the owner is told before anything else is done.
+  **Result (Nov 21): all three pass; the fallback did not fire.** Every one of the nine runs is
+  above the mark (`results/g3/small_check_exact_values.txt`, runs in `results/g3/small_check/`):
+
+  | Actor (configuration) | Seed 101 | Seed 102 | Seed 103 | Mean | Share of the optimum |
+  | --- | --- | --- | --- | --- | --- |
+  | Index (18) | 0.62548 | 0.62733 | 0.62879 | 0.62720 | 99.03% |
+  | Unrestricted (8) | 0.62758 | 0.62929 | 0.62927 | 0.62871 | 99.27% |
+  | Pooled (8) | 0.63013 | 0.63041 | 0.62864 | 0.62972 | 99.43% |
+
+  Tuning seeds: a gate check, not a reported result.
 - **Rule search misses contained rules (found and fixed Nov 20).** Each threshold
   family contains the narrower ones (one interview with interviews off is the falling bar; a
   falling bar with no fall is the static rule), so its best score cannot be lower. The local
