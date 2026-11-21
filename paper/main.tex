@@ -104,34 +104,28 @@ margin, and the yardsticks tell how much payoff any policy could still gain.
 \draft{whole section, for the owner to revise. Only sources that were opened are cited; the
 reading depth of each is noted in references.bib.}
 
-\textbf{Costly inspection.} Paying to learn the value of an option before choosing is the
-subject of Pandora's problem. Recent work adds deadlines after which a box can no longer be
-opened or selected and gives an approximation guarantee for that variant~\citep{qin2026}, and
-allows a box to be opened in stages, a cheap partial inspection before a full
-one~\citep{aouad2025}. Our candidates combine both features, staged inspection (resume, then
-interviews) and limited availability, but their availability ends at a random time that depends
-on their hidden quality, and several roles are filled from a stream of arrivals.
-
-\textbf{Index policies and bounds.} For problems in which a decision maker repeatedly selects
-among many items, \citet{brown2020} relax the constraint that links the items with a Lagrange
-multiplier. The relaxed problem splits into one problem per item, which yields both an upper
-bound on the optimal value and index-style heuristic policies. Our upper bound and our strongest
-rule, the price-directed rule, follow this construction. Index structure has also been learned:
-NeurWIN trains a network to output the Whittle index of a restless bandit
-arm~\citep{nakhleh2021}. Our index-structured actor shares one scoring network across
-candidates; unlike a Whittle index, its scores are trained end to end by policy gradient and are
-not required to be an index in the technical sense.
+\textbf{Costly inspection and index policies.} Paying to learn the value of an option before
+choosing it is the subject of Pandora's problem. Recent variants add deadlines after which a box
+can no longer be opened or selected~\citep{qin2026} and staged inspection, a cheap partial
+opening before a full one, with job recruitment as a motivating case~\citep{aouad2025}. Our
+candidates combine staged inspection with limited availability, but availability ends at a
+random time that depends on hidden quality, and several roles are filled from a stream of
+arrivals. \citet{brown2020} study problems in which a decision maker repeatedly selects among
+many items, with screening a fixed set of applicants as one example. They relax the constraint
+that links the items with Lagrange multipliers; the relaxed problem splits into one problem per
+item and gives both an upper bound and index policies. Our bound and our strongest rule follow
+this construction. Index functions have also been learned: NeurWIN trains a network that maps
+the state of a single restless-bandit arm to its Whittle index~\citep{nakhleh2021}. Our
+index-structured actor also scores each candidate from that candidate's state, but it is trained
+end to end by policy gradient and is not required to be a Whittle index.
 
 \textbf{Learning method.} We use proximal policy optimization~\citep{schulman2017} with invalid
-actions masked out of the policy~\citep{huang2022}, in the Stable-Baselines3
-implementation~\citep{raffin2021}. The pooled actor adds a permutation-invariant summary of the
-candidate set in the manner of Deep Sets~\citep{zaheer2017}. Our reporting follows the advice of
-\citet{agarwal2021} to treat the training seed as the unit of analysis and to report interval
-estimates.
-
-\textbf{Selection by departure.} That the candidates who remain available are a selected,
-weaker group is a known effect in duration models. \pending{cite a source for dynamic selection
-(frailty) once it has been opened; none has been yet.}
+actions masked~\citep{huang2022}, as implemented in Stable-Baselines3~\citep{raffin2021}; the
+pooled actor adds a permutation-invariant summary of the candidate set in the manner of Deep
+Sets~\citep{zaheer2017}. We treat the training seed as the unit of analysis and report interval
+estimates, following \citet{agarwal2021}. That candidates who remain available are a selected,
+weaker group is a known effect in duration models \pending{cite a source once one has been
+opened; none has been yet}.
 
 \textbf{Novelty.} To our knowledge, and within a literature search completed on 12 November
 2026 \draft{state the search scope: databases and query terms; the search record is
@@ -186,43 +180,14 @@ was interviewed today, and, for the firm, the days left, the roles left, the int
 today, the pool size and whether offers are still open today. Features are scaled by fixed
 constants inside the simulator, identically for every candidate slot.
 
-\begin{table}[t]
-  \caption{The two parameter sets. Stress is run at five pressure levels: no pressure
-    ($h_0 = 0$, $\beta = 0$) and $h_0 \in \{0, 0.02, 0.05, 0.10\}$ with $\beta = 0.03$; the
-    primary setting is $h_0 = 0.05$.}
-  \label{tab:scenarios}
-  \centering
-  \begin{small}
-    \begin{tabular}{lcc}
-      \toprule
-      Parameter & Stress & Calibrated \\
-      \midrule
-      Horizon $T$, roles $m$ & 60, 3 & 60, 3 \\
-      Arrivals per day $\lambda$ & 1.5 & 1.5 \\
-      Interviews per day $K$ & 3 & 3 \\
-      Resume noise $\sigma_R$ & 1.5 & 2.4 \\
-      Interview noise $\sigma_I$ & 1.0 & 2.2 \\
-      Interview cost $c$ & 0.05 & 0.05 \\
-      Base acceptance $a_0$ & 0.90 & 0.80 \\
-      Acceptance decay $\beta$ & 0.03 & 0.003 \\
-      Poaching level $h_0$ & 0 to 0.10 & 0.02 \\
-      Quality slope $\kappa$ & 0.6 & 0.6 \\
-      \bottomrule
-    \end{tabular}
-  \end{small}
-\end{table}
-
-\textbf{Two parameter sets} (\cref{tab:scenarios}). The \emph{stress} scenario is our main test
-bed; its acceptance decay and its upper poaching levels are harsher than hiring benchmarks
-support, and we label it as such. The \emph{calibrated} scenario moves five values toward
-published recruiting statistics. The horizon matches a median time to fill of 60 to 61 days at
-large employers~\citep{shrm2025}. Base acceptance and its decay are set so that realised offer
-acceptance falls inside the 76 to 84\% reported by \citet{ashby2024} and \citet{gem2025}. The
-poaching level is our inference from the shares of candidates who say they would disengage after
-one week (12\%) and one month (36\%)~\citep{cronofy2024}. The two noise levels are our mapping,
-$r = 1/\sqrt{1 + \sigma^2}$, of the validities reported by \citet{sackett2023} for structured
-interviews ($r = .42$) and empirically keyed biodata ($r = .38$, our stand-in for a resume). The
-quality slope $\kappa$, the exponential forms and the interview cost have no empirical basis.
+\textbf{Two parameter sets.} The \emph{stress} scenario, our main test bed, has $T = 60$,
+$m = 3$, $\lambda = 1.5$, $K = 3$, $\sigma_R = 1.5$, $\sigma_I = 1$, $c = 0.05$, $a_0 = 0.9$ and
+$\kappa = 0.6$, at five pressure levels: none ($h_0 = 0$, $\beta = 0$) and
+$h_0 \in \{0, 0.02, 0.05, 0.10\}$ with $\beta = 0.03$; $h_0 = 0.05$ is the primary setting. Its
+pressure is harsher than hiring benchmarks support. The \emph{calibrated} scenario moves five
+values toward published recruiting
+statistics~\citep{shrm2025,gem2025,ashby2024,cronofy2024,sackett2023}; \cref{tab:scenarios} in
+the supplement lists both sets and the source of each calibrated value.
 
 \textbf{A small instance that can be solved exactly.} With one role, twelve days, at most one
 arrival per day (probability 0.6), one interview per day, at most two interviews per candidate,
@@ -292,9 +257,10 @@ decreases with time and with the number of open roles; a \emph{one-interview} ru
 interviews candidates above a lower bar and offers after the result; and a rule with \emph{up to
 two interviews}. Each family contains the ones before it. On the last day every rule offers to
 any candidate with a positive estimate. The fifth rule, the \emph{price-directed} rule, comes
-from the bound below: at every decision it finds the price of a hire that the relaxation would
-charge in the current state and lets each candidate take its own best action at that price,
-offers first. It has two tuned parameters, a multiplier on that price and a price per interview.
+from the bound below. It is an index policy in the sense of \citet{brown2020}, with one
+difference of ours: at every decision it recomputes the price of a hire that the relaxation
+would charge in the current state, and then lets each candidate take its own best action at that
+price, offers first. It has two tuned parameters, a multiplier on that price and a price per interview.
 Every rule exists in two versions, using the naive or the survival-aware estimate.
 
 \textbf{Exact optimum on the small instance.} A candidate's state is its resume bin, its
@@ -305,8 +271,10 @@ place of the maximum gives that agent's expected payoff exactly, with no samplin
 agents are scored on this instance.
 
 \textbf{Upper bound on the full problem.} Two constraints tie candidates together: at most $m$
-hires, and at most $K$ interviews per day. Following \citet{brown2020}, we charge a price
-$z \ge 0$ per hire and $\ell \ge 0$ per interview and drop both constraints. Every policy of the
+hires, and at most $K$ interviews per day. Following the Lagrangian relaxation of
+\citet{brown2020}, we charge a price $z \ge 0$ per hire and $\ell \ge 0$ per interview and drop
+both constraints. Their multipliers may vary with time; ours are constant, which keeps the bound
+valid but can make it looser. Every policy of the
 real problem earns at least as much in the priced problem, which splits into independent
 one-candidate problems, so the optimal payoff $V^\star$ satisfies
 \begin{equation}
@@ -317,7 +285,8 @@ where $F_t(z, \ell)$ is the optimal value of one candidate arriving on day $t$ w
 $q - z$ if hired and pays $c + \ell$ per interview. Each $F_t$ is a small dynamic program on
 $(\mu_n, n, d)$ under the survival-aware posterior. The relaxation also drops the
 offer-then-interview order and the $N$-candidate view; each of these can only raise the bound.
-A finer numerical grid lowers the bound by less than $0.006$ at every setting.
+Two successive refinements of the numerical grid lower the bound by at most $0.005$ at the
+stress settings and $0.006$ in the calibrated scenario.
 
 The bound may be far from tight. On the small instance, where the optimum is known exactly, the
 bound is 0.862 against an optimum of 0.633, that is 36\% above it. The distance between the best
@@ -330,15 +299,15 @@ payoff left unearned, and we do not read that distance as a shortfall of any pol
 The protocol was written down in a pre-registration file, tagged in the repository on
 21~November 2026 before any final training seed was run. This section restates it.
 
-\textbf{Hypotheses.} H1a: on the small instance the best tuned rule reaches at least 95\% of the
-exact optimum. H1b: on the full problem the best tuned rule reaches 85 to 91\% of the upper
-bound, and the shortfall grows with $h_0$. H2a: PPO is within 2\% of the exact optimum on the
-small instance. H2b: on the full problem PPO's payoff is at least that of the best tuned rule.
-H3: the unrestricted minus the index-structured agent is within the 2\% margin at $h_0 = 0$ and
-grows with $h_0$. H4a: inside a fixed rule, replacing the naive by the survival-aware estimate
-changes decisions on a measurable share of candidate-days and raises payoff at $h_0 \ge 0.05$.
-H4b: for PPO, which observes the days waited, the two estimates give payoffs within 2\%, and the
-survival-aware agent reaches a given payoff in fewer steps.
+\textbf{Hypotheses.} \emph{H1a}: on the small instance the best tuned rule reaches at least 95\%
+of the exact optimum. \emph{H1b}: on the full problem it reaches 85 to 91\% of the upper bound,
+and the shortfall grows with $h_0$. \emph{H2a}: PPO is within 2\% of the exact optimum on the
+small instance. \emph{H2b}: on the full problem PPO is at least as good as the best tuned rule.
+\emph{H3}: unrestricted minus index-structured agent is within the 2\% margin at $h_0 = 0$ and
+grows with $h_0$. \emph{H4a}: inside a fixed rule, the survival-aware estimate changes decisions
+on a measurable share of candidate-days and raises payoff at $h_0 \ge 0.05$. \emph{H4b}: for PPO,
+which observes the days waited, the two estimates give payoffs within 2\%, and the
+survival-aware agent learns in fewer steps.
 
 \textbf{Seeds and episodes.} Four pools are kept apart. Tuning uses training seeds 101 to 103 and
 4{,}000 tuning episodes. Final runs use training seeds 1001 to 1015, fifteen per condition, and
@@ -366,10 +335,8 @@ that the rules are not under-tuned: if the best rule gained more than the margin
 rule would become the comparator.
 
 \textbf{Training length and convergence.} The index-structured actor trains for 3 million steps
-and the other two for 10 million, fixed by rules set in advance: doubling the length had to
-change the payoff by less than 1\%. Every run logs payoff, policy loss, value loss, entropy,
-approximate KL divergence and clip fraction. A curve is called flat only if the 95\% interval of
-its change over the last fifth of training lies inside $\pm 1\%$ of the final payoff.
+and the other two for 10 million, lengths fixed in advance by a doubling test (supplement). Every
+run logs payoff, policy loss, value loss, entropy, approximate KL divergence and clip fraction.
 
 \textbf{Final runs and ablations.} Each actor is trained at seven settings (the small instance,
 no pressure, four poaching levels, calibrated) with the survival-aware estimate, and at the
@@ -378,18 +345,11 @@ time from the frozen index-structured configuration at the primary setting, thre
 discount, entropy coefficient, learning rate and rollout length (two other values each),
 potential-based reward shaping, and an end-day score that also reads the pool summary.
 
-\textbf{Known-answer tests.} Before the final runs each actor had to reach 98\% of the exact
-optimum on the small instance, copy the exact optimal policy by supervised learning, and the
-bound had to exceed every evaluated policy at every setting.
-
-\textbf{Recorded departures.} (i) Hyperparameters were tuned at the primary setting only, not
-also on the small instance; the small-instance test was rerun on the frozen configurations
-instead. (ii) After tuning, a flaw in the rule search was found and fixed before the tag: a wider
-rule family could score below a family it contains, which had overstated two gaps between the
-estimates. (iii) The training code gained the ablation options after the tag, while final runs
-were in progress, so runs record different code versions; the default training path gives
-bit-identical weights before and after the change. \pending{any further deviation, including
-the seed cutoff rule if it fires.}
+\textbf{Known-answer tests and departures.} Before the final runs each actor had to reach 98\%
+of the exact optimum on the small instance and copy the exact optimal policy by supervised
+learning, and the bound had to exceed every evaluated policy at every setting. Four departures
+from the registered plan are recorded and described in the supplement; none changes a
+hypothesis, a margin or a seed list. \pending{any further deviation.}
 
 % ---------------------------------------------------------------------------------------------
 \section{Results}
@@ -445,7 +405,7 @@ evaluation episodes, and the share of candidate-days on which the two versions o
 differently.} A correction found before the tag belongs here: an earlier search had reported
 calibrated gaps of $+0.24$ and $+0.32$ for the falling-bar and one-interview rules; these were
 overstated because the naive search had missed a simpler rule it contains
-(\cref{sec:protocol}).
+(\cref{sec:supplement}).
 
 \subsection{Learned agents (RQ2, RQ3, H4b)}
 \label{sec:ppo}
@@ -577,6 +537,62 @@ download. \texttt{make figures} regenerates every table and figure from saved re
 \label{sec:supplement}
 The assignment allows the detailed methodology of an algorithm as supplementary material. Nothing
 here is needed to read the results.
+
+\textbf{Parameter sets.} \Cref{tab:scenarios} lists the two parameter sets. In the calibrated
+scenario the horizon matches a median time to fill of 60 to 61 days at large
+employers~\citep{shrm2025}. Base acceptance and its decay are set so that realised offer
+acceptance falls inside the 76 to 84\% reported by \citet{ashby2024} and \citet{gem2025}. The
+poaching level is our inference from the shares of candidates who say they would disengage after
+one week (12\%) and one month (36\%)~\citep{cronofy2024}. The two noise levels are our mapping,
+$r = 1/\sqrt{1 + \sigma^2}$, of the validities reported by \citet{sackett2023} for structured
+interviews ($r = .42$) and empirically keyed biodata ($r = .38$, our stand-in for a resume). The
+quality slope $\kappa$, the exponential forms and the interview cost have no empirical basis.
+
+\begin{table}[h]
+  \caption{The two parameter sets. Stress is run at five pressure levels: no pressure
+    ($h_0 = 0$, $\beta = 0$) and $h_0 \in \{0, 0.02, 0.05, 0.10\}$ with $\beta = 0.03$.}
+  \label{tab:scenarios}
+  \centering
+  \begin{small}
+    \begin{tabular}{lcc}
+      \toprule
+      Parameter & Stress & Calibrated \\
+      \midrule
+      Horizon $T$, roles $m$ & 60, 3 & 60, 3 \\
+      Arrivals per day $\lambda$ & 1.5 & 1.5 \\
+      Interviews per day $K$ & 3 & 3 \\
+      Resume noise $\sigma_R$ & 1.5 & 2.4 \\
+      Interview noise $\sigma_I$ & 1.0 & 2.2 \\
+      Interview cost $c$ & 0.05 & 0.05 \\
+      Base acceptance $a_0$ & 0.90 & 0.80 \\
+      Acceptance decay $\beta$ & 0.03 & 0.003 \\
+      Poaching level $h_0$ & 0 to 0.10 & 0.02 \\
+      Quality slope $\kappa$ & 0.6 & 0.6 \\
+      \bottomrule
+    \end{tabular}
+  \end{small}
+\end{table}
+
+\textbf{Training length.} The lengths were fixed by rules set in advance, on tuning seeds. The
+index-structured actor gained less than 0.01 from 3 to 10 million steps at the primary setting,
+so it trains for 3 million. For the other two actors the test was the gain from 10 to 20 million
+steps: its 95\% interval had to lie inside $\pm 1\%$ of the payoff, which it did, so 10 million
+steps stand. For the final runs a curve is called flat only if the 95\% interval of the change
+over the last fifth of training lies inside $\pm 1\%$ of the final payoff, measured as the final
+model minus the model saved at 80\% of training on the same episodes; otherwise it is reported
+as inconclusive (interval contains zero) or changing.
+
+\textbf{Recorded departures from the registered plan.} (i) Hyperparameters were tuned at the
+primary setting only, not also on the small instance; the small-instance test was rerun on the
+frozen configurations instead. (ii) After tuning, a flaw in the rule search was found and fixed
+before the tag: a wider rule family could score below a family it contains, which had overstated
+two gaps between the estimates. Each threshold family is now also scored at the best vector of
+every family it contains. (iii) The training code gained the ablation options after the tag,
+while final runs were in progress, so runs record different code versions; the default training
+path gives bit-identical weights before and after the change. (iv) The registered rule search on
+the small instance (H1a) was run after the tag; it uses no final seed and no evaluation episode.
+The price-directed rule is built for continuous signals and does not exist on the small
+instance, so four rule families were tuned there.
 
 \textbf{Hyperparameters.} \Cref{tab:hyper} lists the frozen configuration of each actor and the
 search ranges. All runs use 8 environments in one process, a learning rate that falls linearly to
