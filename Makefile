@@ -22,6 +22,4 @@ paper-setup:
 
 # Every figure and table of the paper, from saved results only (one script each).
 figures:
-	$(PY) experiments/analysis/table_rules.py
-	$(PY) experiments/analysis/table_belief.py
-	$(PY) experiments/analysis/fig_curves.py
+	$(PY) experiments/analysis/make_figures.py

@@ -20,5 +20,8 @@ latexmk -pdf main.tex
 ## Rules
 
 - A reference goes into `references.bib` only after the paper has been opened and read.
-- Figures are vector files written by `experiments/analysis/` into `paper/figures/`.
+- Figures are vector files written by `experiments/analysis/` into `paper/figures/`, tables into `paper/tables/`.
+  `python experiments/analysis/make_figures.py` regenerates all of them from saved results (`make figures`
+  calls the same script). Cells show `--` until the final runs are scored; `tables/prov.tex` removes the
+  provisional mark once the rules have evaluation-pool scores.
 - Every number in the text comes from a file under `results/`; prototype numbers are never results.

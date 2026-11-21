@@ -6,7 +6,8 @@
 %   SKELETON   Sections 6.3 to 6.5 and 7: every \pending{} waits for the final runs or the evaluation pool
 % No number from tuning seeds or development episodes is given as a result. Numbers marked
 % \prov are in-sample (tuning episodes) and are replaced when the evaluation pool is opened.
-% Tables and figures are written by experiments/analysis/ (make figures); do not edit them here.
+% Every table and figure is written by experiments/analysis/ (make_figures.py); do not edit them here.
+% A cell shows -- until its scores exist; the tables fill themselves when score_final.py has run.
 \documentclass{article}
 
 \usepackage{microtype}
@@ -30,6 +31,7 @@
 \newcommand{\prov}{$^{\dagger}$}                            % provisional: in-sample, tuning episodes
 \newcommand{\E}{\mathbb{E}}
 \input{figures/curves_count}
+\input{tables/prov}   % switches the provisional mark off once the rules are scored on the evaluation episodes
 
 \icmltitlerunning{Hiring as a Race Against Poaching}
 
@@ -399,8 +401,9 @@ overstated because the naive search had missed a simpler rule it contains
   \caption{Learning curves of the final runs at the primary setting ($h_0 = 0.05$): median and
     interquartile band over training seeds (\curveseeds\ finished so far; \pending{15 each}).
     The payoff panel uses 300 fixed curve episodes, which are not evaluation episodes: the
-    figure documents convergence and is not a result. \pending{reference lines for the random
-    policy and the best rule on the same episodes.}}
+    figure documents convergence and is not a result. On the same episodes the best rule scores
+    \curverule\ (dotted line) and the random policy \curverandom. Approximate KL and clip
+    fraction, and every other setting, are in \cref{fig:curves_all}.}
   \label{fig:curves}
 \end{figure*}
 
@@ -408,25 +411,14 @@ overstated because the naive search had missed a simpler rule it contains
 inconclusive or changing, under the $\pm 1\%$ rule.}
 
 \begin{table}[t]
-  \caption{\pending{Main table: mean payoff on the 10{,}000 evaluation episodes, interquartile
-    mean over 15 training seeds with 95\% intervals, as a percentage of the bound (and of the
-    exact optimum on the small instance).}}
+  \caption{Payoff on the 10{,}000 evaluation episodes: best tuned rule, and for each actor the
+    interquartile mean over training seeds with its 95\% bootstrap interval (sub- and
+    superscript). Small instance: exact values, with the exact optimum in the last column.
+    \pending{cells fill in when the final runs are scored.}}
   \label{tab:main}
   \centering
   \begin{footnotesize}
-    \begin{tabular}{@{}lccccc@{}}
-      \toprule
-      Setting & Rule & Index & Unrestr. & Pooled & Bound \\
-      \midrule
-      Small instance & -- & -- & -- & -- & 0.862 \\
-      No pressure & -- & -- & -- & -- & 4.34 \\
-      $h_0 = 0$ & -- & -- & -- & -- & 4.29 \\
-      $h_0 = 0.02$ & -- & -- & -- & -- & 4.16 \\
-      $h_0 = 0.05$ & -- & -- & -- & -- & 3.98 \\
-      $h_0 = 0.10$ & -- & -- & -- & -- & 3.77 \\
-      Calibrated & -- & -- & -- & -- & 2.65 \\
-      \bottomrule
-    \end{tabular}
+    \input{tables/main}
   \end{footnotesize}
 \end{table}
 
@@ -469,14 +461,46 @@ actor, and report steps to a fixed payoff.
 
 \subsection{Tuning and ablations}
 \label{sec:ablations}
-\pending{Tuning table: the frozen configuration of each actor and the spread of the 40 search
-configurations (tuning seeds; reported as sensitivity evidence, not as results). Ablation table:
-payoff change against the frozen index-structured configuration for discount, entropy
-coefficient, learning rate, rollout length, reward shaping and the end-day variant, three seeds
-each, with intervals. Runs start after the main runs.}
+\begin{table*}[t]
+  \centering
+  \begin{minipage}[t]{0.52\textwidth}
+    \caption{Hyperparameter search at the primary setting: mean payoff over the three tuning
+      seeds on the tuning episodes. Sensitivity evidence, not a result.}
+    \label{tab:tuning}
+    \centering
+    \begin{footnotesize}
+      \input{tables/tuning}
+    \end{footnotesize}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.45\textwidth}
+    \caption{Ablations of the index-structured agent at the primary setting: payoff minus that
+      of the frozen configuration with the same seed, three seeds. \pending{runs after the main
+      runs.}}
+    \label{tab:ablations}
+    \centering
+    \begin{footnotesize}
+      \input{tables/ablations}
+    \end{footnotesize}
+  \end{minipage}
+\end{table*}
+
+\Cref{tab:tuning} summarises the search that fixed each actor's configuration, and
+\cref{tab:ablations} the one-at-a-time changes. \pending{what the search spread and the
+ablations show.}
 
 \subsection{Hurdles and failure modes}
 \label{sec:hurdles}
+\begin{table}[t]
+  \caption{Where agents differ from the reference in the same state. Left: against the best
+    rule, primary setting, per 100 episodes. Right: small instance, exact cost of each type of
+    mistake. \pending{fills in when the final runs are scored.}}
+  \label{tab:mistakes}
+  \centering
+  \begin{footnotesize}
+    \input{tables/mistakes}
+  \end{footnotesize}
+\end{table}
+
 \pending{Written after the final evaluation. Tested mechanisms are kept apart from conjecture.
 Planned content: (a) headroom: rule, agents and bound per setting; (b) where agents and the best
 rule differ: mistakes counted by type (offer too early, interview wasted, candidate lost
@@ -504,7 +528,7 @@ about hiring practice. \pending{limitations that the final results add.}
 Code, configurations, the pre-registration and every run's logs are at
 \url{https://github.com/EliasHaddad00/Hiring_RL_Research} (tag \texttt{preregistration}). Trained
 models are attached to the release \texttt{final-models} and verified by checksum after
-download. \texttt{make figures} regenerates every table and figure from saved results.
+download. The script \texttt{make\_figures.py} regenerates every table and figure from saved results.
 \pending{tag of the submitted version.}
 
 \bibliography{references}
@@ -633,6 +657,16 @@ below the cap, at cost $c + \ell$, with the result seen next morning and lost if
 poached that night; wait. Expectations use the survival-aware posterior of \cref{eq:survival}. On
 the small instance the tables are exact; on the full problem the minimising interview price is
 $\ell = 0$ at every setting.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{figures/curves_all.pdf}
+  \caption{Learning curves of the final runs finished so far, every setting (rows) and all six
+    logged quantities (columns): median and interquartile band over training seeds. Dashed
+    line: upper bound (exact optimum on the small instance); dotted: best rule.
+    \pending{all settings.}}
+  \label{fig:curves_all}
+\end{figure}
 
 \textbf{Reward shaping (ablation).} Potential-based, with potential
 $\Phi(s) = \sum \max(\hat q_i, 0)$ over the $k$ candidates in the pool with the highest shown

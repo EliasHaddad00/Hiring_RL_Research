@@ -28,7 +28,20 @@ family it contains (`PREREGISTRATION.md`, "Checks triggered before the tag"). Th
 unchanged at every setting. Corrected calibrated gaps between the two estimates: falling bar +0.097
 (was +0.243), one interview +0.192 (was +0.319), two interviews +0.120 (was +0.105).
 
-**No decision is waiting for the project owner.** The two ablation definitions were accepted on Nov 21.
+**Waiting for the project owner:** the points where the wording of the pre-registered decision rule is open
+(`experiments/configs/decision_rule.yaml`, listed Nov 21). Until each has a decision, `apply_decision_rule.py`
+refuses to run on the final results.
+
+**Gate G4 pipeline (written Nov 21, tested on stand-in data only).** After the last final run, and on the owner's word:
+
+```
+python experiments/scripts/score_final.py --allow-evaluation-pool    # every run and rule on the evaluation episodes; resumes if interrupted
+python experiments/scripts/apply_decision_rule.py                    # one verdict per hypothesis: results/final/verdicts.txt
+python experiments/analysis/make_figures.py                          # every table and figure of the paper ("make figures")
+```
+
+With `--stand-in` the same three commands run on tuning-seed models and development episodes and write
+only to `results/standin_not_results/` (git-ignored): a pipeline test whose numbers mean nothing.
 
 Decided and recorded in `PREREGISTRATION.md`: interview cap stays at 3; no widening of the PPO tuning
 ranges; chosen configurations; small-instance check (pass rule on the mean of three seeds) and its
