@@ -1,0 +1,86 @@
+{
+ "optimum": 0.6333277027645984,
+ "pass_mark": 0.6206611487093064,
+ "rows": [
+  {
+   "actor": "index",
+   "seed": 101,
+   "exact_value": 0.6254762885662417,
+   "percent_of_optimum": 98.7602919998472,
+   "passes": true
+  },
+  {
+   "actor": "index",
+   "seed": 102,
+   "exact_value": 0.6273309369609754,
+   "percent_of_optimum": 99.05313382354097,
+   "passes": true
+  },
+  {
+   "actor": "index",
+   "seed": 103,
+   "exact_value": 0.6287869084809868,
+   "percent_of_optimum": 99.28302610737063,
+   "passes": true
+  },
+  {
+   "actor": "pooled",
+   "seed": 101,
+   "exact_value": 0.6301257861188114,
+   "percent_of_optimum": 99.4944297191154,
+   "passes": true
+  },
+  {
+   "actor": "pooled",
+   "seed": 102,
+   "exact_value": 0.6304060305159347,
+   "percent_of_optimum": 99.53867922784524,
+   "passes": true
+  },
+  {
+   "actor": "pooled",
+   "seed": 103,
+   "exact_value": 0.6286353294509163,
+   "percent_of_optimum": 99.25909236352697,
+   "passes": true
+  },
+  {
+   "actor": "unrestricted",
+   "seed": 101,
+   "exact_value": 0.6275824036552073,
+   "percent_of_optimum": 99.092839444049,
+   "passes": true
+  },
+  {
+   "actor": "unrestricted",
+   "seed": 102,
+   "exact_value": 0.6292930100190222,
+   "percent_of_optimum": 99.36293758697686,
+   "passes": true
+  },
+  {
+   "actor": "unrestricted",
+   "seed": 103,
+   "exact_value": 0.6292674199697839,
+   "percent_of_optimum": 99.35889701696442,
+   "passes": true
+  }
+ ],
+ "by_actor": {
+  "index": {
+   "mean": 0.6271980446694013,
+   "seeds": 3,
+   "passes": true
+  },
+  "pooled": {
+   "mean": 0.6297223820285541,
+   "seeds": 3,
+   "passes": true
+  },
+  "unrestricted": {
+   "mean": 0.6287142778813378,
+   "seeds": 3,
+   "passes": true
+  }
+ }
+}

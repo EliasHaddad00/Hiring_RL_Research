@@ -1,0 +1,17 @@
+Exact optimum 0.63333; pass mark 0.62066 (98%). Exact value of the greedy policy, no sampling.
+
+index_s101             0.62548   98.76% of the optimum  pass
+index_s102             0.62733   99.05% of the optimum  pass
+index_s103             0.62879   99.28% of the optimum  pass
+pooled_s101            0.63013   99.49% of the optimum  pass
+pooled_s102            0.63041   99.54% of the optimum  pass
+pooled_s103            0.62864   99.26% of the optimum  pass
+unrestricted_s101      0.62758   99.09% of the optimum  pass
+unrestricted_s102      0.62929   99.36% of the optimum  pass
+unrestricted_s103      0.62927   99.36% of the optimum  pass
+
+index         mean of 3 seeds 0.62720   99.03% of the optimum  PASS
+pooled        mean of 3 seeds 0.62972   99.43% of the optimum  PASS
+unrestricted  mean of 3 seeds 0.62871   99.27% of the optimum  PASS
+
+Tuning seeds; a gate check, not a reported result.
