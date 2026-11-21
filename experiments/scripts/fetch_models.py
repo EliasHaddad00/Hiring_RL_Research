@@ -3,6 +3,9 @@
   python experiments/scripts/fetch_models.py                 download, verify, unpack into results/final/
   python experiments/scripts/fetch_models.py --verify-only   check the models already on disk
   python experiments/scripts/fetch_models.py --source <folder or URL>   take the zips from elsewhere
+  python experiments/scripts/fetch_models.py --tuning-search  also the 720 tuning-search models (about
+                                                              1 GB, into results/g3/ppo_tuning/search);
+                                                              optional, no result depends on them
 
 The list of zips and the SHA-256 of every zip and every model is results/final/model_checksums.sha256
 (in git, written by pack_models.py). A zip is unpacked only if its checksum matches, and only the
@@ -15,14 +18,22 @@ import urllib.request
 import zipfile
 from pathlib import Path
 
-from pack_models import ROOT, read_checksums, sha256
+from pack_models import OPTIONAL, ROOT, read_checksums, sha256
 
 RELEASE = "https://github.com/EliasHaddad00/Hiring_RL_Research/releases/download/final-models"
 
 
-def fetch(final: Path, source: str, verify_only: bool = False) -> list:
-    """Returns the list of problems (empty: every model is present and matches)."""
+def fetch(final: Path, source: str, verify_only: bool = False, optional: bool = False) -> list:
+    """Returns the list of problems (empty: every model is present and matches).
+
+    optional=False: the final-run models, unpacked into `final`. optional=True: only the entries
+    marked optional in the checksum file (the tuning-search models), unpacked into results/."""
     sums = read_checksums(final)
+    if optional:
+        sums = {k[len(OPTIONAL):]: v for k, v in sums.items() if k.startswith(OPTIONAL)}
+    else:
+        sums = {k: v for k, v in sums.items() if not k.startswith(OPTIONAL)}
+    base = final.parent if optional else final        # where the models go
     zips = sorted(k for k in sums if k.startswith("release/"))
     models = sorted(k for k in sums if not k.startswith("release/"))
     problems = []
@@ -43,12 +54,12 @@ def fetch(final: Path, source: str, verify_only: bool = False) -> list:
             with zipfile.ZipFile(target) as archive:
                 for member in archive.namelist():
                     if member in sums:                   # nothing outside the recorded list is written
-                        (final / member).parent.mkdir(parents=True, exist_ok=True)
-                        (final / member).write_bytes(archive.read(member))
+                        (base / member).parent.mkdir(parents=True, exist_ok=True)
+                        (base / member).write_bytes(archive.read(member))
     for m in models:
-        if not (final / m).exists():
+        if not (base / m).exists():
             problems.append(f"{m}: missing")
-        elif sha256(final / m) != sums[m]:
+        elif sha256(base / m) != sums[m]:
             problems.append(f"{m}: checksum differs")
     print(f"{len(models) - sum(': ' in p and not p.startswith('release/') for p in problems)} of {len(models)} models verified, "
           f"{len(zips)} zip(s) listed")
@@ -59,8 +70,12 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--verify-only", action="store_true")
     ap.add_argument("--source", default=RELEASE, help="URL or folder holding the zips")
+    ap.add_argument("--tuning-search", action="store_true", help="also fetch the optional tuning-search models")
+    ap.add_argument("--final", type=Path, default=ROOT / "results" / "final", help="folder holding model_checksums.sha256")
     a = ap.parse_args()
-    problems = fetch(ROOT / "results" / "final", a.source, a.verify_only)
+    problems = fetch(a.final, a.source, a.verify_only)
+    if a.tuning_search:
+        problems += fetch(a.final, a.source, a.verify_only, optional=True)
     for p in problems:
         print("PROBLEM", p)
     sys.exit(1 if problems else 0)

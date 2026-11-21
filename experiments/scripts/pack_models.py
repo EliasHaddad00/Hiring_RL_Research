@@ -8,6 +8,10 @@ results/final/model_checksums.sha256 (in git) the SHA-256 of every model and of 
 The ten ablation arms go into one zip, models_ablations.zip, once all of them have finished.
 Upload the zips to the Release; fetch_models.py downloads and verifies them.
 A setting already in the checksum file is checked, never repacked: a changed model is an error.
+
+The models of the PPO tuning search (results/g3/ppo_tuning/search, kept out of git) go into one
+more zip, models_tuning_search.zip. Its entries in the checksum file start with "optional/":
+fetch_models.py leaves them alone unless asked (--tuning-search); no result depends on them.
 """
 import hashlib
 import json
@@ -82,14 +86,42 @@ def pack(final: Path, spec: dict) -> list:
     return written
 
 
+OPTIONAL = "optional/"
+SEARCH_ZIP = "models_tuning_search.zip"
+
+
+def pack_search(final: Path) -> bool:
+    """Pack the tuning-search models once. Paths in the zip are relative to results/. True if written now."""
+    sums, key = read_checksums(final), f"{OPTIONAL}release/{SEARCH_ZIP}"
+    results = final.parent
+    files = sorted(p.relative_to(results).as_posix() for p in (results / "g3" / "ppo_tuning" / "search").glob("**/model*.zip"))
+    if key in sums:
+        changed = [f for f in files if sums.get(OPTIONAL + f) != sha256(results / f)]
+        if changed:
+            sys.exit(f"STOP: tuning-search models changed after their checksum was recorded: {changed[:3]}")
+        return False
+    if not files:
+        return False
+    (final / "release").mkdir(parents=True, exist_ok=True)
+    with zipfile.ZipFile(final / "release" / SEARCH_ZIP, "w", zipfile.ZIP_STORED) as z:
+        for f in files:
+            z.writestr(zipfile.ZipInfo(f, date_time=(1980, 1, 1, 0, 0, 0)), (results / f).read_bytes())
+            sums[OPTIONAL + f] = sha256(results / f)
+    sums[key] = sha256(final / "release" / SEARCH_ZIP)
+    write_checksums(final, sums)
+    return True
+
+
 def main():
     spec = yaml.safe_load((ROOT / "experiments" / "configs" / "final_runs.yaml").read_text())
     final = ROOT / spec["out"]
     written = pack(final, spec)
-    sums = read_checksums(final)
+    if pack_search(final):
+        written.append(SEARCH_ZIP)
+    sums = {k: v for k, v in read_checksums(final).items() if not k.startswith(OPTIONAL)}
     packed = sorted(k for k in sums if k.startswith("release/"))
     print(f"Packed now: {written or 'nothing new'}")
-    print(f"Settings packed so far: {len(packed)}; models with a checksum: {len(sums) - len(packed)}")
+    print(f"Settings packed so far: {len(packed)}; final models with a checksum: {len(sums) - len(packed)}")
     for name in written:
         size = (final / "release" / name).stat().st_size / 1e6
         print(f"Upload to the Release: {final / 'release' / name}  ({size:.0f} MB)")

@@ -9,7 +9,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "experiments" / "scripts"))
 from fetch_models import fetch  # noqa: E402
-from pack_models import pack, read_checksums  # noqa: E402
+from pack_models import pack, pack_search, read_checksums  # noqa: E402
 
 SPEC = dict(actors=["index", "pooled"], blocks=[dict(setting="h0_0.05", belief="survival"), dict(setting="small", belief="survival")],
             ablations=dict(seeds=[1001], arms=[dict(name="gamma_0.99", actor="index")]))
@@ -45,6 +45,24 @@ def test_only_finished_settings_are_packed_and_a_clean_clone_verifies(final, tmp
     assert fetch(clone, str(final / "release")) == []
     assert (clone / "h0_0.05_survival/pooled_s1002/model.zip").read_bytes() == b"model h0_0.05_survival/pooled_s1002"
     assert fetch(clone, "", verify_only=True) == []
+
+
+def test_tuning_search_models_are_optional(final, tmp_path):
+    search = tmp_path / "g3" / "ppo_tuning" / "search" / "index" / "c01_s101"
+    search.mkdir(parents=True)
+    (search / "model.zip").write_bytes(b"search model")
+    pack(final, SPEC)
+    assert pack_search(final) and not pack_search(final)                 # packed once, then only checked
+    clone = tmp_path / "clone" / "final"
+    clone.mkdir(parents=True)
+    shutil.copy(final / "model_checksums.sha256", clone)
+    assert fetch(clone, str(final / "release")) == []                    # a normal reproduction does not need them
+    assert not (clone.parent / "g3").exists() and not (clone / "release" / "models_tuning_search.zip").exists()
+    assert fetch(clone, str(final / "release"), optional=True) == []
+    assert (clone.parent / "g3/ppo_tuning/search/index/c01_s101/model.zip").read_bytes() == b"search model"
+    (search / "model.zip").write_bytes(b"changed")
+    with pytest.raises(SystemExit):
+        pack_search(final)
 
 
 def test_a_changed_or_missing_model_is_reported(final, tmp_path):
