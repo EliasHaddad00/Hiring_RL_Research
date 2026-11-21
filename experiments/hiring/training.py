@@ -5,7 +5,9 @@ Fixed for every run (CLAUDE.md, "Implementation pitfalls"):
   - Observations are scaled inside the environment. VecNormalize is never used.
   - The evaluation callback is maskable, plays fixed development episodes and takes the most
     probable valid action, the same setting as final scoring (PREREGISTRATION.md).
-  - The reward is unshaped, so the logged return is the payoff.
+  - The reward is unshaped, so the logged return is the payoff. Only the shaping ablation
+    (reward_shaping: true in the config) trains on a shaped reward; its logged return and its
+    evaluations are still the unshaped payoff (hiring/shaping.py).
   - progress.csv holds: rollout/ep_rew_mean and eval/mean_reward (return), train/policy_gradient_loss,
     train/value_loss, train/entropy_loss, train/approx_kl, train/clip_fraction, and
     train/normalized_entropy (entropy divided by the log of the number of valid actions).
@@ -26,6 +28,7 @@ from .env import HiringEnv
 REQUIRED_COLUMNS = ("rollout/ep_rew_mean", "train/policy_gradient_loss", "train/value_loss",
                     "train/entropy_loss", "train/approx_kl", "train/clip_fraction")
 ACTORS = ("unrestricted", "index", "pooled")
+ABLATION_ACTORS = ("index_end_pooled",)   # index actor, pool summary in the "end day" logit only
 EVAL_POOL_OFFSET = 90_000       # curve episodes: dev seeds 1,090,000 onward, apart from scoring episodes
 CHECKPOINT_SHARE = 0.8          # model_80.zip: the model at 80% of training, for the plateau test
 ROOT = Path(__file__).resolve().parents[2]
@@ -63,6 +66,28 @@ def run_config(name_or_path: str, setting: str | None = None, belief: str | None
         assert belief in ("naive", "survival")
         cfg["scenario_overrides"] = dict(cfg.get("scenario_overrides") or {}, obs_belief=belief)
     return cfg
+
+
+def override(cfg: dict, key: str, value) -> dict:
+    """One value changed in a run config (ablations): a PPO hyperparameter, or reward_shaping."""
+    assert key in cfg["ppo"] or key == "reward_shaping", f"unknown override {key}"
+    if key in cfg["ppo"]:
+        cfg["ppo"] = dict(cfg["ppo"], **{key: value})
+    else:
+        cfg[key] = value
+    return cfg
+
+
+def make_training_env(cfg: dict, sc, n_envs: int, seed: int):
+    """The vectorised training environment. With reward_shaping the shaping wrapper sits outside
+    Monitor, so PPO sees the shaped reward and the log keeps the unshaped return."""
+    from stable_baselines3.common.env_util import make_vec_env
+    from stable_baselines3.common.vec_env import DummyVecEnv
+    if not cfg.get("reward_shaping"):
+        return make_vec_env(lambda: HiringEnv(sc), n_envs=n_envs, seed=int(seed), vec_env_cls=DummyVecEnv)
+    from .shaping import ShapedReward
+    return make_vec_env(lambda: HiringEnv(sc), n_envs=n_envs, seed=int(seed), vec_env_cls=DummyVecEnv,
+                        wrapper_class=ShapedReward, wrapper_kwargs=dict(gamma=cfg["ppo"]["gamma"]))
 
 
 def commit_hash() -> str:
@@ -150,14 +175,13 @@ def train(cfg: dict, actor: str, seed: int, out_dir, total_timesteps: int | None
     from sb3_contrib import MaskablePPO
     from stable_baselines3.common.callbacks import CallbackList
     _TimedEval = _timed_eval_class()
-    from stable_baselines3.common.env_util import make_vec_env
     from stable_baselines3.common.logger import configure
     from stable_baselines3.common.monitor import Monitor
     from stable_baselines3.common.vec_env import DummyVecEnv
 
-    from .policies import IndexPolicy, PooledIndexPolicy, index_policy_kwargs
+    from .policies import IndexEndPooledPolicy, IndexPolicy, PooledIndexPolicy, index_policy_kwargs
 
-    assert actor in ACTORS, f"actor must be one of {ACTORS}"
+    assert actor in ACTORS + ABLATION_ACTORS, f"actor must be one of {ACTORS + ABLATION_ACTORS}"
     check_training_seed(seed, allow_final=allow_final_seed)
     th.set_num_threads(1)
     out_dir = Path(out_dir)
@@ -167,13 +191,13 @@ def train(cfg: dict, actor: str, seed: int, out_dir, total_timesteps: int | None
     n_envs, p, ev = int(cfg["n_envs"]), dict(cfg["ppo"]), cfg["eval"]
     hidden = int(cfg.get("hidden", 64))
 
-    venv = make_vec_env(lambda: HiringEnv(sc), n_envs=n_envs, seed=int(seed), vec_env_cls=DummyVecEnv)
+    venv = make_training_env(cfg, sc, n_envs, seed)
     lr0 = float(p.pop("learning_rate"))
     schedule = p.pop("lr_schedule", "linear")
     assert schedule in ("linear", "constant")
     lr = LinearSchedule(lr0) if schedule == "linear" else lr0
-    if actor in ("index", "pooled"):
-        policy = IndexPolicy if actor == "index" else PooledIndexPolicy
+    if actor != "unrestricted":
+        policy = dict(index=IndexPolicy, pooled=PooledIndexPolicy, index_end_pooled=IndexEndPooledPolicy)[actor]
         policy_kwargs = dict(index_policy_kwargs(HiringEnv(sc)), hidden=hidden)
     else:
         policy, policy_kwargs = "MlpPolicy", dict(net_arch=dict(pi=[hidden, hidden], vf=[hidden, hidden]))

@@ -128,6 +128,34 @@ class PooledIndexPolicy(IndexPolicy):
     extractor_class = PooledExtractor
 
 
+class EndPooledExtractor(PooledExtractor):
+    """Ablation (PREREGISTRATION.md, "Final run list"): the index actor whose "end day" logit also
+    reads the pool summary. Interview and offer logits come from the candidate's own features and
+    the globals only, exactly as in IndexExtractor."""
+
+    def __init__(self, n_slots, n_slot_features, n_global, hidden=64, activation=nn.Tanh):
+        super().__init__(n_slots, n_slot_features, n_global, hidden, activation)
+        self.candidate_body = mlp([self.F + self.G, hidden, hidden], activation)
+
+    def forward_actor(self, x: th.Tensor) -> th.Tensor:
+        b = x.shape[0]
+        slots = x[:, :self.N * self.F].reshape(b, self.N, self.F)
+        g = x[:, self.N * self.F:]
+        own = th.cat([slots, g[:, None, :].expand(b, self.N, self.G)], dim=-1)
+        present = slots[:, :, :1]
+        count = present.sum(1)
+        summary = (self.embed(own) * present).sum(1) / count.clamp(min=1.0)
+        pool = th.cat([summary, count / self.N], dim=-1)
+        per = self.candidate_head(self.candidate_body(own))
+        end = self.end_head(self.end_body(th.cat([g, pool], dim=-1)))
+        return th.cat([per[:, :, 0], per[:, :, 1], end], dim=1)
+
+
+class IndexEndPooledPolicy(IndexPolicy):
+    """Index actor with the pool summary in the "end day" logit only (ablation)."""
+    extractor_class = EndPooledExtractor
+
+
 def index_policy_kwargs(env) -> dict:
     """policy_kwargs for IndexPolicy matching a HiringEnv's observation layout."""
     from .env import N_GLOBAL

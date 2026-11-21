@@ -3,6 +3,8 @@
   python experiments/scripts/final_runs.py --list       the run table, run count and hours estimate
   python experiments/scripts/final_runs.py --launch --allow-final-seeds
                                                          train every run not yet finished, block by block
+  python experiments/scripts/final_runs.py --launch-ablations --allow-final-seeds
+                                                         the must-run ablations, after the main runs
 
 The list is experiments/configs/final_runs.yaml. Each run uses the frozen configuration of its
 actor (configs/ppo_final_<actor>.yaml) at the block's setting and writes to
@@ -52,6 +54,20 @@ def block_seeds(spec, block, folder: Path, today: datetime.date) -> list:
     return seeds
 
 
+def ablation_commands(spec, allow_final_seeds=True) -> list:
+    """One train.py command per ablation arm (three seeds each)."""
+    ab, cmds = spec["ablations"], []
+    for arm in ab["arms"]:
+        cmd = [sys.executable, str(Path(__file__).with_name("train.py")), "--config", ab["config"],
+               "--setting", ab["setting"], "--belief", ab["belief"], "--actor", arm["actor"],
+               "--out", str(ROOT / spec["out"] / "ablations" / arm["name"]), "--procs", str(ab["procs"]),
+               "--skip-finished", "--seed", *map(str, ab["seeds"])]
+        if arm["override"]:
+            cmd += ["--override", *(f"{k}={str(v).lower() if isinstance(v, bool) else v}" for k, v in arm["override"].items())]
+        cmds.append(cmd + (["--allow-final-seeds"] if allow_final_seeds else []))
+    return cmds
+
+
 def table(spec):
     rows = expand(spec)
     lines = ["| Group | Setting | Estimate | Actor | Steps | Seeds | Runs | Run-hours |", "| --- | --- | --- | --- | --- | --- | --- | --- |"]
@@ -71,15 +87,22 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--list", action="store_true")
     ap.add_argument("--launch", action="store_true")
+    ap.add_argument("--launch-ablations", action="store_true")
     ap.add_argument("--allow-final-seeds", action="store_true")
     a = ap.parse_args()
     import yaml
     spec = yaml.safe_load((CONFIG_DIR / "final_runs.yaml").read_text())
-    if a.list or not a.launch:
+    if a.list or not (a.launch or a.launch_ablations):
         print(table(spec))
         return
     if not a.allow_final_seeds:
         sys.exit("stopped: final seeds are locked; --allow-final-seeds only after the tag and the owner's word")
+    if a.launch_ablations:
+        for arm, cmd in zip(spec["ablations"]["arms"], ablation_commands(spec)):
+            print(f"ablation: {arm['name']}", flush=True)
+            if subprocess.run(cmd).returncode != 0:
+                sys.exit("stopped: an ablation run failed; see the message above")
+        return
     for b in spec["blocks"]:   # one pool per block, so the six slots stay full across actors
         out = ROOT / spec["out"] / f"{b['setting']}_{b['belief']}"
         seeds = block_seeds(spec, b, out, datetime.date.today())

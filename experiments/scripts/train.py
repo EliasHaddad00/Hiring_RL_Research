@@ -17,15 +17,19 @@ import sys
 import time
 from pathlib import Path
 
+import yaml
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from hiring.config import SETTINGS, check_training_seed  # noqa: E402
-from hiring.training import ACTORS, run_config, train  # noqa: E402
+from hiring.training import ABLATION_ACTORS, ACTORS, override, run_config, train  # noqa: E402
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--config", required=True, help="name in experiments/configs or a path; {actor} is filled in per run")
-    ap.add_argument("--actor", nargs="+", required=True, choices=ACTORS)
+    ap.add_argument("--actor", nargs="+", required=True, choices=ACTORS + ABLATION_ACTORS)
+    ap.add_argument("--override", nargs="*", default=[], metavar="KEY=VALUE",
+                    help="ablations: one PPO hyperparameter or reward_shaping=true, changed in the config")
     ap.add_argument("--seed", nargs="+", type=int, required=True)
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--steps", type=int, help="override total_timesteps")
@@ -44,8 +48,11 @@ def main():
 
     if len(runs) == 1:
         actor, seed = runs[0]
-        meta = train(run_config(a.config.format(actor=actor), a.setting, a.belief), actor, seed, a.out / f"{actor}_s{seed}", a.steps,
-                     allow_final_seed=a.allow_final_seeds)
+        cfg = run_config(a.config.format(actor=actor), a.setting, a.belief)
+        for item in a.override:
+            key, value = item.split("=", 1)
+            override(cfg, key, yaml.safe_load(value))
+        meta = train(cfg, actor, seed, a.out / f"{actor}_s{seed}", a.steps, allow_final_seed=a.allow_final_seeds)
         print(f"{actor} seed {seed}: {meta['total_timesteps']} steps in {meta['wall_seconds']:.0f} s, "
               f"last evaluation {meta['last_eval_mean']:.4f}")
         return
@@ -64,6 +71,8 @@ def main():
                 cmd += ["--setting", a.setting]
             if a.belief:
                 cmd += ["--belief", a.belief]
+            if a.override:
+                cmd += ["--override", *a.override]
             if a.allow_final_seeds:
                 cmd += ["--allow-final-seeds"]
             log = open(out / "log.txt", "w")

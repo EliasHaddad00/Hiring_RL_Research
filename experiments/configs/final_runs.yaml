@@ -24,3 +24,24 @@ blocks:
   - {group: other settings, setting: h0_0.02, belief: survival}
   - {group: other settings, setting: h0_0.10, belief: survival}
   - {group: other settings, setting: calibrated, belief: survival}
+
+# Must-run ablations (PREREGISTRATION.md, "Final run list"): launched last, with --launch-ablations.
+# One value changed at a time from the frozen index configuration, at the primary setting.
+# The unchanged arm is the main run with the same seed. Output: results/final/ablations/<name>/.
+ablations:
+  config: ppo_final_index
+  setting: h0_0.05
+  belief: survival
+  seeds: [1001, 1002, 1003]
+  procs: 3
+  arms:
+    - {name: gamma_0.99, actor: index, override: {gamma: 0.99}}
+    - {name: gamma_0.999, actor: index, override: {gamma: 0.999}}
+    - {name: ent_coef_third, actor: index, override: {ent_coef: 0.0017056075490486221}}
+    - {name: ent_coef_triple, actor: index, override: {ent_coef: 0.015350467941437599}}
+    - {name: learning_rate_third, actor: index, override: {learning_rate: 0.00022143821543547453}}
+    - {name: learning_rate_triple, actor: index, override: {learning_rate: 0.0019929439389192708}}
+    - {name: n_steps_256, actor: index, override: {n_steps: 256}}
+    - {name: n_steps_1024, actor: index, override: {n_steps: 1024}}
+    - {name: reward_shaping, actor: index, override: {reward_shaping: true}}
+    - {name: end_day_pooled, actor: index_end_pooled, override: {}}
