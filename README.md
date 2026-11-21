@@ -64,6 +64,26 @@ other packages may differ from the lockfile; it is not the build the results wer
 python -m pip install -r requirements.txt torch==2.15.0
 ```
 
+## Trained models (the step after cloning and installing)
+
+The final-run models are not in git. They are attached to the GitHub Release `final-models`,
+one zip per setting. Download them and check every file against the checksums kept in git
+(`results/final/model_checksums.sha256`):
+
+```
+.venv\Scripts\python.exe experiments/scripts/fetch_models.py
+```
+
+It unpacks the models into `results/final/<setting>/<actor>_s<seed>/` and ends with
+"N of N models verified"; any missing or differing file is listed and the exit code is 1.
+`--verify-only` re-checks the files on disk without downloading. Everything else from the final
+runs (logs, curves, `run.json`) is already in the clone. The clean-clone reproduction of Dec 14
+includes this step: clone, install, fetch and verify the models, then regenerate the results.
+
+For the owner, after a setting finishes: `python experiments/scripts/pack_models.py` writes
+`results/final/release/models_<setting>.zip`, prints the files to upload to the Release, and
+updates the checksum file, which is then committed.
+
 ## Run
 
 | Command | What it does |
@@ -80,6 +100,8 @@ python -m pip install -r requirements.txt torch==2.15.0
 | `python experiments/scripts/tune_ppo.py --stage search` (then `finals`, `report`) | PPO hyperparameter search, results in `results/g3/` |
 | `python experiments/scripts/exact_values.py --runs results/g3/small_check` | Exact value of every agent in a folder of small-instance runs, against the pass mark |
 | `python experiments/scripts/search_medians.py` | Median search score by hyperparameter value (`results/g3/search_medians.txt`) |
+| `python experiments/scripts/pack_models.py` / `fetch_models.py` | Zip the models of finished settings and record checksums / download from the Release and verify |
+| `python experiments/scripts/final_runs.py --launch-ablations --allow-final-seeds` | The 30 must-run ablation runs (after the main runs) |
 | `python experiments/scripts/final_runs.py --list` | The final run table, run count and hours (`--launch --allow-final-seeds` only after the owner says so) |
 | `python experiments/scripts/check_plateau.py results/g2/ppo_stress` | Logged columns and the plateau test on the curve, for a folder of runs |
 | `python experiments/scripts/check_plateau_checkpoints.py results/g2/ppo_pooled_stress_10m` | Plateau test from the saved 80% and final models, 4,000 development episodes |
