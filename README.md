@@ -8,44 +8,39 @@ Status: gates G1 (simulator trusted) and G2 (yardsticks built, first agents trai
 `results/g1/G1_STATUS.md` and `results/g2/G2_STATUS.md`. Everything so far uses tuning seeds and
 development or tuning episodes: there are no reported results yet.
 
-## Where the project stands (Nov 20, 2026)
+## Where the project stands (Nov 21, 2026)
 
 Working towards gate G3 (Dec 2): configurations frozen, pre-registration tagged, final seeds launched.
 Read `CLAUDE.md` first (binding rules), then `PREREGISTRATION.md` and `results/g2/README.md` (index of every result file).
 
-**PPO hyperparameter tuning is finished (Nov 20): 45 of 45 full-length runs.**
-
-| Stage | State | Where |
+| Step | State | Where |
 | --- | --- | --- |
-| Search: 40 configurations x 3 seeds x 3 actors, 30% length | Done, 360 of 360 | `results/g3/ppo_tuning_search.txt` |
-| Finals: 5 best per actor x 3 seeds, full length | Done, 45 of 45 | `results/g3/ppo_tuning_finals.txt` |
-
-Best configuration per actor at full length (mean over seeds 101 to 103, tuning episodes; the tuned
-rule scores 3.594 on the same episodes): unrestricted 8 (3.535), index 18 (3.573), pooled 8 (3.586).
-Not yet chosen: see the open decision below. One sitting was stopped when the machine ran low on
-memory; the last 6 runs were made with `--procs 6`.
+| PPO tuning: search (360 runs) and finals (45 runs) | Done Nov 20 | `results/g3/ppo_tuning_search.txt`, `ppo_tuning_finals.txt` |
+| Tuning ranges | Not widened (owner, Nov 20); edge values do not win in the search | `results/g3/search_medians.txt` |
+| Configurations chosen and frozen | Unrestricted 8, index 18, pooled 8 | `experiments/configs/ppo_final_<actor>.yaml` |
+| Small-instance check on the chosen configurations | Passed Nov 21: 99.0%, 99.3%, 99.4% of the optimum (index, unrestricted, pooled; mean of seeds 101 to 103) | `results/g3/small_check_exact_values.txt` |
+| Final run list | Written: 360 runs, about 870 run-hours | `PREREGISTRATION.md`, "Final run list"; `experiments/configs/final_runs.yaml` |
+| `PREREGISTRATION.md` tagged | **Not yet: waits for the owner's yes** | |
+| Final seeds launched | **Not yet: waits for the owner's word after the tag** | `python experiments/scripts/final_runs.py --launch --allow-final-seeds` |
 
 Rule tuning was corrected on Nov 20: each threshold family is also scored at the best vector of every
 family it contains (`PREREGISTRATION.md`, "Checks triggered before the tag"). The best rule is
 unchanged at every setting. Corrected calibrated gaps between the two estimates: falling bar +0.097
 (was +0.243), one interview +0.192 (was +0.319), two interviews +0.120 (was +0.105).
 
-**Then, in order:**
-
-1. Pick one configuration per actor (best mean over seeds 101 to 103 in the finals table).
-2. Rerun the small-instance check on the winners (`check_small_ppo.py`, `exact_values.py`); tuning was done at h0 = 0.05 only.
-3. Get the owner's decision (below), record it in `PREREGISTRATION.md`.
-4. Freeze the configs, tag `PREREGISTRATION.md`, and only then launch final training seeds 1001 to 1015.
-
 **Decisions waiting for the project owner (do not choose for them):**
 
-| Decision | Options | Recommendation given to the owner (Nov 16) |
+| Decision | Options | Note (Nov 21) |
 | --- | --- | --- |
-| Tuning ranges, reopened by the owner's own condition: each actor's best full-length configuration has values on the edge of a range that can be widened (unrestricted and pooled 8: 10 epochs, clip 0.1, width 256; index 18: batch 64, width 256; `results/g3/ppo_tuning_finals.txt`) | A: no widening, record why. B: add network width 512 (new search runs). C: wider still | none yet |
+| Machine time of the final runs: about 6 days at 6 runs at a time, above the owner's line of about 4 days | Run as listed; 10 seeds (the stated floor) at some or all settings; pooled actor at fewer settings; more runs at a time | Nothing has been cut. As listed, a launch on Nov 22 ends about Nov 28, before gate G4 (Dec 9) |
+| Must-run ablations: values, actor and seeds were never fixed | The proposal in `PREREGISTRATION.md` ("Final run list": index actor, seeds 1001 to 1003, 30 runs), or other choices | Reward shaping and the second end-day variant are not implemented yet |
 
-Decided Nov 20 and recorded in `PREREGISTRATION.md`: the interview cap stays at 3; no widening of the PPO tuning ranges unless a chosen configuration sits on the edge of a range that can be widened (it does: see the table); contained rules are scored in every threshold search. The calibrated benchmark sources were opened and confirmed (`experiments/configs/README.md`).
+Decided Nov 20 and recorded in `PREREGISTRATION.md`: interview cap stays at 3; no widening of the PPO
+tuning ranges; chosen configurations; small-instance check and its fallback; model storage; launch order.
 
-It must be settled and recorded in `PREREGISTRATION.md` before the configs are frozen.
+**Final-run models are not in git.** They stay in `results/final/` on the training machine
+(`.gitignore`) and will be attached to a GitHub Release; every other file of a run is committed.
+The tuning models already in the repository stay.
 
 **Not allowed before G3:** the evaluation episode pool and final training seeds 1001 to 1015 (both locked in `hiring/config.py`).
 Search models (`results/g3/ppo_tuning/search/**/model*.zip`) are kept locally only, by decision.
@@ -85,6 +80,9 @@ python -m pip install -r requirements.txt torch==2.15.0
 | `python experiments/scripts/check_g2.py` | Gate G2 check: bound above every rule and PPO run, slot view, interview cap |
 | `python experiments/scripts/exact_values.py` | Exact value of the trained small-instance agents |
 | `python experiments/scripts/tune_ppo.py --stage search` (then `finals`, `report`) | PPO hyperparameter search, results in `results/g3/` |
+| `python experiments/scripts/exact_values.py --runs results/g3/small_check` | Exact value of every agent in a folder of small-instance runs, against the pass mark |
+| `python experiments/scripts/search_medians.py` | Median search score by hyperparameter value (`results/g3/search_medians.txt`) |
+| `python experiments/scripts/final_runs.py --list` | The final run table, run count and hours (`--launch --allow-final-seeds` only after the owner says so) |
 | `python experiments/scripts/check_plateau.py results/g2/ppo_stress` | Logged columns and the plateau test on the curve, for a folder of runs |
 | `python experiments/scripts/check_plateau_checkpoints.py results/g2/ppo_pooled_stress_10m` | Plateau test from the saved 80% and final models, 4,000 development episodes |
 
