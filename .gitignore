@@ -21,3 +21,6 @@ paper/*.bbl
 paper/*.blg
 paper/main.pdf
 results/g3/ppo_tuning/search/**/model*.zip
+# Final-run models (about 2 GB): kept locally, attached to a GitHub Release, not in git.
+# Everything else in a run folder is committed (run.json, progress.csv, evaluations.npz, per-episode payoffs).
+results/final/**/model*.zip

@@ -1,15 +1,15 @@
 # Pre-registration: hiring as a race against poaching
 
 **Status: DRAFT, not tagged.** Written Nov 12, 2026 for gate G1. Nothing here is binding until this
-file is committed and tagged at gate G3 (Dec 2), before the final seeds run. Items marked
-*(planning default)* are this plan's choices and may still change before the tag. After the tag,
+file is committed and tagged at gate G3 (Dec 2), before the final seeds run. Every value that was
+a planning default is now marked *(final, Nov 20)* with what fixed it. After the tag,
 anything not in this file is labelled exploratory, and changes are recorded under Deviations.
 
 ## Hypotheses
 
 | | Hypothesis |
 | --- | --- |
-| H1a | On the exact small instance, the best tuned rule reaches at least 95% *(planning default)* of the exact optimum. |
+| H1a | On the exact small instance, the best tuned rule reaches at least 95% *(final, Nov 20: kept as written on Nov 12, before any rule was scored on the small instance)* of the exact optimum. |
 | H1b | On the full problem, the best tuned rule reaches 85 to 91% of the Lagrangian upper bound, and the shortfall grows with the poaching level h0. |
 | H2a | PPO's mean payoff is within 2% of the exact optimum on the small instance. |
 | H2b | On the full problem, PPO's mean payoff is at least that of the best tuned rule. |
@@ -23,7 +23,7 @@ anything not in this file is labelled exploratory, and changes are recorded unde
   evaluation episodes. Reported for every policy, also when training uses reward shaping.
 - **Unit of analysis.** The training seed; each seed's score is its 10,000-episode mean.
 - **Primary comparison.** PPO against the best tuned rule at the primary setting, stress scenario
-  with h0 = 0.05 *(planning default)*, paired on the same evaluation episodes.
+  with h0 = 0.05 *(final, Nov 20: rules and PPO were tuned at this setting)*, paired on the same evaluation episodes.
 - **How a PPO agent is scored** *(decided Nov 14)*. The action mask is always passed and the agent
   takes its most probable valid action (greedy). The evaluation callback that draws the training
   curves uses the same setting, so curves and final scores measure the same thing. The score with
@@ -33,7 +33,7 @@ anything not in this file is labelled exploratory, and changes are recorded unde
 
 ## Decision rule
 
-Take the 95% interval of the mean paired difference and a margin of 2% *(planning default)* of the
+Take the 95% interval of the mean paired difference and a margin of 2% *(final, Nov 20: unchanged since Nov 12 and used in every gate check)* of the
 comparator's payoff. Interval entirely inside the margin: **equivalent**. Otherwise, entirely above
 zero: **better**; entirely below zero: **worse**. Anything else: **inconclusive**, reported as such.
 Equivalence takes precedence. Statistics: interquartile mean with bootstrap 95% intervals over
@@ -44,7 +44,7 @@ multiplicity correction over the primary comparisons.
 
 | Pool | Seeds | Use |
 | --- | --- | --- |
-| Tuning training seeds | 101, 102, 103 (3 per configuration, *planning default*) | Scoring PPO configurations |
+| Tuning training seeds | 101, 102, 103 (3 per configuration; *final, Nov 20: the tuning was run with them*) | Scoring PPO configurations |
 | Final training seeds | 1001 to 1015 (15 per condition; 10 is the floor) | Final runs only |
 | Tuning episodes | 2,000,000 to 2,003,999 (4,000) | Fitting rules; scoring configurations |
 | Evaluation episodes | 3,000,000 to 3,009,999 (10,000) | Final paired evaluation only |
@@ -54,7 +54,7 @@ No choice is made on the final training seeds or the evaluation episodes. **No s
 
 ## Budgets
 
-- **Tuning.** 40 configurations *(planning default)* for each rule and each PPO architecture; PPO never
+- **Tuning.** 40 configurations *(final, Nov 20: the searches were run with this budget)* for each rule and each PPO architecture; PPO never
   gets less than the rules. *(Nov 20)* A threshold rule family is in addition scored at the best
   vector of each family it contains, up to 3 evaluations; the price-directed rule gets none (see
   "Checks triggered before the tag").
@@ -103,8 +103,7 @@ No choice is made on the final training seeds or the evaluation episodes. **No s
   million steps stand. For description: the 80% model test on the 20-million-step runs gives
   unrestricted +0.015 (flat) and pooled +0.023 (inconclusive); the models at 16 of 20 million steps
   score at or below the finished 10-million-step models, which is what settling under a falling
-  learning rate would look like. Earlier text: 3 million steps per run
-  *(planning default)*, then reset to at least twice the point where the curves flatten. Plateau test *(wording fixed Nov 15)*: a curve is flat if the 95%
+  learning rate would look like. Earlier text, superseded by the lengths above: 3 million steps per run, then reset to at least twice the point where the curves flatten. Plateau test *(wording fixed Nov 15)*: a curve is flat if the 95%
   interval of the change in interquartile mean over the last 20% of training lies inside +-1% of the
   final payoff. An interval that reaches outside that band is reported as "inconclusive" (if it
   contains zero) or "changing" (if it does not), never as flat. The change is the last evaluation
@@ -134,7 +133,7 @@ rule, with either estimate, offers to anyone with a positive estimate on the las
 price-directed rule's naive version uses its own tables, solved
 under the naive belief (tonight's loss risk averaged over that belief), and is tuned separately.
 Simulator conventions are those in `experiments/hiring/env.py` (strict offer-then-interview phases,
-interview results visible next morning, 3 interviews per candidate, 10 slots *(planning default)*,
+interview results visible next morning, 3 interviews per candidate, 10 slots *(final: decided Nov 15, confirmed Nov 20)*,
 last-day interviews masked, automatic drop on the small instance).
 
 ## Planned ablations

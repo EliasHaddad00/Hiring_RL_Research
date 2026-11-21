@@ -3,7 +3,7 @@
 # Starting values from the research plan; not yet tuned.
 scenario: stress
 scenario_overrides: {h0: 0.0, accept_decay: 0.0}
-total_timesteps: 3000000        # planning default
+total_timesteps: 3000000        # starting value; the final lengths are in ppo_final_<actor>.yaml
 n_envs: 8                       # DummyVecEnv, one torch thread
 hidden: 64                      # 64 x 64 tanh, separate actor and critic
 ppo:

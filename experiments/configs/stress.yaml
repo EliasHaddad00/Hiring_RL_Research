@@ -1,4 +1,4 @@
-# Stress scenario (the decided parameter set). Primary setting: h0 = 0.05 (planning default).
+# Stress scenario (the decided parameter set). Primary setting: h0 = 0.05 (final, Nov 20).
 # Other pressure levels override h0 and accept_decay:
 #   none            h0 = 0,    accept_decay = 0
 #   decay only      h0 = 0,    accept_decay = 0.03
