@@ -1,0 +1,1 @@
+index seed 1006: 3002368 steps in 2737 s, last evaluation 3.5696
