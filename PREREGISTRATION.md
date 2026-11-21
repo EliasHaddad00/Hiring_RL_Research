@@ -422,3 +422,15 @@ because each reverses something written here earlier.
   From this note until the last final run has finished, no further change is made to the
   training code, the environment or the policies; if one becomes unavoidable, the owner is asked
   first.
+- **Nov 21, 2026: the registered rule search on the small instance was run after the tag.**
+  H1a compares the best tuned rule with the exact optimum of the small instance, but the rules had
+  been tuned only at the six full-problem settings. By the owner's decision of Nov 21 the search
+  was run after the tag with the registered budget: 40 configurations per rule family and
+  estimate on the 4,000 tuning episodes, plus the best vector of each contained family
+  (`experiments/scripts/tune_rules_small.py`, one process, results in `results/g3/rules_small/`
+  and `results/g3/rules_small.txt`). It uses no final training seed and no evaluation episode,
+  and no result of a final run was looked at to set it up. Two things differ from the full
+  problem. The price-directed rule is built for Gaussian signals and does not exist on the small
+  instance (binned signals), so four families are tuned. And the best rule of each family is
+  scored exactly, by the solver's backward pass with the rule's action in place of the maximum
+  (no sampling), which is the number H1a is judged on; the tuning-episode mean is shown beside it.
