@@ -58,7 +58,7 @@ def main():
     for ax, (_, title, _) in zip(axes, PANELS):
         ax.set_title(title, fontsize=7)
         ax.set_xlabel("Training steps (millions)", fontsize=6.5)
-        ax.tick_params(labelsize=6, length=2)
+        ax.tick_params(which="both", labelsize=6, length=2)
         for side in ("top", "right"):
             ax.spines[side].set_visible(False)
     axes[0].legend(fontsize=5.5, frameon=False, loc="lower right")

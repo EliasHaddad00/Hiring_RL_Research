@@ -1,6 +1,6 @@
 # Paper
 
-`main.tex` is the ICML 2026 source (at most 5 pages). Status, Nov 14: skeleton with all section
+`main.tex` is the ICML 2026 source (at most 5 pages, excluding references and the contribution statement). Status, Nov 21: problem, approach, protocol and rule results written; introduction and related work are drafts; PPO results, ablations, failure modes and conclusion are marked placeholders (see the header of `main.tex`). Earlier status, Nov 14: skeleton with all section
 headings; only Section 3 (problem and simulator) is drafted. It compiles (Nov 21, MiKTeX 25.12, 3 pages; one overfull line). Earlier: there
 was no LaTeX installation on the development machine.
 

@@ -67,7 +67,7 @@ Commands (fill in as they come to exist, and keep this list current):
 - G3 checks: `search_medians.py` (median search score by value, `results/g3/search_medians.txt`), `exact_values.py --runs <folder>` (exact value of every small-instance agent in a folder, pass rule on the mean per actor)
 - Diagnostics: `check_plateau.py <runs folder>` (logged columns, plateau test on the curve), `check_plateau_checkpoints.py <runs folder>` (plateau test from `model_80.zip` and `model.zip` on 4,000 development episodes; the one that counts for runs made after Nov 15), `exact_values.py` (exact value of trained small-instance agents), `price_mistakes.py`, `copy_test.py`, `diagnose_throughput.py`
 - Paper: `paper/main.tex`; style files are fetched locally (`paper/README.md`). MiKTeX is installed since Nov 21 (`%LOCALAPPDATA%ProgramsMiKTeXmiktexbind`); build with `latexmk -pdf main.tex` in `paper/` (needs MiKTeX's bin folder and Perl on PATH; MiKTeX stops with "cannot retrieve attributes" while PATH holds an entry that is a file, such as `...aude.exe`, so drop such entries from PATH for the build).
-- Regenerate all figures and tables: `make figures` (stub until week 2)
+- Regenerate all figures and tables of the paper: `make figures` (one script each in `experiments/analysis/`, reading saved results only: `table_rules.py`, `table_belief.py`, `fig_curves.py`; output in `paper/tables/` and `paper/figures/`). There is no `make` on this machine: run the three scripts directly. Paper state and rules for placeholders are in the header of `paper/main.tex`
 
 The environment runs Python 3.13.17 (since Nov 14; create it with `py -3.13 -m venv .venv`). Do not use Python 3.12.0: its `zipfile` breaks loading of saved SB3 models, and `test_setup.py` fails there.
 
