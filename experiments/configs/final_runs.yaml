@@ -1,0 +1,22 @@
+# Final run list (PREREGISTRATION.md, "Final run list"). Blocks are launched in this order:
+# the primary setting, the other settings, then the belief arm for H4b.
+# Each block runs every actor with its frozen configuration (ppo_final_<actor>.yaml) and every seed.
+# Listed and launched by experiments/scripts/final_runs.py. Models stay local (not in git).
+seeds: [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010, 1011, 1012, 1013, 1014, 1015]
+actors: [index, unrestricted, pooled]
+procs: 6                      # width-256 runs: the machine ran out of memory at 12 during tuning
+out: results/final
+# Hours per run, measured on the tuning runs of the same configurations (estimates, not promises):
+# full problem from results/g3/ppo_tuning/finals, small instance from results/g3/small_check.
+hours_per_run:
+  full: {index: 1.20, unrestricted: 1.97, pooled: 4.54}
+  small: {index: 0.0, unrestricted: 0.0, pooled: 0.0}
+blocks:
+  - {group: primary, setting: h0_0.05, belief: survival}
+  - {group: other settings, setting: small, belief: survival}
+  - {group: other settings, setting: none, belief: survival}
+  - {group: other settings, setting: h0_0, belief: survival}
+  - {group: other settings, setting: h0_0.02, belief: survival}
+  - {group: other settings, setting: h0_0.10, belief: survival}
+  - {group: other settings, setting: calibrated, belief: survival}
+  - {group: belief arm (H4b), setting: h0_0.05, belief: naive}

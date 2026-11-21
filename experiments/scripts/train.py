@@ -33,10 +33,14 @@ def main():
     ap.add_argument("--belief", choices=["naive", "survival"], help="estimate shown in the observation (default: the scenario's)")
     ap.add_argument("--procs", type=int, default=6, help="runs in parallel")
     ap.add_argument("--allow-final-seeds", action="store_true")
+    ap.add_argument("--skip-finished", action="store_true", help="skip runs whose folder already has run.json")
     a = ap.parse_args()
     for s in a.seed:
         check_training_seed(s, allow_final=a.allow_final_seeds)
-    runs = [(actor, seed) for actor in a.actor for seed in a.seed]
+    runs = [(actor, seed) for actor in a.actor for seed in a.seed
+            if not (a.skip_finished and (a.out / f"{actor}_s{seed}" / "run.json").exists())]
+    if not runs:
+        return
 
     if len(runs) == 1:
         actor, seed = runs[0]
