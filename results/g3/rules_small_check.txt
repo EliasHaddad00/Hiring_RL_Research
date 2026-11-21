@@ -1,0 +1,6 @@
+Check of the exact rule scoring (tune_rules_small.py, rule_choice) against simulation: the same rule on
+40,000 development episodes. A check of the method, not a reported result.
+
+static_threshold       naive     exact 0.31206  40,000 development episodes 0.31293 se 0.00417  difference in se -0.21
+one_interview          survival  exact 0.61006  40,000 development episodes 0.60752 se 0.00409  difference in se +0.62
+up_to_two_interviews   naive     exact 0.61140  40,000 development episodes 0.60865 se 0.00415  difference in se +0.66

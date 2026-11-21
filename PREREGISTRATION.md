@@ -434,3 +434,13 @@ because each reverses something written here earlier.
   instance (binned signals), so four families are tuned. And the best rule of each family is
   scored exactly, by the solver's backward pass with the rule's action in place of the maximum
   (no sampling), which is the number H1a is judged on; the tuning-episode mean is shown beside it.
+  *Result (Nov 21, `results/g3/rules_small.txt`).* Best rule on the tuning episodes: one
+  interview with the survival-aware estimate, tuning mean 0.6269, exact value 0.61006, which is
+  96.33% of the optimum 0.63333 (H1a asks for at least 95%, that is 0.60166): **H1a holds.** The
+  two-interview rule with the naive estimate has the highest exact value, 0.61140 (96.54%). The
+  exact scoring was checked against 40,000 development episodes for three rules; the differences
+  are -0.21, +0.62 and +0.66 standard errors (`results/g3/rules_small_check.txt`). One caveat,
+  which does not touch H1a: with binned signals the estimates take few values, and the naive
+  static search stayed at its starting bar (exact value 0.312 against 0.552 for the
+  survival-aware static rule), so the small-instance scores are not used to compare the two
+  estimates.

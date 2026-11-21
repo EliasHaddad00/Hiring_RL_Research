@@ -1,0 +1,17 @@
+Threshold rules on the exact small instance: best of 40 configurations per family and estimate
+(4,000 tuning episodes; plus the best vector of each contained family), then scored exactly.
+Exact optimum 0.63333. H1a asks for at least 95% of it: 0.60166.
+The price-directed rule does not exist on this instance (binned signals).
+
+family                 estimate  tuning mean     se exact value % of optimum exact - mean, in se  parameters
+static_threshold       naive          0.3179 0.0131     0.31206       49.27%               -0.45  0.800
+static_threshold       survival       0.5717 0.0139     0.55174       87.12%               -1.44  0.600
+resume_falling_bar     naive          0.5435 0.0142     0.52233       82.47%               -1.49  0.721 0.835 0.136
+resume_falling_bar     survival       0.5717 0.0139     0.55174       87.12%               -1.44  0.600 0.000 0.000
+one_interview          naive          0.5779 0.0143     0.56732       89.58%               -0.74  1.475 0.913 -0.061 0.240 0.596 0.110 0.030
+one_interview          survival       0.6269 0.0129     0.61006       96.33%               -1.31  1.235 0.886 -0.471 0.669 0.452 0.832 0.114
+up_to_two_interviews   naive          0.6212 0.0131     0.61140       96.54%               -0.75  1.356 1.098 7.180 1.120 1.246 0.382 29.254 0.523 0.183
+up_to_two_interviews   survival       0.6269 0.0129     0.61006       96.33%               -1.31  1.235 0.886 0.886 -0.471 0.669 0.452 99.000 0.832 0.114
+
+Best rule by exact value: up_to_two_interviews with the naive estimate, 0.61140, 96.54% of the optimum: H1a holds.
+The rule was chosen on the tuning episodes; its exact value involves no sampling.

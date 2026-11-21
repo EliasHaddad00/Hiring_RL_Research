@@ -379,8 +379,12 @@ or above the upper end of the 85 to 91\% predicted in H1b, and the share does no
 with $h_0$, against the second half of H1b. \pending{H1b verdict on the evaluation episodes, with
 intervals.} Because the bound is loose (\cref{sec:yardsticks}), the remaining 7 to 10\% is an
 upper limit on what any policy, learned or not, could add to the best rule.
-\pending{H1a: best tuned rule on the small instance against the exact optimum $0.6333$. The
-rules have not yet been tuned on the small instance.}
+On the small instance the comparison is exact. The best tuned rule, the one-interview rule with
+the survival-aware estimate, has an expected payoff of $0.6101$, computed by the same backward
+pass as the optimum and with no sampling: 96.3\% of the optimum $0.6333$. H1a asked for at least
+95\%, so \textbf{H1a holds}: a tuned threshold rule leaves 3.7\% of the optimum unearned. (The
+rule was selected on the tuning episodes; the two-interview rule with the naive estimate scores
+96.5\% exactly. The price-directed rule is not defined on this instance.)
 
 \subsection{The two estimates inside a rule (H4a)}
 \label{sec:h4a}
