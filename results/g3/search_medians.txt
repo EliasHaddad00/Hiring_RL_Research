@@ -1,0 +1,50 @@
+Median search score by hyperparameter value (40 configurations per actor, 30% length, tuning episodes).
+Descriptive only: configurations differ in every hyperparameter at once. n = configurations with that value.
+
+n_steps
+    value   n  unrestricted         index        pooled
+      256   6         3.443         3.363         3.531
+      512  10         3.479         3.403         3.549
+     1024  15         3.432         3.414         3.519
+     2048   9         3.376         3.140         3.493
+
+batch_size
+    value   n  unrestricted         index        pooled
+       64   7         3.461         3.437         3.523
+      128   4         3.433         3.435         3.512
+      256  10         3.484         3.498         3.551
+      512   6         3.450         3.387         3.532
+     1024  13         3.386         3.224         3.493
+
+n_epochs
+    value   n  unrestricted         index        pooled
+        4  14         3.443         3.347         3.523
+        5  12         3.446         3.357         3.512
+       10  14         3.426         3.435         3.508
+
+gamma
+    value   n  unrestricted         index        pooled
+     0.99   8         3.344         3.157         3.358
+    0.995  12         3.442         3.349         3.512
+    0.999   9         3.481         3.507         3.550
+        1  11         3.487         3.488         3.551
+
+clip_range
+    value   n  unrestricted         index        pooled
+      0.1  12         3.460         3.283         3.516
+      0.2  12         3.459         3.464         3.539
+      0.3  16         3.416         3.395         3.524
+
+hidden
+    value   n  unrestricted         index        pooled
+       64  14         3.385         3.288         3.495
+      128   9         3.485         3.417         3.548
+      256  17         3.456         3.361         3.526
+
+Full-length finalists (mean over seeds 101 to 103): gap of each to the best of its actor
+  unrestricted  c08 3.5354 (+0.0000)  c20 3.5299 (-0.0055)  c14 3.5143 (-0.0211)  c30 3.5087 (-0.0267)  c01 3.4985 (-0.0369)
+                mean standard deviation over the three seeds within a configuration: 0.0075
+  index         c18 3.5731 (+0.0000)  c29 3.5692 (-0.0039)  c01 3.5686 (-0.0045)  c16 3.5625 (-0.0107)  c10 3.5491 (-0.0240)
+                mean standard deviation over the three seeds within a configuration: 0.0156
+  pooled        c08 3.5856 (+0.0000)  c10 3.5855 (-0.0002)  c30 3.5845 (-0.0011)  c03 3.5604 (-0.0253)  c18 3.5010 (-0.0847)
+                mean standard deviation over the three seeds within a configuration: 0.0173

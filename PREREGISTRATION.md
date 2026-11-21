@@ -179,6 +179,39 @@ departure rates); upper bound at least as large as every evaluated policy at eve
   (owner): no widening on the search, with one condition: if the configuration chosen for an actor
   after the full-length runs has a value on the edge of a range that can be widened, the question
   is reopened for that actor before the configurations are frozen.
+- **PPO tuning ranges, reopened and closed (decided Nov 20).** The condition fired: the best
+  full-length configuration of every actor has values on an edge that can be widened
+  (unrestricted and pooled 8: 10 epochs, clip 0.1, width 256; index 18: batch 64, width 256).
+  Decision (owner): no widening. Reason: across the 40 search configurations the edge values do
+  not win. Median search score by value (`results/g3/search_medians.txt`, from
+  `experiments/scripts/search_medians.py`; unrestricted / index / pooled):
+
+  | Value on an edge | Its median | Compared with | Its median |
+  | --- | --- | --- | --- |
+  | Width 256 | 3.456 / 3.361 / 3.526 | Width 128 | 3.485 / 3.417 / 3.548 |
+  | Batch 64 | 3.461 / 3.437 / 3.523 | Batch 256 | 3.484 / 3.498 / 3.551 |
+  | Clip 0.1 | 3.460 / 3.283 / 3.516 | Clip 0.2 | 3.459 / 3.464 / 3.539 |
+  | 10 epochs | 3.426 / 3.435 / 3.508 | 4 epochs | 3.443 / 3.347 / 3.523 |
+
+  Width 128 beats 256 and batch 256 beats 64 for every actor. Clip 0.1 is below 0.2 for the index
+  and pooled actors and level with it for the unrestricted actor (+0.001). Ten epochs help only
+  the index actor. The top finalists are tied within noise: pooled 8, 10 and 30 within 0.0011,
+  index 18, 29 and 1 within 0.0045, against a seed-to-seed standard deviation of about 0.016
+  within a configuration. This is a descriptive check, not a controlled test: every configuration
+  changes all hyperparameters at once, so a value's median also reflects what it was drawn with.
+- **Chosen configurations (decided Nov 20).** By the rule under "Budgets" (best mean over seeds
+  101 to 103 among the five full-length finalists, `results/g3/ppo_tuning_finals.txt`):
+  unrestricted 8 (3.535), index 18 (3.573), pooled 8 (3.586); the tuned rule scores 3.594 on the
+  same tuning episodes. Frozen in `experiments/configs/ppo_final_<actor>.yaml`.
+- **Small-instance check on the chosen configurations (rule written Nov 20, before the runs).**
+  Each chosen configuration is trained on the small instance with seeds 101 to 103 at its own
+  length (index 3 million steps, unrestricted and pooled 10 million) and scored by the exact
+  value of its greedy policy (`exact_values.py`). Pass mark as before: at least 0.62067 (98% of
+  0.63333). A configuration passes if the mean of its three exact values reaches the mark (a
+  configuration's score is its mean over seeds everywhere else in this file); all three values
+  are reported, and a single seed below the mark is reported to the owner. Fallback, fixed before running: if a
+  chosen configuration fails, the next-ranked finalist of that actor that passes is used instead,
+  and the owner is told before anything else is done.
 - **Rule search misses contained rules (found and fixed Nov 20).** Each threshold
   family contains the narrower ones (one interview with interviews off is the falling bar; a
   falling bar with no fall is the static rule), so its best score cannot be lower. The local
