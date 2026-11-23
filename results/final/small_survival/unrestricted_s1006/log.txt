@@ -1,0 +1,1 @@
+unrestricted seed 1006: 10002432 steps in 4489 s, last evaluation 0.6268
