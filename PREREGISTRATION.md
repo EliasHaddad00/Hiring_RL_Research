@@ -479,3 +479,21 @@ because each reverses something written here earlier.
   16. H4b's margin is 2% of the survival-aware agent's payoff.
   17. H4b's target payoff is 95% of the survival-aware agent's final payoff on the curve episodes.
   18. "Fewer steps" in H4b needs the interval of the difference in median steps above zero.
+
+- **Nov 26, 2026: power outage during the final runs; six runs restarted from scratch.** The
+  machine lost power at about 06:44 on Nov 26, during the h0 = 0.10 block. State found afterwards:
+  300 of the 360 runs finished (all of the primary, H4b, small, no-pressure, h0 = 0 and h0 = 0.02
+  blocks, and the index and unrestricted actors at h0 = 0.10, the last of them written at 02:07);
+  6 runs in training (pooled actor, h0 = 0.10, seeds 1001 to 1006, all past 80% of training);
+  54 not started (pooled, h0 = 0.10, seeds 1007 to 1015; the calibrated block). Every finished run
+  was checked before anything was relaunched: all six files present and non-empty, both model
+  files pass the zip CRC test, the 540 model files of the six committed blocks match
+  `results/final/model_checksums.sha256`, the curve file loads with all 66 evaluations and its
+  last mean equals the one in `run.json`, the log ends at the final step, and no committed file
+  differs from git. No problem was found. The six interrupted runs were not resumed: the training
+  code has no resume path, and the saved 80% model holds neither the environments' state nor the
+  random-number state, so a resumed run could not be bit-identical to an uninterrupted one. Their
+  partial folders were deleted and the runs are trained again from step 0 with the same seeds,
+  configuration and code, by the same launch command. No seed is dropped or replaced, no result
+  was looked at to decide this, and the evaluation pool stays locked. The block's `seeds.json`
+  (15 seeds, written Nov 25) is unchanged, so the Dec 4 cutoff rule does not apply to it.
