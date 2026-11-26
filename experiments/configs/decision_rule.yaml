@@ -2,32 +2,35 @@
 # Nothing here is decided by the code. `decided` is filled in by the owner (value and date in the
 # comment); each decision made after the tag is also recorded under "Deviations" or as a
 # clarification in PREREGISTRATION.md. While any `decided` is null, apply_decision_rule.py refuses
-# to run on the final results. Its --stand-in mode uses `stand_in`, which is NOT a decision: it is
-# only there so that the pipeline can be tested.
+# to run on the final results. `stand_in` is NOT a decision: it only let the pipeline be tested
+# before the owner decided, and is ignored once `decided` is set.
+#
+# All 18 points decided by the owner on Nov 25, 2026, before any final run was scored and with the
+# evaluation pool locked (PREREGISTRATION.md, Deviations, "wording of the decision rule fixed").
 
 # -- the interval ("95% interval of the mean paired difference", "bootstrap ... over seeds")
-resample:            {decided: null, stand_in: seeds, options: [seeds, seeds_and_episodes]}
-statistic:           {decided: null, stand_in: mean, options: [mean, iqm]}
-pair_seeds:          {decided: null, stand_in: false, options: [false, true]}     # actor against actor: is seed 1001 of one paired with seed 1001 of the other?
+resample:            {decided: seeds_and_episodes, stand_in: seeds, options: [seeds, seeds_and_episodes]}
+statistic:           {decided: iqm, stand_in: mean, options: [mean, iqm]}
+pair_seeds:          {decided: false, stand_in: false, options: [false, true]}     # actor against actor: is seed 1001 of one paired with seed 1001 of the other?
 # -- "PPO" in H2a and H2b: which actor
-ppo_actor:           {decided: null, stand_in: each, options: [each, index, unrestricted, pooled]}
+ppo_actor:           {decided: each, stand_in: each, options: [each, index, unrestricted, pooled]}
 # -- "a multiplicity correction over the primary comparisons"
-multiplicity_family: {decided: null, stand_in: h2b, options: [h2b, all_ppo]}      # the three actor-against-rule comparisons, or these plus H3 and H4b
-multiplicity_form:   {decided: null, stand_in: holm_p, options: [holm_p, bonferroni_p, bonferroni_intervals]}
+multiplicity_family: {decided: h2b, stand_in: h2b, options: [h2b, all_ppo]}      # the three actor-against-rule comparisons, or these plus H3 and H4b
+multiplicity_form:   {decided: bonferroni_intervals, stand_in: holm_p, options: [holm_p, bonferroni_p, bonferroni_intervals]}
 # -- H2a: the decision rule on the 15 exact values, or the gate-check rule (mean at least 98%)
-h2a_basis:           {decided: null, stand_in: interval, options: [interval, mean_mark]}
+h2a_basis:           {decided: interval, stand_in: interval, options: [interval, mean_mark]}
 # -- H1b: "85 to 91% of the bound, and the shortfall grows with h0"
-h1b_settings:        {decided: null, stand_in: all_full, options: [all_full, h0_levels, primary]}
-h1b_shortfall:       {decided: null, stand_in: percent, options: [percent, absolute]}
-trend:               {decided: null, stand_in: monotone_points, options: [monotone_points, ends_interval]}   # "grows / increases with h0", H1b and H3
+h1b_settings:        {decided: all_full, stand_in: all_full, options: [all_full, h0_levels, primary]}
+h1b_shortfall:       {decided: percent, stand_in: percent, options: [percent, absolute]}
+trend:               {decided: monotone_points, stand_in: monotone_points, options: [monotone_points, ends_interval]}   # "grows / increases with h0", H1b and H3
 # -- H3: "at h0 = 0" is the setting with acceptance decay (h0_0) or the one without any pressure (none)
-h3_zero_setting:     {decided: null, stand_in: h0_0, options: [h0_0, none]}
+h3_zero_setting:     {decided: h0_0, stand_in: h0_0, options: [h0_0, none]}
 # -- H4a: "inside a fixed rule ... changes decisions on a measurable share ... raises payoff"
-h4a_pairing:         {decided: null, stand_in: swapped, options: [swapped, tuned]}   # same parameters with the estimate swapped, or each version tuned separately
-h4a_families:        {decided: null, stand_in: best_rule, options: [best_rule, every_family]}
-h4a_raises:          {decided: null, stand_in: above_zero, options: [above_zero, better]}   # interval above zero, or the verdict "better" (outside the 2% margin)
-h4a_measurable:      {decided: null, stand_in: interval_above_zero, options: [interval_above_zero, at_least_1_percent]}
+h4a_pairing:         {decided: swapped, stand_in: swapped, options: [swapped, tuned]}   # same parameters with the estimate swapped, or each version tuned separately
+h4a_families:        {decided: best_rule, stand_in: best_rule, options: [best_rule, every_family]}
+h4a_raises:          {decided: better, stand_in: above_zero, options: [above_zero, better]}   # interval above zero, or the verdict "better" (outside the 2% margin)
+h4a_measurable:      {decided: interval_above_zero, stand_in: interval_above_zero, options: [interval_above_zero, at_least_1_percent]}
 # -- H4b: "within 2%" of which agent, and "reaches a given payoff in fewer steps"
-h4b_comparator:      {decided: null, stand_in: survival, options: [survival, naive]}
-h4b_target:          {decided: null, stand_in: rule_98, options: [rule_98, own_95]}   # 98% of the best rule on the curve episodes, or 95% of the survival-aware agent's final curve payoff
-h4b_speed:           {decided: null, stand_in: median_points, options: [median_points, interval]}
+h4b_comparator:      {decided: survival, stand_in: survival, options: [survival, naive]}
+h4b_target:          {decided: own_95, stand_in: rule_98, options: [rule_98, own_95]}   # 98% of the best rule on the curve episodes, or 95% of the survival-aware agent's final curve payoff
+h4b_speed:           {decided: interval, stand_in: median_points, options: [median_points, interval]}

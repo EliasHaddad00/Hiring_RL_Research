@@ -28,9 +28,9 @@ family it contains (`PREREGISTRATION.md`, "Checks triggered before the tag"). Th
 unchanged at every setting. Corrected calibrated gaps between the two estimates: falling bar +0.097
 (was +0.243), one interview +0.192 (was +0.319), two interviews +0.120 (was +0.105).
 
-**Waiting for the project owner:** the points where the wording of the pre-registered decision rule is open
-(`experiments/configs/decision_rule.yaml`, listed Nov 21). Until each has a decision, `apply_decision_rule.py`
-refuses to run on the final results.
+**No decision is waiting for the project owner.** The 18 points where the wording of the pre-registered
+decision rule was open were decided on Nov 25, before any final run was scored
+(`experiments/configs/decision_rule.yaml`; recorded in `PREREGISTRATION.md`, Deviations).
 
 **Gate G4 pipeline (written Nov 21, tested on stand-in data only).** After the last final run, and on the owner's word:
 

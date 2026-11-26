@@ -444,3 +444,38 @@ because each reverses something written here earlier.
   static search stayed at its starting bar (exact value 0.312 against 0.552 for the
   survival-aware static rule), so the small-instance scores are not used to compare the two
   estimates.
+- **Nov 25, 2026: wording of the decision rule fixed (18 points).** When the verdict script was
+  written (Nov 21), 18 places were found where the registered wording allows more than one
+  reading. The owner decided all of them on Nov 25, before any final run or rule was scored: the
+  evaluation pool was still locked, no exact value of a final small-instance run had been
+  computed, and the committed training curves of the final runs were not opened. Where the text
+  was open, the reading the plan's prediction was built on was taken; where tuning-episode numbers
+  already hinted at the outcome, the stricter reading. The values are in
+  `experiments/configs/decision_rule.yaml`:
+  1. The bootstrap redraws training seeds and episodes (not seeds only): on the tuning runs the
+     episode noise of a paired difference is as large as the seed noise.
+  2. The statistic over seeds is the interquartile mean, as the "Statistics" sentence says; the
+     plain mean is reported beside it.
+  3. Seeds of different actors or estimates are not paired; episodes are.
+  4. "PPO" in H2a and H2b means each actor: one verdict per actor.
+  5. The multiplicity correction covers the three actor-against-rule comparisons of H2b; H3 and
+     H4b are uncorrected secondary results.
+  6. The correction is Bonferroni on the intervals: the three H2b intervals are at the 98.33%
+     level, and their p-values are Bonferroni-adjusted.
+  7. H2a is judged by the decision rule on the 15 exact values (interval), not by the gate-check
+     mark on the mean.
+  8. H1b's range of 85 to 91% must hold at every full-problem setting, the no-pressure and the
+     calibrated one included.
+  9. H1b's shortfall is in percent of the bound.
+  10. "Grows with h0" (H1b, H3) means every step up in h0 raises the estimate; the interval of
+      last minus first is printed beside it.
+  11. "h0 = 0" in H3 is the setting with acceptance decay and no poaching, not the no-pressure one.
+  12. H4a swaps the estimate inside the survival-aware rule's own parameters; the separately
+      tuned gap is reported beside it.
+  13. H4a is judged on the best rule of each setting; other families are descriptive.
+  14. "Raises payoff" in H4a needs the verdict "better" of the decision rule, so a gain inside
+      the 2% margin does not count.
+  15. A "measurable share" in H4a is one whose interval lies above zero; the share is reported.
+  16. H4b's margin is 2% of the survival-aware agent's payoff.
+  17. H4b's target payoff is 95% of the survival-aware agent's final payoff on the curve episodes.
+  18. "Fewer steps" in H4b needs the interval of the difference in median steps above zero.
