@@ -1,0 +1,1 @@
+index seed 1014: 3002368 steps in 2620 s, last evaluation 3.6962
